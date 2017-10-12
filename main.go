@@ -3,6 +3,7 @@ package main
 import (
 	"ERP/controllers"
 	_ "ERP/models"
+	_ "ERP/modules/redis"
 	_ "ERP/routers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"

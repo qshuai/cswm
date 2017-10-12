@@ -1309,3 +1309,106 @@
 2017/10/12 11:38:05 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   2.608031ms|   match|[46m POST    [0m /category_edit   r:/category_edit
 2017/10/12 11:38:06 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    4.24937ms|   match|[44m GET     [0m /category_list   r:/category_list
 2017/10/12 11:39:24 [I] [asm_amd64.s:2337] http server Running on http://:9090
+2017/10/12 12:50:04 [I] [asm_amd64.s:2337] http server Running on http://:9090
+2017/10/12 12:50:11 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   1.763107ms|   match|[44m GET     [0m /login   r:/login
+2017/10/12 12:50:11 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    187.157µs|   match|[44m GET     [0m /static/css/style.css
+2017/10/12 12:50:12 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    100.169µs|   match|[44m GET     [0m /static/img/bg.png
+2017/10/12 12:50:12 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    116.475µs|   match|[44m GET     [0m /static/img/arrow.png
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[47m 302 [0m|   2.628186ms|   match|[46m POST    [0m /login   r:/login
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   3.827123ms|   match|[44m GET     [0m /     r:/
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    149.653µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    434.725µs|   match|[44m GET     [0m /static/static/h-ui/css/H-ui.min.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     98.856µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/skin.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    435.726µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/H-ui.admin.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     80.527µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/style.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     98.458µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    129.948µs|   match|[44m GET     [0m /static/datepicker/pikaday.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     85.229µs|   match|[44m GET     [0m /static/css/my.css
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   1.764535ms|   match|[44m GET     [0m /static/lib/jquery/1.9.1/jquery.min.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   1.991715ms|   match|[44m GET     [0m /static/js/Chart.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    1.10719ms|   match|[44m GET     [0m /static/lib/layer/2.4/layer.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    817.054µs|   match|[44m GET     [0m /static/static/h-ui/js/H-ui.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    137.557µs|   match|[44m GET     [0m /static/province_list/jquery.provincesCity.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    288.803µs|   match|[44m GET     [0m /static/static/h-ui.admin/js/H-ui.admin.page.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    213.689µs|   match|[44m GET     [0m /static/province_list/provincesData.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    131.761µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    153.946µs|   match|[44m GET     [0m /static/datepicker/moment.min.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    213.917µs|   match|[44m GET     [0m /static/datepicker/pikaday.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    159.015µs|   match|[44m GET     [0m /static/paginator/jqPaginator.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    258.342µs|   match|[44m GET     [0m /static/js/my.js
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    682.624µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.woff
+2017/10/12 12:50:13 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    114.244µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/icon_arrow.png
+2017/10/12 12:50:14 [D] [server.go:2619] |      127.0.0.1|[43m 404 [0m|   1.018556ms| nomatch|[44m GET     [0m /static/awesomplete/awesomplete.css.map
+2017/10/12 12:50:14 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    188.425µs|   match|[44m GET     [0m /static/lib/layer/2.4/skin/layer.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   2.891166ms|   match|[44m GET     [0m /default_permission   r:/default_permission
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    181.799µs|   match|[44m GET     [0m /static/static/h-ui/css/H-ui.min.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|      97.69µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/H-ui.admin.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     88.085µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     39.403µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/skin.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     53.813µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/style.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     37.271µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     88.776µs|   match|[44m GET     [0m /static/datepicker/pikaday.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     49.605µs|   match|[44m GET     [0m /static/css/my.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     139.18µs|   match|[44m GET     [0m /static/lib/jquery/1.9.1/jquery.min.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    117.569µs|   match|[44m GET     [0m /static/lib/layer/2.4/layer.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    230.757µs|   match|[44m GET     [0m /static/static/h-ui/js/H-ui.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     69.035µs|   match|[44m GET     [0m /static/static/h-ui.admin/js/H-ui.admin.page.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     120.38µs|   match|[44m GET     [0m /static/province_list/provincesData.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     83.777µs|   match|[44m GET     [0m /static/province_list/jquery.provincesCity.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     80.716µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    157.943µs|   match|[44m GET     [0m /static/datepicker/moment.min.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    175.041µs|   match|[44m GET     [0m /static/datepicker/pikaday.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     141.85µs|   match|[44m GET     [0m /static/paginator/jqPaginator.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    161.739µs|   match|[44m GET     [0m /static/js/my.js
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    147.071µs|   match|[44m GET     [0m /static/lib/layer/2.4/skin/layer.css
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    168.021µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.woff
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    170.377µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/icon_arrow.png
+2017/10/12 12:50:17 [D] [server.go:2619] |      127.0.0.1|[43m 404 [0m|   1.312699ms| nomatch|[44m GET     [0m /static/awesomplete/awesomplete.css.map
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   2.720498ms|   match|[44m GET     [0m /permission_member_list   r:/permission_member_list
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    206.078µs|   match|[44m GET     [0m /static/static/h-ui/css/H-ui.min.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     70.462µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/H-ui.admin.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     65.846µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|      63.66µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/skin.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     55.889µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/style.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     37.523µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     95.388µs|   match|[44m GET     [0m /static/datepicker/pikaday.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     32.197µs|   match|[44m GET     [0m /static/css/my.css
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     93.917µs|   match|[44m GET     [0m /static/lib/jquery/1.9.1/jquery.min.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     75.348µs|   match|[44m GET     [0m /static/lib/layer/2.4/layer.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    206.447µs|   match|[44m GET     [0m /static/static/h-ui/js/H-ui.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|      61.76µs|   match|[44m GET     [0m /static/static/h-ui.admin/js/H-ui.admin.page.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     64.273µs|   match|[44m GET     [0m /static/province_list/jquery.provincesCity.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     61.024µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     75.945µs|   match|[44m GET     [0m /static/province_list/provincesData.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    200.958µs|   match|[44m GET     [0m /static/datepicker/moment.min.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     127.05µs|   match|[44m GET     [0m /static/datepicker/pikaday.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     86.718µs|   match|[44m GET     [0m /static/paginator/jqPaginator.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|      86.35µs|   match|[44m GET     [0m /static/js/my.js
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    137.663µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.woff
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     73.074µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/icon_arrow.png
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[43m 404 [0m|   1.935855ms| nomatch|[44m GET     [0m /static/awesomplete/awesomplete.css.map
+2017/10/12 12:53:21 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     80.396µs|   match|[44m GET     [0m /static/lib/layer/2.4/skin/layer.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   2.660465ms|   match|[44m GET     [0m /default_permission   r:/default_permission
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    172.553µs|   match|[44m GET     [0m /static/static/h-ui/css/H-ui.min.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     53.385µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/H-ui.admin.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     59.666µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     35.579µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/skin.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     41.721µs|   match|[44m GET     [0m /static/static/h-ui.admin/css/style.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     54.227µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    106.763µs|   match|[44m GET     [0m /static/datepicker/pikaday.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     31.246µs|   match|[44m GET     [0m /static/css/my.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    143.613µs|   match|[44m GET     [0m /static/lib/jquery/1.9.1/jquery.min.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     83.733µs|   match|[44m GET     [0m /static/lib/layer/2.4/layer.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    244.372µs|   match|[44m GET     [0m /static/static/h-ui/js/H-ui.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     73.016µs|   match|[44m GET     [0m /static/static/h-ui.admin/js/H-ui.admin.page.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     77.919µs|   match|[44m GET     [0m /static/province_list/jquery.provincesCity.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    156.217µs|   match|[44m GET     [0m /static/province_list/provincesData.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    127.951µs|   match|[44m GET     [0m /static/awesomplete/awesomplete.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    157.246µs|   match|[44m GET     [0m /static/datepicker/moment.min.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    112.498µs|   match|[44m GET     [0m /static/datepicker/pikaday.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    434.027µs|   match|[44m GET     [0m /static/paginator/jqPaginator.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|   2.001856ms|   match|[44m GET     [0m /static/js/my.js
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    188.448µs|   match|[44m GET     [0m /static/lib/layer/2.4/skin/layer.css
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|    161.938µs|   match|[44m GET     [0m /static/lib/Hui-iconfont/1.0.8/iconfont.woff
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[42m 200 [0m|     82.628µs|   match|[44m GET     [0m /static/static/h-ui.admin/skin/default/icon_arrow.png
+2017/10/12 12:53:24 [D] [server.go:2619] |      127.0.0.1|[43m 404 [0m|   1.399254ms| nomatch|[44m GET     [0m /static/awesomplete/awesomplete.css.map
