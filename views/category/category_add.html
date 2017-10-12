@@ -1,0 +1,44 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">添加分类</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <br><br><br>
+    <div class="page-container">
+        <div style="width: 50%; margin: 0 auto;">
+            <h1 class="text-c">添加分类</h1>
+            <div class="Huialert Huialert-danger" style="width: 80%; margin: 0 auto;"><span class="label label-secondary radius">1</span> 是否隐藏:默认显示，如果所属一级或二级分类隐藏，则隐藏~</div>
+            <div class="Huialert Huialert-danger" style="width: 80%; margin: 2px auto;"><span class="label label-secondary radius">2</span> 如果添加一级或二级分类，请在对应的后续表格中输入"-"(不带引号)~</div>
+            <form action="" method="post" class="form form-horizontal" id="form-article-add">
+                {{.xsrfdata}}
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="primary">一级分类：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.primary_string}}" id="primary" name="primary" required>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="two_stage">二级分类：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.two_stage_string}}" id="two_stage" name="two_stage" required>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="three_stage">三级分类：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius" id="three_stage" name="three_stage" required>
+                    </div>
+                </div>
+
+                <div class="row cl col-md-offset-2">
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="submit" class="btn btn-block btn-primary radius size-L" value="确 定 提 交">
+                    </div>
+                </div>
+            </form>
+            <br><br><br><br><br><br>
+        </div>
+    </div>
+</section>

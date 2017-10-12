@@ -1,0 +1,132 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">管理员控制中心</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i>
+        </a>
+    </nav>
+
+    <div class="Hui-article">
+
+        <div class="text-c" style="margin: 20px auto 20px 200px;">
+            <div class="formControls col-xs-8 col-sm-9">
+                {{.xsrfdata}}
+                <input type="text" class="input-text radius" placeholder="姓名或电话号码" name="search_entry" style="width: 50%;">
+                <a class="btn btn-primary radius member_search">&nbsp;&nbsp;检 索&nbsp;&nbsp;</a>
+            </div>
+        </div>
+        <br>
+
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th colspan="9" scope="col">人员列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th>姓名</th>
+                    <th>电话</th>
+                    <th>职位</th>
+                    <th>库房</th>
+                    <th>激活</th>
+                    <th>最后一次登陆时间</th>
+                    <th>最后一次登陆ip</th>
+                    <th>用户创建时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{if .user}}
+                <tr class="text-c">
+                    <td>{{.user.Name}}</td>
+                    <td>{{.user.Tel}}</td>
+                    <td>{{.user.Position}}</td>
+                    <td>{{.user.PoolName}}</td>
+
+                    {{ if .user.IsActive }}
+                    <td>正常</td>
+                    {{ else }}
+                    <td class="c-danger">未激活</td>
+                    {{end}}
+
+                    <td>{{date .user.LastLogin "Y-m-d H:i:s"}}</td>
+
+                    {{if eq .user.Ip ""}}
+                        <td class="c-danger">未登陆过</td>
+                    {{else}}
+                        <td>{{.user.Ip}}</td>
+                    {{end}}
+
+                    <td>{{date .user.Created "Y-m-d H:i:s"}}</td>
+                </tr>
+                <input type="hidden" name="userId" value="{{.user.Id}}">
+                {{end}}
+                </tbody>
+            </table>
+
+            <br>
+            <div class="f-r">
+                {{ if .user.IsActive }}
+                    <a class="btn btn-danger control_user radius">禁用账户</a>
+                {{ else }}
+                    <a class="btn btn-success control_user radius">激活账户</a>
+                {{end}}
+
+                <a class="btn btn-primary edit_user radius">编辑此用户</a>
+            </div>
+        </article>
+    </div>
+
+    <div id="member_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+        <div class="modal-dialog" style="width: 60%;">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title">人员信息修改</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin_edit_all" method="post" class="form form-horizontal">
+                        <input type="hidden" name="uid" value="">
+                        {{ .xsrfdata }}
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="name"><span class="c-red">*</span>姓名：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="name" name="name" readonly>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="tel"><span class="c-red">*</span>电话：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="tel" name="tel" required>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="position"><span class="c-red">*</span>职务：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                            <span class="select-box radius">
+                                <select name="position" id="position" class="select" required>
+                                    {{range $index, $value := .level}}
+										<option value="{{$value}}">{{$value}}</option>
+									{{end}}
+                                </select>
+                            </span>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="pool_name"><span class="c-red">*</span>库房：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="pool_name" name="pool_name" required>
+                            </div>
+                        </div>
+                        <div class="row c1">
+                            <button class="btn btn-success radius btn-block">&nbsp; 提 &nbsp; 交 &nbsp;</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

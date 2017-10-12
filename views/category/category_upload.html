@@ -1,0 +1,40 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">更新分类信息</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <br><br><br>
+    <div class="">
+        <h1 class="text-c">请仔细阅读以下注意事项</h1>
+        <div class="Huialert Huialert-danger" style="width: 50%; margin: 0 auto;"><span class="label label-secondary radius">1</span> 请选择以.xlsx为扩展名的Excel文件，低版本excel无法识别~</div>
+        <div class="Huialert Huialert-danger" style="width: 50%; margin: 2px auto;"><span class="label label-secondary radius">2</span> 如果分类中没有二级和/或三级分类，则输入"-"，注意不包括引号~</div>
+        <div class="Huialert Huialert-danger" style="width: 50%; margin: 2px auto;"><span class="label label-secondary radius">3</span> 除了允许填充数据的单元格以外，其他任何地方不允许输入字符，包括空格等~</div>
+        <div class="Huialert Huialert-danger" style="width: 50%; margin: 2px auto;"><span class="label label-secondary radius">4</span> 由于导入的文件会覆盖数据库中的全部分类信息，故请谨慎操作~</div>
+        <div class="Huialert Huialert-danger" style="width: 50%; margin: 2px auto;"><span class="label label-secondary radius">5</span> 如果提交后系统显示错误，请立即联系管理员~</div>
+        <form action="" method="post" enctype="multipart/form-data" class="form form-horizontal text-c">
+            {{.xsrfdata}}
+            <!--<div class="row c1">-->
+                <!--<label class="form-label col-xs-4 col-sm-2" for=""><span class="c-red">*</span>分类表(excel:xlsx)</label>-->
+                <!--&nbsp;&nbsp;<input type="file" name="category_file">-->
+                <!--<br><br>-->
+            <!--</div>-->
+            <span class="btn-upload form-group mt-30">
+                  <input class="input-text upload-url radius" type="text" name="uploadfile-1" id="uploadfile-1" readonly>
+                        <a href="javascript:void();" class="btn btn-primary radius"><i class="iconfont">&#xf0020;</i> 浏览文件</a>
+                  <input type="file" multiple name="category_file" class="input-file">
+                </span>
+            <div class="mt-30">
+                <input type="submit" class="btn btn-success radius" value="确定上传">
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

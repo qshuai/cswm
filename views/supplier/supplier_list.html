@@ -1,0 +1,38 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">供应商列表</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th colspan="2" scope="col">供应商列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th>供应商</th>
+                    <th>创建时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .supplier}}
+                <tr class="text-c">
+                    <td>{{.Name}}</td>
+                    <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </article>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

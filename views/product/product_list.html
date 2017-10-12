@@ -1,0 +1,338 @@
+<!--jquery bootstrap css-->
+<style>
+    .pagination {
+        display: inline-block;
+        padding-left: 0;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+    .pagination > li {
+        display: inline;
+    }
+    .pagination > li > a,
+    .pagination > li > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #428bca;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+    .pagination > li:first-child > a,
+    .pagination > li:first-child > span {
+        margin-left: 0;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+    .pagination > li:last-child > a,
+    .pagination > li:last-child > span {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+    .pagination > li > a:hover,
+    .pagination > li > span:hover,
+    .pagination > li > a:focus,
+    .pagination > li > span:focus {
+        color: #2a6496;
+        background-color: #eee;
+        border-color: #ddd;
+    }
+    .pagination > .active > a,
+    .pagination > .active > span,
+    .pagination > .active > a:hover,
+    .pagination > .active > span:hover,
+    .pagination > .active > a:focus,
+    .pagination > .active > span:focus {
+        z-index: 2;
+        color: #fff;
+        cursor: default;
+        background-color: #428bca;
+        border-color: #428bca;
+    }
+    .pagination > .disabled > span,
+    .pagination > .disabled > span:hover,
+    .pagination > .disabled > span:focus,
+    .pagination > .disabled > a,
+    .pagination > .disabled > a:hover,
+    .pagination > .disabled > a:focus {
+        color: #999;
+        cursor: not-allowed;
+        background-color: #fff;
+        border-color: #ddd;
+    }
+    .pagination-lg > li > a,
+    .pagination-lg > li > span {
+        padding: 10px 16px;
+        font-size: 18px;
+    }
+    .pagination-lg > li:first-child > a,
+    .pagination-lg > li:first-child > span {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+    .pagination-lg > li:last-child > a,
+    .pagination-lg > li:last-child > span {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+    .pagination-sm > li > a,
+    .pagination-sm > li > span {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    .pagination-sm > li:first-child > a,
+    .pagination-sm > li:first-child > span {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+    .pagination-sm > li:last-child > a,
+    .pagination-sm > li:last-child > span {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+</style>
+<!--jquery bootstrap css-->
+
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">商品列表</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+    <div class="Hui-article">
+        <article class="cl" style="padding: 0 20px;">
+            <br>
+            <div style="width: 80%; margin: 0 auto 10px auto;">
+                <div class="row cl">
+                    <input type="text" class="input-text mt-5" name="art_num_filter" autocomplete="off" placeholder="货号" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="brand_filter" autocomplete="off" placeholder="品牌" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="supplier_filter" autocomplete="off" placeholder="供应商" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="store_filter" autocomplete="off" placeholder="库房(格式：J库-大连库房)" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="category_filter" autocomplete="off" placeholder="三级分类名称" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="spec_filter" autocomplete="off" placeholder="规格" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="has_pay_filter" autocomplete="off" placeholder="是否支付货款(填yes或no)" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="has_invioce_filter" autocomplete="off" placeholder="是否提供发票(填yes或no)" style="width: 15%">
+                    <input type="text" class="input-text mt-5" name="user" autocomplete="off" placeholder="录入人员" style="width: 15%">
+                    <a class="btn btn-primary radius mt-5 size-S filter_btn"> 检 索 </a>
+                    <span class="c-warning">不需要筛选的字段不要填写~</span>
+                </div>
+            </div>
+
+            <table class="table table-border table-bordered table-bg product_table table-hover">
+                <thead>
+                <tr>
+                    <th colspan="17" scope="col">商品列表</th>
+                </tr>
+                <tr class="text-c product_title">
+                    <th>商品名称</th>
+                    <th>品牌</th>
+                    <th>供应商</th>
+                    <th>货号</th>
+                    <th>批号</th>
+                    <th>库房</th>
+                    <th>三级分类</th>
+                    <th>规格</th>
+                    <th>单位</th>
+                    <th>数量</th>
+                    <th>入库价格(元)</th>
+                    <th>支付货款</th>
+                    <th>提供发票</th>
+                    <th>发票接受日期</th>
+                    <th>录入人员</th>
+                    <th>入库时间</th>
+                    <th>操作</th>
+                </tr>
+                <tr class="text-c">
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td><a class="product_item_order btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a> <a class="product_item_close btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-jianhao"></i>&nbsp;</a></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody id="product_row">
+
+                </tbody>
+            </table>
+        </article>
+
+        <div class="text-c tip_message f-26"></div>
+
+        <div class="text-c">
+            <!--<input type="hidden" id="total_page" value="{{.total_page}}">-->
+            <span class="dropDown page_size_btn" style="position: relative; top: -33px">
+                <a class="dropDown_A btn btn-default radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >每页显示</a>
+                <ul class="dropDown-menu menu radius box-shadow">
+                    <li><a class="page_size" data="5">5条</a></li>
+                    <li><a class="page_size" data="10">10条</a></li>
+                    <li><a class="page_size" data="20">20条</a></li>
+                    <li><a class="page_size" data="30">30条</a></li>
+                    <li><a class="page_size" data="50">50条</a></li>
+                    <li><a class="page_size" data="100">100条</a></li>
+                </ul>
+            </span>
+            <ul class="pagination" id="pagination"></ul>
+        </div>
+
+        <!--商品编辑弹出层-->
+        <div id="product_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+            <div class="modal-dialog" style="width: 60%;">
+                <div class="modal-content radius">
+                    <div class="modal-header">
+                        <h3 class="modal-title">商品信息修改</h3>
+                        <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                    </div>
+                    <div class="modal-body">
+
+                        <form action="/product_item_edit" method="post" class="form form-horizontal" id="form-article-add">
+                            {{.xsrfdata}}
+                            <input type="hidden" name="product_id">
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="title_edit"><span class="c-red">*</span>产品名称：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" value="" placeholder="" id="title_edit" name="title">
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="brand_edit">品牌：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" id="brand_edit" name="brand">
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="art_num_edit"><span class="c-red">*</span>货号：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" value="" placeholder="" id="art_num_edit" name="atr_num" style="width: 21%">
+                                    <span class="c-warning" id="result_art"></span>
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="lot_num_edit"><span class="c-red">*</span>批号：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" value="" placeholder="" id="lot_num_edit" name="lot_num" style="width: 21%">
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="three_stage_edit">三级分类：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" name="three_stage" autocomplete="on"
+                                           id="three_stage_edit">
+                                </div>
+                            </div>
+
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2">sku信息：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text spec" value="" placeholder="规格" id="spec_edit" name="spec" style="width: 40%">
+                                    <input type="text" class="input-text stock" value="" placeholder="数量" id="stock_edit" name="stock" style="width: 20%">
+                                    <input type="text" class="input-text in_price" value="" placeholder="价格" id="in_price_edit" name="in_price" style="width: 20%">
+                                </div>
+                            </div>
+
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="store_edit">单位：</label>
+                                <div class="formControls col-xs-8 col-sm-9 mt-5 radios_edit">
+                                    <input type="radio" name="unit" class="ml-5" value="箱" id="box"><label for="box">&nbsp;&nbsp;箱</label>
+                                    <input type="radio" name="unit" class="ml-5" value="瓶" id="bottle"><label for="bottle">&nbsp;&nbsp;瓶</label>
+                                    <input type="radio" name="unit" class="ml-5" value="个" id="individual"><label for="individual">&nbsp;&nbsp;个</label>
+                                    <input type="radio" name="unit" class="ml-5" value="盒" id="he"><label for="he">&nbsp;&nbsp;盒</label>
+                                    <input type="radio" name="unit" class="ml-5" value="袋" id="dai"><label for="dai">&nbsp;&nbsp;袋</label>
+                                    <input type="radio" name="unit" class="ml-5" value="支" id="branch"><label for="branch">&nbsp;&nbsp;支</label>
+                                    <input type="radio" name="unit" class="ml-5" value="台" id="tai"><label for="tai">&nbsp;&nbsp;台</label>
+                                    <input type="radio" name="unit" class="ml-5" value="包" id="bao"><label for="bao">&nbsp;&nbsp;包</label>
+                                    <input type="radio" name="unit" class="ml-5" value="套" id="tao"><label for="tao">&nbsp;&nbsp;套</label>
+                                    <input type="radio" name="unit" class="ml-5" value="卷" id="juan"><label for="juan">&nbsp;&nbsp;卷</label>
+                                    <br>
+                                    <input type="radio" name="unit" class="ml-5" value="包" id="bag"><label for="bag">&nbsp;&nbsp;包</label>
+                                    <input type="radio" name="unit" class="ml-5" value="副" id="pair"><label for="pair">&nbsp;&nbsp;副</label>
+                                    <input type="radio" name="unit" class="ml-5" value="张" id="sheet"><label for="sheet">&nbsp;&nbsp;张</label>
+                                    <input type="radio" name="unit" class="ml-5" value="本" id="ben"><label for="ben">&nbsp;&nbsp;本</label>
+                                    <input type="radio" name="unit" class="ml-5" value="只" id="zhi"><label for="zhi">&nbsp;&nbsp;只</label>
+                                    <input type="radio" name="unit" class="ml-5" value="包" id="group"><label for="group">&nbsp;&nbsp;组</label>
+                                    <input type="radio" name="unit" class="ml-5" value="块" id="block"><label for="block">&nbsp;&nbsp;块</label>
+                                    <input type="radio" name="unit" class="ml-5" value="把" id="ba"><label for="ba">&nbsp;&nbsp;把</label>
+                                    <input type="radio" name="unit" class="ml-5" value="根" id="gen"><label for="gen">&nbsp;&nbsp;根</label>
+                                    <input type="radio" name="unit" class="ml-5" value="片" id="piece"><label for="piece">&nbsp;&nbsp;片</label>
+                                </div>
+                            </div>
+
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="store_edit">所在库房：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" value="" id="store_edit" name="store">
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2" for="supplier_edit">供应商：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" class="input-text" value="" id="supplier_edit" name="supplier">
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2">是否结清货款：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <span class="select-box" style="width: 21%;">
+                                        <select class="select" name="has_pay_edit">
+                                            <option>请选择</option>
+                                            <option value="true">是</option>
+                                            <option value="false">否</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row cl">
+                                <label class="form-label col-xs-4 col-sm-2">是否开具发票：</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <span class="select-box" style="width: 21%;">
+                                        <select class="select" name="has_invioce_edit">
+                                            <option>请选择</option>
+                                            <option value="true">是</option>
+                                            <option value="false" id="no_invioce">否</option>
+                                        </select>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row cl">
+                                <label for="get_invioce_edit" class="form-label col-xs-4 col-sm-2">接收发票日期:&nbsp;&nbsp;</label>
+                                <div class="formControls col-xs-8 col-sm-9">
+                                    <input type="text" id="get_invioce_edit" class="input-text" value="" name="get_invioce" />
+                                </div>
+                            </div>
+                            <br>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary">确定</button>
+                                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+    //设置js全局变量
+    var product = {{.product}}
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

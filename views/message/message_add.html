@@ -1,0 +1,44 @@
+<div class="page-container">
+    <section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">新建消息</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+    </nav>
+
+    <div style="width: 50%; margin: 0 auto;">
+        <h1 class="text-c">新建消息</h1>
+        <br><br>
+        <form action="" method="post" class="form form-horizontal" id="form-article-add">
+            {{.xsrfdata}}
+            <table>
+                <tr>
+                    <th class="text-r" width="50px">接收人：</th>
+                    <td><input type="text" class="input-text radius awesomplete" data-list="{{.user_string}}" value="" placeholder="检索" id="message_to" name="message_to"></td>
+                </tr>
+
+                <tr>
+                    <th class="va-t text-r">内容：</th>
+                    <td><textarea class="textarea radius" placeholder="" name="message_content" style="height: 200px;"></textarea></td>
+                </tr>
+            </table>
+            <div class="row cl col-md-offset-2">
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="submit" class="btn btn-block btn-primary radius size-L" value="发 送">
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    </section>
+
+</div>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

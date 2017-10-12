@@ -1,0 +1,121 @@
+<style type="text/css">
+	.mui-switch {
+		width: 70px;
+		height: 28px;
+		position: relative;
+		border: 1px solid #dfdfdf;
+		background-color: #fdfdfd;
+		box-shadow: #dfdfdf 0 0 0 0 inset;
+		border-radius: 20px;
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+		background-clip: content-box;
+		display: inline-block;
+		-webkit-appearance: none;
+		user-select: none;
+		outline: none; }
+	.mui-switch:before {
+		content: '';
+		width: 29px;
+		height: 26px;
+		position: absolute;
+		top: 0px;
+		left: 0;
+		border-radius: 20px;
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+		border-bottom-left-radius: 20px;
+		border-bottom-right-radius: 20px;
+		background-color: #fff;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+	.mui-switch:checked {
+		border-color: #64bd63;
+		box-shadow: #64bd63 0 0 0 16px inset;
+		background-color: #64bd63; }
+	.mui-switch:checked:before {
+		left: 41px; }
+	.mui-switch.mui-switch-animbg {
+		transition: background-color ease 0.4s; }
+	.mui-switch.mui-switch-animbg:before {
+		transition: left 0.3s; }
+	.mui-switch.mui-switch-animbg:checked {
+		box-shadow: #dfdfdf 0 0 0 0 inset;
+		background-color: #64bd63;
+		transition: border-color 0.4s, background-color ease 0.4s; }
+	.mui-switch.mui-switch-animbg:checked:before {
+		transition: left 0.3s; }
+	.mui-switch.mui-switch-anim {
+		transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s; }
+	.mui-switch.mui-switch-anim:before {
+		transition: left 0.3s; }
+	.mui-switch.mui-switch-anim:checked {
+		box-shadow: #64bd63 0 0 0 16px inset;
+		background-color: #64bd63;
+		transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s; }
+	.mui-switch.mui-switch-anim:checked:before {
+		transition: left 0.3s; }
+</style>
+
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+		<span class="c-999 en">&gt;</span>
+		<a onclick="goBack()" class="maincolor">上一页</a>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">编辑默认权限</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<h1 class="text-c">编辑默认权限</h1>
+		<article class="cl pd-20" id="permission">
+			<div class="col-md-6 col-md-offset-3">
+				<form action="/default_permission_edit" method="post">
+				{{.xsrfdata}}
+					<input type="hidden" name="permission_id" value="{{.defaultPermission.Id}}">
+					<input type="hidden" name="permission_position" value="{{.defaultPermission.Position}}">
+				<table class="table table-border table-bordered table-bg table-hover" border="1">
+					<thead>
+					<tr><th>权限名称</th><th>权限开关</th></tr>
+					</thead>
+					<tbody class="permission-item">
+					<tr><td class="text-r">添加人员</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddMember" {{if .defaultPermission.AddMember}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">编辑人员信息</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="EditMember" {{if .defaultPermission.EditMember}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">激活或禁用账户</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ActiveMember" {{if .defaultPermission.ActiveMember}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">添加客户信息</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddConsumer" {{if .defaultPermission.AddConsumer}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">修改客户信息</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="EditConsumer" {{if .defaultPermission.EditConsumer}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看客户信息</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewConsumer" {{if .defaultPermission.ViewConsumer}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">添加品牌</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddBrand" {{if .defaultPermission.AddBrand}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">添加经销商</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddDealer" {{if .defaultPermission.AddDealer}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看经销商</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewDealer" {{if .defaultPermission.ViewDealer}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">添加供应商</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddSupplier" {{if .defaultPermission.AddSupplier}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看供应商</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewSupplier" {{if .defaultPermission.ViewSupplier}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">录入商品</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddProduct" {{if .defaultPermission.AddProduct}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">录入商品录入时的价格（采购价）</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="InputInPrice" {{if .defaultPermission.InputInPrice}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看商品列表中的库房信息</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewProductStore" {{if .defaultPermission.ViewProductStore}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看商品列表中的库存数量（所辖库房）</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewStock" {{if .defaultPermission.ViewStock}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看商品列表中的入库价格</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewInPrice" {{if .defaultPermission.ViewInPrice}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">编辑商品信息（所辖库房）</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="EditProduct" {{if .defaultPermission.EditProduct}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">删除商品</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="DeleteProduct" {{if .defaultPermission.DeleteProduct}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">录入出库</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="OutputProduct" {{if .defaultPermission.OutputProduct}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看销售记录（所辖库房）</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewSale" {{if .defaultPermission.ViewSale}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看销售记录的客户（所辖库房）</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewSaleConsumer" {{if .defaultPermission.ViewSaleConsumer}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看销售记录的进价</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewSaleInPrice" {{if .defaultPermission.ViewSaleInPrice}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看销售记录的售价（所辖库房）</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="EditSale" {{if .defaultPermission.EditSale}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">编辑销售信息</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="OperateCategory" {{if .defaultPermission.OperateCategory}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">添加或修改分类</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="RequestMove" {{if .defaultPermission.RequestMove}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">发起移库</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ResponseMove" {{if .defaultPermission.ResponseMove}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">接受移库</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewMove" {{if .defaultPermission.ViewMove}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">添加库房</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="AddStore" {{if .defaultPermission.AddStore}}checked{{end}}></label></td></tr>
+					<tr><td class="text-r">查看库房(此处只是库房列表)</td><td><label><input class="mui-switch mui-switch-anim" type="checkbox" name="ViewStore" {{if .defaultPermission.ViewStore}}checked{{end}}></label></td></tr>
+					</tbody>
+				</table>
+				<div class="text-c pd-10">
+					<input type="submit" class="btn btn-primary radius btn-block size-L" value=" 确定修改 ">
+				</div>
+				</form>
+			</div>
+
+		</article>
+	</div>
+</section>

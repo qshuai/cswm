@@ -1,0 +1,93 @@
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+		<span class="c-999 en">&gt;</span>
+		<a onclick="goBack()" class="maincolor">上一页</a>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">默认权限</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<h1 class="text-c">默认权限</h1>
+		<article class="cl pd-20" id="permission">
+			<div class="f-l col-md-4">
+				<table class="table table-border table-bordered table-bg table-hover" border="1">
+					<thead>
+						<tr><th>权限名称</th></tr>
+					</thead>
+					<tbody class="">
+					<tr><td>添加人员</td></tr>
+					<tr><td>编辑人员信息</td></tr>
+					<tr><td>激活或禁用账户</td></tr>
+					<tr><td>添加客户信息</td></tr>
+					<tr><td>修改客户信息</td></tr>
+					<tr><td>查看客户信息</td></tr>
+					<tr><td>添加品牌</td></tr>
+					<tr><td>添加经销商</td></tr>
+					<tr><td>查看经销商</td></tr>
+					<tr><td>添加供应商</td></tr>
+					<tr><td>查看供应商</td></tr>
+					<tr><td>录入商品</td></tr>
+					<tr><td>录入商品录入时的价格（采购价）</td></tr>
+					<tr><td>查看商品列表中的库房信息</td></tr>
+					<tr><td>查看商品列表中的库存数量（所辖库房）</td></tr>
+					<tr><td>查看商品列表中的入库价格</td></tr>
+					<tr><td>编辑商品信息（所辖库房）</td></tr>
+					<tr><td>删除商品</td></tr>
+					<tr><td>录入出库</td></tr>
+					<tr><td>查看销售记录（所辖库房）</td></tr>
+					<tr><td>查看销售记录的客户（所辖库房）</td></tr>
+					<tr><td>查看销售记录的进价</td></tr>
+					<tr><td>查看销售记录的售价（所辖库房）</td></tr>
+					<tr><td>编辑销售信息</td></tr>
+					<tr><td>添加或修改分类</td></tr>
+					<tr><td>发起移库</td></tr>
+					<tr><td>接受移库</td></tr>
+					<tr><td>添加库房</td></tr>
+					<tr><td>查看库房(此处只是库房列表)</td></tr>
+					</tbody>
+				</table>
+			</div>
+				{{range .defaultPermission}}
+				<div class="f-l col-md-2">
+					<table class="table table-border table-bordered table-bg table-hover" border="1">
+						<thead><tr><th>{{.Position}}</th></tr></thead>
+						<tbody>
+							<tr><td>{{.AddMember}}</td></tr>
+							<tr><td>{{.EditMember}}</td></tr>
+							<tr><td>{{.ActiveMember}}</td></tr>
+							<tr><td>{{.AddConsumer}}</td></tr>
+							<tr><td>{{.EditConsumer}}</td></tr>
+							<tr><td>{{.ViewConsumer}}</td></tr>
+							<tr><td>{{.AddBrand}}</td></tr>
+							<tr><td>{{.AddDealer}}</td></tr>
+							<tr><td>{{.ViewDealer}}</td></tr>
+							<tr><td>{{.AddSupplier}}</td></tr>
+							<tr><td>{{.ViewSupplier}}</td></tr>
+							<tr><td>{{.AddProduct}}</td></tr>
+							<tr><td>{{.InputInPrice}}</td></tr>
+							<tr><td>{{.ViewProductStore}}</td></tr>
+							<tr><td>{{.ViewStock}}</td></tr>
+							<tr><td>{{.ViewInPrice}}</td></tr>
+							<tr><td>{{.EditProduct}}</td></tr>
+							<tr><td>{{.DeleteProduct}}</td></tr>
+							<tr><td>{{.OutputProduct}}</td></tr>
+							<tr><td>{{.ViewSale}}</td></tr>
+							<tr><td>{{.ViewSaleConsumer}}</td></tr>
+							<tr><td>{{.ViewSaleInPrice}}</td></tr>
+							<tr><td>{{.EditSale}}</td></tr>
+							<tr><td>{{.OperateCategory}}</td></tr>
+							<tr><td>{{.RequestMove}}</td></tr>
+							<tr><td>{{.ResponseMove}}</td></tr>
+							<tr><td>{{.ViewMove}}</td></tr>
+							<tr><td>{{.AddStore}}</td></tr>
+							<tr><td>{{.ViewStore}}</td></tr>
+						</tbody>
+					</table>
+					<div class="text-c pd-10">
+						<a href="default_permission_edit/{{.Id}}" class="btn btn-danger radius">修改默认权限</a>
+					</div>
+				</div>
+				{{end}}
+		</article>
+	</div>
+</section>

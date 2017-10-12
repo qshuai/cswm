@@ -1,0 +1,44 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">完善个人信息</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <br><br>
+    <div class="page-container col-md-offset-3">
+        <form action="" method="post" class="form form-horizontal">
+            <h3 class="col-md-offset-2">完善个人信息</h3>
+            {{ .xsrfdata }}
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="username"><span class="c-red">*</span>用户名：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" value="" placeholder="" id="username" name="username" required style="width: 180px;">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="password"><span class="c-red">*</span>密码：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="password" class="input-text" value="" placeholder="" id="password" name="password" required style="width: 180px;">
+                </div>
+            </div>
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="repassword"><span class="c-red">*</span>再次输入密码：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="password" class="input-text" value="" placeholder="" id="repassword" name="repassword" required style="width: 180px;">
+                </div>
+            </div>
+            <div class="row c1">
+                <div class="col-md-offset-3">
+                    <button class="btn btn-success radius">&nbsp; 提 &nbsp; 交 &nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

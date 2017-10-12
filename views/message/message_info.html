@@ -1,0 +1,44 @@
+<div class="page-container">
+    <section class="Hui-article-box">
+        <nav class="breadcrumb"><i class="Hui-iconfont"></i>
+            <a href="/" class="maincolor">首页</a>
+            <span class="c-999 en">&gt;</span>
+            <a onclick="goBack()" class="maincolor">上一页</a>
+            <span class="c-999 en">&gt;</span>
+            <span class="c-666">消息详情</span>
+            <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+        </nav>
+
+        <div style="width: 50%; margin: 0 auto;">
+            <h1 class="text-c">消息详情</h1>
+            <br><br>
+            <blockquote>来自： <span class="c-primary">{{.message.From.Name}}</span></blockquote>
+            <p class="radius" style="height: 200px;border: 1px solid #eee;padding: 20px;">{{str2html .message.Content}}</p>
+
+            {{if .is_self}}
+                <!--这里代表发信人就是自己本身-->
+            {{else}}
+                <a class="btn btn-success radius text-r" onclick="showReplyForm()">回 复</a>
+
+                <form action="/message_add" method="post" class="form form-horizontal hidden reply-form mt-20" id="form-article-add">
+                    {{.xsrfdata}}
+                    <input type="hidden" name="message_to" value="{{.message.From.Name}}">
+                    <textarea class="textarea radius" placeholder="发送内容..." name="message_content" style="height: 200px;"></textarea>
+                    <div class="row cl col-md-offset-2">
+                        <div class="formControls col-xs-8 col-sm-9">
+                            <input type="submit" class="btn btn-block btn-primary radius size-L" value="发 送">
+                        </div>
+                    </div>
+                </form>
+            {{end}}
+        </div>
+
+    </section>
+
+</div>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

@@ -1,0 +1,84 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">库房列表</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th colspan="11" scope="col">库房列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th>商品名称</th>
+                    <th>商品货号</th>
+                    <th>起始库房</th>
+                    <th>目标库房</th>
+                    <th>移库数量</th>
+                    <th>请求人</th>
+                    <th>响应人</th>
+                    <th>响应状态</th>
+                    <th>创建时间</th>
+                    <th>完成时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .move}}
+                    <tr>
+                        <input type="hidden" name="mid" value="{{.Id}}">
+                        <td class="text-c">{{.Origin.Title}}</td>
+                        <td class="text-c">{{.Origin.ArtNum}}</td>
+                        <td class="text-c">{{.From.Pool}}-{{.From.Name}}</td>
+                        <td class="text-c">{{.To.Pool}}-{{.To.Name}}</td>
+                        <td class="text-c">{{.Num}}</td>
+                        <td class="text-c">{{.Request.Name}}</td>
+                        <td class="text-c">{{.Response.Name}}</td>
+                        {{if eq .Operate "1"}}
+                            <td class="text-c c-success">达成</td>
+                        {{else if eq .Operate "0"}}
+                            <td class="text-c c-warning">未处理</td>
+                        {{else if eq .Operate "2"}}
+                            <td class="text-c c-success">完成</td>
+                        {{else}}
+                            <td class="text-c c-danger">拒绝</td>
+                        {{end}}
+                        <td class="text-c">{{date .Created "Y-m-d H:i:s"}}</td>
+                        <td class="text-c">{{date .Finished "Y-m-d H:i:s"}}</td>
+                        <td class="text-c">
+                            <a class="btn btn-success-outline radius" href="/move_info/{{.Id}}" title="详情"><i class="Hui-iconfont Hui-iconfont-yuedu"></i></a>
+                            {{if eq .Operate "1"}}
+                                <a class="btn btn-warning-outline radius disabled" title="同意" onclick="agreeMove(this)"><i class="Hui-iconfont Hui-iconfont-xuanze"></i></a>
+                                <a class="btn btn-warning-outline radius" title="拒绝" onclick="disagreeMove(this)"><i class="Hui-iconfont Hui-iconfont-close"></i></a>
+                                <a class="btn btn-warning-outline radius" title="完成" onclick="finishMove(this)"><i class="Hui-iconfont Hui-iconfont-weigouxuan2"></i></a>
+                            {{else if eq .Operate "0"}}
+                                <a class="btn btn-warning-outline radius" title="同意" onclick="agreeMove(this)"><i class="Hui-iconfont Hui-iconfont-xuanze"></i></a>
+                                <a class="btn btn-warning-outline radius" title="拒绝" onclick="disagreeMove(this)"><i class="Hui-iconfont Hui-iconfont-close"></i></a>
+                                <a class="btn btn-warning-outline radius disabled" title="完成" onclick="finishMove(this)"><i class="Hui-iconfont Hui-iconfont-weigouxuan2"></i></a>
+                            {{else if eq .Operate "-1"}}
+                                <a class="btn btn-warning-outline radius" title="同意" onclick="agreeMove(this)"><i class="Hui-iconfont Hui-iconfont-xuanze"></i></a>
+                                <a class="btn btn-warning-outline radius disabled" title="拒绝" onclick="disagreeMove(this)"><i class="Hui-iconfont Hui-iconfont-close"></i></a>
+                                <a class="btn btn-warning-outline radius disabled" title="完成" onclick="finishMove(this)"><i class="Hui-iconfont Hui-iconfont-weigouxuan2"></i></a>
+                            {{else if eq .Operate "2"}}
+                                <a class="btn btn-warning-outline radius disabled" title="同意" onclick="agreeMove(this)"><i class="Hui-iconfont Hui-iconfont-xuanze"></i></a>
+                                <a class="btn btn-warning-outline radius disabled" title="拒绝" onclick="disagreeMove(this)"><i class="Hui-iconfont Hui-iconfont-close"></i></a>
+                                <a class="btn btn-warning-outline radius disabled" title="完成"><i class="Hui-iconfont Hui-iconfont-xuanzhong1"></i></a>
+                            {{end}}
+                        </td>
+                    </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </article>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

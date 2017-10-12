@@ -1,0 +1,117 @@
+<div class="page-container">
+    <div style="width: 70%; margin: 0 auto;">
+        <h1 class="text-c">出库录入</h1>
+        <br>
+        <div class="f-l" style="width: 30%;font-size: 20px;border: 1px solid #666;border-radius: 4px;padding: 20px;">
+            <ul>
+                <li>名称: {{.product_item.Title}}</li>
+                <li>货号: {{.product_item.ArtNum}}</li>
+                <li class="c-primary">库房: {{.product_item.Store.Pool}}-{{.product_item.Store.Name}}</li>
+                <li>规格: {{.product_item.Spec}}</li>
+                <li>单位: {{.product_item.Unit}}</li>
+                <li class="c-primary">库存: {{.product_item.Stock}}</li>
+                <li class="c-primary">进价: {{.product_item.InPrice}}</li>
+            </ul>
+        </div>
+        <div class="f-r" style="width: 60%;">
+            <form action="/store_output_action" method="post" class="form form-horizontal" id="form-article-add">
+                {{.xsrfdata}}
+                <input type="hidden" name="product_id" value="{{.product_item.Id}}">
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="salesman"><span class="c-red">*</span>业务员：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius awesomplete" id="salesman" data-list="{{.salesman_string}}" placeholder="检索" name="salesman">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="consumer"><span class="c-red">*</span>客户：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius awesomplete" id="consumer" data-list="{{.consumer_string}}" placeholder="检索" name="consumer">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="num"><span class="c-red">*</span>数量：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius" id="num" name="num">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="outprice"><span class="c-red">*</span>售价：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius" id="outprice" name="outprice">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label for="send" class="form-label col-xs-4 col-sm-2">发货日期:&nbsp;&nbsp;</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="send" class="input-text radius" value="" name="send" />
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">开具发票：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <span class="select-box radius" style="width: 21%;">
+                            <select class="select" name="hasinvoice">
+                                <option>请选择</option>
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2" for="invioce_num"><span class="c-red">*</span>发票编号：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text radius" id="invioce_num" name="invioce_num">
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label for="sendinvioce" class="form-label col-xs-4 col-sm-2">开票日期:&nbsp;&nbsp;</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="sendinvioce" class="input-text radius" value="" name="send_invioce" />
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label for="getInvoice" class="form-label col-xs-4 col-sm-2">递交发票:&nbsp;&nbsp;</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="getInvoice" class="input-text radius" value="" name="get_invioce" />
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label class="form-label col-xs-4 col-sm-2">接收汇款：</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <span class="select-box radius" style="width: 21%;">
+                            <select class="select" name="get_money">
+                                <option>请选择</option>
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row cl">
+                    <label for="getdate" class="form-label col-xs-4 col-sm-2">汇款日期:&nbsp;&nbsp;</label>
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="text" id="getdate" class="input-text radius" value="" name="get_date" />
+                    </div>
+                </div>
+
+                <div class="row cl col-md-offset-2">
+                    <div class="formControls col-xs-8 col-sm-9">
+                        <input type="submit" class="btn btn-block btn-primary radius size-L" value="确 定 提 交">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

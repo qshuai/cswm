@@ -1,0 +1,42 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">分类详情</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="Hui-article" style="width: 70%; margin: 0 auto;">
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th colspan="3" scope="col">分类信息表</th>
+                </tr>
+                <tr class="text-c">
+                    <th>一级分类</th>
+                    <th>二级分类</th>
+                    <th>三级分类</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .category}}
+                    {{if ne .ThreeStage "-"}}
+                        <tr>
+                            <td>{{index $.primary (stringToInt .Primary)}}</td>
+                            <td>{{index $.two_stage (stringToInt .TwoStage)}}</td>
+                            <td>{{.ThreeStage}}</td>
+                        </tr>
+                    {{end}}
+                {{end}}
+                </tbody>
+            </table>
+        </article>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

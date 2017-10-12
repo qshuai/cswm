@@ -1,0 +1,217 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">销售列表</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th colspan="16" scope="col">销售列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th>商品名称</th>
+                    <th>货号</th>
+                    <th>业务员</th>
+                    <th>客户</th>
+                    <th>进价</th>
+                    <th>售价</th>
+                    <th>数量</th>
+                    <th>发货日期</th>
+                    <th>含发票</th>
+                    <th>发票号</th>
+                    <th>开发票</th>
+                    <th>送发票</th>
+                    <th>收款</th>
+                    <th>收款时间</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .sale}}
+                <tr class="text-c">
+                    <input type="hidden" class="sale_id" value="{{.Id}}">
+                    <td>{{.Product.Title}}</td>
+                    <td>{{.Product.ArtNum}}</td>
+                    <td>{{.Salesman.Name}}</td>
+                    <td>{{.Consumer.Name}}</td>
+                    <td>{{.Product.InPrice}}</td>
+                    <td>{{.OutPrice}}</td>
+                    <td>{{.Num}}</td>
+                    <td>{{date .Send "Y-m-d"}}</td>
+
+                    {{if .HasInvoice}}
+                        <td>是</td>
+                    {{else}}
+                        <td>否</td>
+                    {{end}}
+
+                    <td>{{.InvoiceNum}}</td>
+                    <td>{{date .SendInvoice "Y-m-d"}}</td>
+                    <td>{{date .GetInvoice "Y-m-d"}}</td>
+
+                    {{if .GetMoney}}
+                        <td>是</td>
+                    {{else}}
+                        <td>否</td>
+                    {{end}}
+
+                    <td>{{date .GetDate "Y-m-d"}}</td>
+
+                    <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                    <td><a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a></td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </article>
+    </div>
+
+    <!--修改销售记录弹窗-->
+    <div id="sale_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+        <div class="modal-dialog" style="width: 60%">
+            <input type="hidden" name="sale_id">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title">修改销售信息</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <form action="/sale_edit" method="post" class="form form-horizontal" id="form-article-add">
+                        {{.xsrfdata}}
+                        <input type="hidden" name="sale_id" value="">
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="title"><span class="c-red">*</span>商品名称：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="title" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="artnum"><span class="c-red">*</span>货号：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="artnum" name="artnum" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="salesman"><span class="c-red">*</span>业务员：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="salesman" name="salesman">
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="consumer"><span class="c-red">*</span>客户：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="consumer" name="consumer" readonly>
+                            </div>
+                        </div>
+
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="inprice"><span class="c-red">*</span>进价：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="inprice" name="inprice" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="outprice"><span class="c-red">*</span>售价：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="outprice" name="outprice">
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="num"><span class="c-red">*</span>数量：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="num" name="num" readonly>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label for="send" class="form-label col-xs-4 col-sm-2">发货日期:&nbsp;&nbsp;</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" id="send" class="input-text radius" value="" name="send" />
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2">开具发票：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                        <span class="select-box radius" style="width: 21%;">
+                            <select class="select" name="hasinvoice">
+                                <option>请选择</option>
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                        </span>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="invioce_num"><span class="c-red">*</span>发票编号：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" id="invioce_num" name="invioce_num">
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label for="sendinvioce" class="form-label col-xs-4 col-sm-2">开票日期:&nbsp;&nbsp;</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" id="sendinvioce" class="input-text radius" value="" name="send_invioce" />
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label for="getInvoice" class="form-label col-xs-4 col-sm-2">递交发票:&nbsp;&nbsp;</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" id="getInvoice" class="input-text radius" value="" name="get_invioce" />
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2">接收汇款：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                        <span class="select-box radius" style="width: 21%;">
+                            <select class="select" name="get_money">
+                                <option>请选择</option>
+                                <option value="true">是</option>
+                                <option value="false">否</option>
+                            </select>
+                        </span>
+                            </div>
+                        </div>
+
+                        <div class="row cl">
+                            <label for="getdate" class="form-label col-xs-4 col-sm-2">汇款日期:&nbsp;&nbsp;</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" id="getdate" class="input-text radius" value="" name="get_date" />
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-primary">确定</button>
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

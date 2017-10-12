@@ -1,0 +1,642 @@
+[
+  {
+    "Id": 1,
+    "Title": "LDH试剂盒",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "09657",
+    "LotNum": "0967889080",
+    "CatNum": {
+      "Id": 96,
+      "Primary": "1",
+      "TwoStage": "12",
+      "ThreeStage": "电泳产品",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "100只",
+    "Stock": 324,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-13T22:08:20+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 56.98,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-13T00:00:00+08:00"
+  },
+  {
+    "Id": 2,
+    "Title": "LDH试剂盒",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "09657",
+    "LotNum": "0967889080",
+    "CatNum": {
+      "Id": 96,
+      "Primary": "1",
+      "TwoStage": "12",
+      "ThreeStage": "电泳产品",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "67只",
+    "Stock": 324,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-13T22:08:20+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 56.98,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-13T00:00:00+08:00"
+  },
+  {
+    "Id": 3,
+    "Title": "1640培养基",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "545669786",
+    "LotNum": "9876456879",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "67只",
+    "Stock": 12,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-13T22:45:45+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 56.98,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-15T00:00:00+08:00"
+  },
+  {
+    "Id": 5,
+    "Title": "1640培养基",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "545669786",
+    "LotNum": "9876456879",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "5只装",
+    "Stock": 866,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-13T22:45:45+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 67.98,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-15T00:00:00+08:00"
+  },
+  {
+    "Id": 6,
+    "Title": "AKT羊抗鼠抗体",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "LT898767687",
+    "LotNum": "cat932873947",
+    "CatNum": {
+      "Id": 147,
+      "Primary": "1",
+      "TwoStage": "15",
+      "ThreeStage": "抗体",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "20ul",
+    "Stock": 231,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T08:13:17+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 56.98,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  },
+  {
+    "Id": 7,
+    "Title": "AKT羊抗鼠抗体",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "LT898767687",
+    "LotNum": "cat932873947",
+    "CatNum": {
+      "Id": 147,
+      "Primary": "1",
+      "TwoStage": "15",
+      "ThreeStage": "抗体",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "50ul",
+    "Stock": 574,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T08:13:17+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 34.97,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  },
+  {
+    "Id": 8,
+    "Title": "AKT羊抗鼠抗体",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "LT898767687",
+    "LotNum": "cat932873947",
+    "CatNum": {
+      "Id": 147,
+      "Primary": "1",
+      "TwoStage": "15",
+      "ThreeStage": "抗体",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "100ul",
+    "Stock": 34,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T08:13:17+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 67.98,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  },
+  {
+    "Id": 9,
+    "Title": "AKT羊抗鼠抗体",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "LT898767687",
+    "LotNum": "cat3434542",
+    "CatNum": {
+      "Id": 147,
+      "Primary": "1",
+      "TwoStage": "15",
+      "ThreeStage": "抗体",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "500ul",
+    "Stock": 121,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T09:55:53+08:00",
+    "Supplier": {
+      "Id": 1,
+      "Name": "华晨生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 123.87,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-12T00:00:00+08:00"
+  },
+  {
+    "Id": 10,
+    "Title": "AKT羊抗鼠抗体",
+    "Brand": {
+      "Id": 1,
+      "Name": "TaKaRa",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "LT898767687",
+    "LotNum": "cat3434542",
+    "CatNum": {
+      "Id": 147,
+      "Primary": "1",
+      "TwoStage": "15",
+      "ThreeStage": "抗体",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "1000ul",
+    "Stock": 34,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T09:55:53+08:00",
+    "Supplier": {
+      "Id": 1,
+      "Name": "华晨生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 1298.97,
+    "HasPay": true,
+    "HasInvioce": false,
+    "GetInvioce": "2017-09-12T00:00:00+08:00"
+  },
+  {
+    "Id": 17,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "100ml",
+    "Stock": 328,
+    "Unit": "盒",
+    "Store": {
+      "Id": 4,
+      "Num": 198,
+      "Name": "大连库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T14:38:39+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 598.34,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-08T00:00:00+08:00"
+  },
+  {
+    "Id": 18,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "200ml",
+    "Stock": 328,
+    "Unit": "盒",
+    "Store": {
+      "Id": 4,
+      "Num": 198,
+      "Name": "大连库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T14:38:39+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 873.78,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-08T00:00:00+08:00"
+  },
+  {
+    "Id": 19,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "500ml",
+    "Stock": 424,
+    "Unit": "盒",
+    "Store": {
+      "Id": 4,
+      "Num": 198,
+      "Name": "大连库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T14:38:39+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 1298.87,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-08T00:00:00+08:00"
+  },
+  {
+    "Id": 20,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "100ml",
+    "Stock": 234,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T17:33:00+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 598.34,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  },
+  {
+    "Id": 21,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "200ml",
+    "Stock": 53434,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T17:33:00+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 873.78,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  },
+  {
+    "Id": 22,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "500ml",
+    "Stock": 1232,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T17:33:00+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 1298.87,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  },
+  {
+    "Id": 23,
+    "Title": "BCA蛋白浓度测定试剂盒",
+    "Brand": {
+      "Id": 2,
+      "Name": "Axygen",
+      "Product": null,
+      "Created": "2017-09-11T00:00:00+08:00"
+    },
+    "ArtNum": "CAT937597",
+    "LotNum": "97692389",
+    "CatNum": {
+      "Id": 78,
+      "Primary": "1",
+      "TwoStage": "11",
+      "ThreeStage": "常规生化试剂",
+      "Is_hidden": false,
+      "Product": null
+    },
+    "Spec": "1L",
+    "Stock": 12,
+    "Unit": "盒",
+    "Store": {
+      "Id": 3,
+      "Num": 167,
+      "Name": "北京库房",
+      "Product": null
+    },
+    "InTime": "2017-09-14T17:33:00+08:00",
+    "Supplier": {
+      "Id": 2,
+      "Name": "康泰生物",
+      "Created": "2017-09-11T00:00:00+08:00",
+      "Product": null
+    },
+    "InPrice": 3000.78,
+    "HasPay": false,
+    "HasInvioce": true,
+    "GetInvioce": "2017-09-14T00:00:00+08:00"
+  }
+]

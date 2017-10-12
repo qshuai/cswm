@@ -1,0 +1,19 @@
+input:read-only{
+    color: #f37b1d;
+}
+
+.store_spec ul{
+    left: -100%;
+}
+
+#permission tr td, #permission tr th{
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#permission_member tr td, #permission_member tr th{
+	text-align: center;
+	font-size: 18px;
+	font-weight: bold;
+}

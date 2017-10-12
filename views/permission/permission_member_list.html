@@ -1,0 +1,63 @@
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+		<span class="c-999 en">&gt;</span>
+		<a onclick="goBack()" class="maincolor">上一页</a>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">人员列表</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<table class="table table-border table-bordered table-bg table-hover">
+				<thead>
+				<tr>
+					<th colspan="9" scope="col">人员列表</th>
+				</tr>
+				<tr class="text-c">
+					<th>姓名</th>
+					<th>电话</th>
+					<th>职位</th>
+					<th>库房</th>
+					<th>账号状态</th>
+					<th>最后一次登陆时间</th>
+					<th>最后一次登陆ip</th>
+					<th>用户创建时间</th>
+				</tr>
+				</thead>
+				<tbody>
+				{{range .user}}
+				<tr class="text-c">
+					<td>{{.Name}} <a href="/permission_member_edit/{{.Id}}" class="c-primary btn size-S btn-danger-outline radius">修改权限</a></td>
+					<td>{{.Tel}}</td>
+					<td>{{.Position}}</td>
+					<td>{{.PoolName}}</td>
+
+					{{ if .IsActive }}
+					<td>正常</td>
+					{{ else }}
+					<td class="c-danger">未激活</td>
+					{{end}}
+
+					<td>{{date .LastLogin "Y-m-d H:i:s"}}</td>
+
+
+					{{if eq .Ip ""}}
+					<td class="c-danger">未登陆过</td>
+					{{else}}
+					<td>{{.Ip}}</td>
+					{{end}}
+
+					<td>{{date .Created "Y-m-d H:i:s"}}</td>
+				</tr>
+				{{end}}
+				</tbody>
+			</table>
+		</article>
+	</div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

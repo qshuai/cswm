@@ -1,0 +1,32 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">添加品牌</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <br><br><br>
+    <div class="page-container text-c" style="width: 50%;margin: 0 auto">
+        <h1>添加品牌信息</h1>
+        <form action="" method="post" class="form form-horizontal">
+            {{ .xsrfdata }}
+            <div class="row cl">
+                <label class="form-label col-xs-4 col-sm-2" for="name"><span class="c-red">*</span>品牌名称：</label>
+                <div class="formControls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text radius" value="" placeholder="" id="name" name="name" required>
+                </div>
+            </div>
+            <div class="row c1">
+                <div>
+                    <button class="btn btn-success radius">&nbsp; 提 &nbsp; 交 &nbsp;</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

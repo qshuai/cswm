@@ -1,0 +1,119 @@
+<section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+        <span class="c-999 en">&gt;</span>
+        <a onclick="goBack()" class="maincolor">上一页</a>
+        <span class="c-999 en">&gt;</span>
+        <span class="c-666">客户列表</span>
+        <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+           href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="Hui-article">
+        <article class="cl pd-20">
+            <table class="table table-border table-bordered table-bg">
+                <thead>
+                <tr>
+                    <th colspan="9" scope="col">客户列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th>姓名</th>
+                    <th>电话</th>
+                    <th>单位</th>
+                    <th>省份</th>
+                    <th>市</th>
+                    <th>区</th>
+                    <th>备注</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .consumer}}
+                <tr class="text-c">
+                    <td><a class="c-primary" cid="{{.Id}}" onclick=ConsumerEdit(this)>{{.Name}} <i class="Hui-iconfont Hui-iconfont-edit"></i></a></td>
+                    <td>{{.Tel}}</td>
+                    <td>{{.Department}}</td>
+                    <td>{{.Province}}</td>
+                    <td>{{.City}}</td>
+                    <td>{{.Region}}</td>
+                    <td>{{.Introduction}}</td>
+                    <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                    <td>{{date .Updated "Y-m-d H:i:s"}}</td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+        </article>
+    </div>
+
+    <!--修改销售记录弹窗-->
+    <div id="consumer_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+        <div class="modal-dialog" style="width: 60%">
+            <input type="hidden" name="sale_id">
+            <div class="modal-content radius">
+                <div class="modal-header">
+                    <h3 class="modal-title">修改销售信息</h3>
+                    <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                </div>
+                <div class="modal-body">
+                    <form action="/consumer_edit" method="post" class="form form-horizontal" id="form-article-add">
+                        {{.xsrfdata}}
+                        <input type="hidden" name="consumer_id">
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="name"><span class="c-red">*</span>姓名：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="name" name="name" readonly>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="tel"><span class="c-red">*</span>电话：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="tel" name="tel" required>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="department"><span class="c-red">*</span>单位：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="department" name="department" required>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="province"><span class="c-red">*</span>省份：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="province" name="province" required>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="city"><span class="c-red">*</span>城市：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="city" name="city" required>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="region"><span class="c-red">*</span>区域：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="region" name="region" required>
+                            </div>
+                        </div>
+                        <div class="row cl">
+                            <label class="form-label col-xs-4 col-sm-2" for="introduction"><span class="c-red">*</span>备注：</label>
+                            <div class="formControls col-xs-8 col-sm-9">
+                                <input type="text" class="input-text radius" value="" placeholder="" id="introduction" name="introduction" required>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary">确定</button>
+                            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
