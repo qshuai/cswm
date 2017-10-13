@@ -9,6 +9,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"strconv"
+	"ERP/models/permission"
 )
 
 type MemberController struct {
@@ -101,6 +102,9 @@ func (c *MemberController) UserInfo_post() {
 	u := models.User{}
 	u.Id, _ = c.GetSession("uid").(int)
 	u.Username = c.GetString("username")
+
+	//同步当前用户的permission数据到redis
+	permission.AsyncMysql2RedisOne(u.Id)
 
 	password := []byte(c.GetString("password"))
 	passwordMD5 := md5.Sum(password)
