@@ -9,7 +9,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"strconv"
-	"ERP/models/permission"
+	"ERP/permission"
 )
 
 type MemberController struct {

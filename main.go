@@ -11,7 +11,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"regexp"
 	"strconv"
-	"ERP/models/permission"
+	"ERP/permission"
 )
 
 func init() {
@@ -48,6 +48,12 @@ var FilterUserInfo = func(c *context.Context) {
 	if is_first == "false" && c.Request.RequestURI == "/userinfo" {
 		c.Redirect(302, "/")
 	}
+}
+
+//为每个页面都赋予authority变量（用户权限map）
+var PermissionAssign = func(c *context.Context) {
+	uid, _ := c.Input.Session("uid").(int)
+	c.Input.SetData("authority", permission.GetOneRowPermission(uid))
 }
 
 //模板函数
@@ -88,6 +94,7 @@ func main() {
 	//过滤器
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterLogin)
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterUserInfo)
+	beego.InsertFilter("/*", beego.BeforeRouter, PermissionAssign)
 
 	//自定义错误界面
 	beego.ErrorController(&controllers.ErrorController{})

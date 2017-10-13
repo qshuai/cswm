@@ -1,6 +1,8 @@
 package controllers
 
-import "github.com/astaxie/beego"
+import (
+	"github.com/astaxie/beego"
+)
 
 //定义响应json数据格式
 type ResponseInfo struct {
@@ -13,6 +15,3 @@ type BaseController struct {
 	beego.Controller
 }
 
-func init() {
-
-}
