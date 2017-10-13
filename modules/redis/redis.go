@@ -22,7 +22,7 @@ type RedisStorage struct {
 	config Redis
 }
 
-func NewRedis(config Redis) (redisInterface, error) {
+func NewRedis(config Redis) (RedisInterface, error) {
 	r := &RedisStorage{
 		config: config,
 		pool: &redis.Pool{

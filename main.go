@@ -11,6 +11,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"regexp"
 	"strconv"
+	"ERP/models/permission"
 )
 
 func init() {
@@ -81,6 +82,9 @@ func stringToInt(str string) int {
 }
 
 func main() {
+	//同步mysql数据表permission到redis
+	permission.AsyncMysql2RedisAll()
+
 	//过滤器
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterLogin)
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterUserInfo)

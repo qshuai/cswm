@@ -2,8 +2,10 @@ package redis_orm
 
 import "github.com/astaxie/beego"
 
+var RedisPool RedisInterface
+
+//获取redis配置信息
 func init() {
-	//获取配置信息
 	port, _ := beego.AppConfig.Int("redis::port")
 	DB, _ := beego.AppConfig.Int("redis::db")
 	IdleTimeout, _ := beego.AppConfig.Int("redis::idletimeout")
@@ -22,9 +24,9 @@ func init() {
 		InitialOpenConns: InitialOpenConns,
 	}
 
-	obj, err := NewRedis(redis_config)
+	var err error
+	RedisPool, err = NewRedis(redis_config)
 	if err != nil {
 
 	}
-	obj.Set_user("name", 45)
 }

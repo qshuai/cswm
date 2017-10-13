@@ -1,5 +1,7 @@
 package redis_orm
 
-type redisInterface interface {
-	Set_user(key string, value int) error
+import "ERP/models"
+
+type RedisInterface interface {
+	StorePermission(permission_items []models.Permission) error
 }
