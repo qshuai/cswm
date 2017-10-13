@@ -118,7 +118,7 @@ func (r *RedisStorage) GetOneRowPermission(uid int) map[string]bool {
 	return maps
 }
 
-//获取某个人的permission的一行数据
+//获取某个人的permission的某个权限数据
 func (r *RedisStorage) GetOneItemPermission(uid int, key string) bool {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")

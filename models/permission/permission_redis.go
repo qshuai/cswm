@@ -16,6 +16,7 @@ func AsyncMysql2RedisAll() {
 	redis_orm.RedisPool.StorePermission(permission_items)
 }
 
+//同步一个用户的permission数据到redis中
 func AsyncMysql2RedisOne(uid int) {
 	o := orm.NewOrm()
 	permission_item := models.Permission{}
@@ -23,10 +24,12 @@ func AsyncMysql2RedisOne(uid int) {
 	redis_orm.RedisPool.StoreOnePermission(permission_item)
 }
 
+//获取某个人的permission的一行数据
 func GetOneRowPermission(uid int) map[string]bool {
 	return redis_orm.RedisPool.GetOneRowPermission(uid)
 }
 
+//获取某个人的permission的某个权限数据
 func GetOneItemPermission(uid int, key string) bool {
 	return redis_orm.RedisPool.GetOneItemPermission(uid, key)
 }
