@@ -49,8 +49,12 @@
                 <ul class="cl">
                     <li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe600;</i> 新增 <i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
-                            <li><a href="/product_add"><i class="Hui-iconfont">&#xe620;</i> 产品</a></li>
-                            <li><a href="/member_add"><i class="Hui-iconfont">&#xe60d;</i> 用户</a></li>
+							{{if .authority.AddProduct}}
+                            	<li><a href="/product_add"><i class="Hui-iconfont">&#xe620;</i> 产品</a></li>
+							{{end}}
+							{{if .authority.AddMember}}
+                            	<li><a href="/member_add"><i class="Hui-iconfont">&#xe60d;</i> 用户</a></li>
+							{{end}}
                             <li><a href="/message_add"><i class="Hui-iconfont">&#xe60d;</i> 消息</a></li>
                         </ul>
                     </li>
@@ -58,8 +62,8 @@
             </nav>
             <nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
                 <ul class="cl">
-                    <li>管理员</li>
-                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">戚帅 <i class="Hui-iconfont">&#xe6d5;</i></a>
+                    <li>{{.grade}}</li>
+                    <li class="dropDown dropDown_hover"> <a href="#" class="dropDown_A">{{.username}} <i class="Hui-iconfont">&#xe6d5;</i></a>
                         <ul class="dropDown-menu menu radius box-shadow">
                             <li><a href="/member_edit">个人信息</a></li>
                             <li><a href="/logout">退出</a></li>
@@ -87,16 +91,21 @@
 <aside class="Hui-aside">
 
     <div class="menu_dropdown bk_2">
-        <dl id="menu-product">
+        <dl id="menu-product" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe66a;</i> 库存管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/store_list" title="库房列表">库房列表</a></li>
-                    <li><a href="/store_add" title="库房列表">添加库房</a></li>
+					{{if .authority.ViewStore}}
+                    	<li><a href="/store_list" title="库房列表">库房列表</a></li>
+					{{end}}
+					{{if .authority.AddStore}}
+                    	<li><a href="/store_add" title="库房列表">添加库房</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+		{{if .authority.ViewMove}}
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe655;</i> 移库管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -104,7 +113,9 @@
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-product">
+		{{end}}
+		{{if .authority.OperateCategory}}
+        <dl id="menu-product" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe681;</i> 分类管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -115,72 +126,101 @@
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+		{{end}}
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe620;</i> 产品管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
                     <li><a href="/product_list" title="图片管理">产品列表</a></li>
-                    <li><a href="/product_add" title="图片管理">产品录入</a></li>
+					{{if .authority.AddProduct}}
+                    	<li><a href="/product_add" title="图片管理">产品录入</a></li>
+					{{end}}
+					{{if .authority.AddProduct}}
+						<li><a href="/product_template_list">模板列表</a></li>
+						<li><a href="/product_template_add">模板录入</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe61e;</i> 销售相关<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/sale_list" title="图片管理">销售记录</a></li>
+					{{if .authority.ViewSale}}
+                    	<li><a href="/sale_list" title="销售记录">销售记录</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe60d;</i> 供应商<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/supplier_list" title="供应商列表">供应商列表</a></li>
-                    <li><a href="/supplier_add" title="添加供应商">添加供应商</a></li>
+					{{if .authority.ViewSupplier}}
+                    	<li><a href="/supplier_list" title="供应商列表">供应商列表</a></li>
+					{{end}}
+					{{if .authority.AddSupplier}}
+                    	<li><a href="/supplier_add" title="添加供应商">添加供应商</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe62c;</i> 经销商<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/dealer_list" title="经销商列表">经销商列表</a></li>
-                    <li><a href="/dealer_add" title="添加经销商">添加经销商</a></li>
+					{{if .authority.ViewDealer}}
+						<li><a href="/dealer_list" title="经销商列表">经销商列表</a></li>
+					{{end}}
+					{{if .authority.AddDealer}}
+                    	<li><a href="/dealer_add" title="添加经销商">添加经销商</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe611;</i> 客户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/consumer_list" title="图片管理">客户列表</a></li>
-                    <li><a href="/consumer_add" title="图片管理">添加客户</a></li>
+					{{if .authority.ViewConsumer}}
+                    	<li><a href="/consumer_list" title="图片管理">客户列表</a></li>
+					{{end}}
+					{{if .authority.AddConsumer}}
+                    	<li><a href="/consumer_add" title="图片管理">添加客户</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-picture">
+        <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe6d3;</i> 品牌管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
                     <li><a href="/brand_list" title="品牌列表">品牌列表</a></li>
-                    <li><a href="/brand_add" title="添加品牌">添加品牌</a></li>
+					{{if .authority.AddBrand }}
+                    	<li><a href="/brand_add" title="添加品牌">添加品牌</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-member">
+        <dl id="menu-member" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe602;</i> 人员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
                     <li><a href="/member_list" title="会员列表">会员列表</a></li>
-                    <li><a href="/member_add" title="添加会员">添加会员</a></li>
-                    <li><a href="/disable_member_list" title="删除的会员">禁用账号</a></li>
-                    <li><a href="/member_edit" title="等级管理">自我修改</a></li>
-                    <li><a href="/admin_member_edit" title="等级管理">管理人员</a></li>
+					{{if .authority.AddMember}}
+                    	<li><a href="/member_add" title="添加会员">添加会员</a></li>
+					{{end}}
+					{{if .authority.ActivieMember}}
+                    	<li><a href="/disable_member_list" title="禁用账号">禁用账号</a></li>
+					{{end}}
+                    	<li><a href="/member_edit" title="等级管理">自我修改</a></li>
+					{{if .authority.EditMember}}
+                    	<li><a href="/admin_member_edit" title="等级管理">管理人员</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-comments">
+        <dl id="menu-comments" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe622;</i> 消息管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -189,7 +229,9 @@
                 </ul>
             </dd>
         </dl>
-        <dl id="menu-comments">
+
+		{{if eq .grade "超级管理员"}}
+        <dl id="menu-comments" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe61d;</i> 权限管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -198,6 +240,7 @@
                 </ul>
             </dd>
         </dl>
+		{{end}}
     </div>
 </aside>
 <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>

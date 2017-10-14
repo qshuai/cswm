@@ -46,6 +46,11 @@ func init() {
 		beego.Router("/product_item_edit", &controllers.ProductController{}, "post:Product_item_edit")
 		//商品跟踪
 		beego.Router("/product_track", &controllers.ProductController{}, "get:Product_track")
+
+		beego.Router("/product_template_list", &controllers.ProductController{}, "get:ProductTemplateList")
+		beego.Router("/product_template_add", &controllers.ProductController{}, "get:ProductTemplateAdd")
+		beego.Router("/product_template_add", &controllers.ProductController{}, "post:ProductTemplateAddPost")
+		beego.Router("/product_template_edit", &controllers.ProductController{}, "post:ProductTemplateEditPost")
 	}
 
 	{

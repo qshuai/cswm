@@ -10,6 +10,13 @@ if (query_url == "/product_list" || query_url == "/sale_list") {
     $("body").addClass("big-page");
 }
 
+//如果左侧导航栏条目下无可选内容，则隐藏改条目
+var navlis = $(".nav-left-list");
+$.each(navlis, function (index) {
+	if (navlis.eq(index).find("li").length === 0){
+		navlis.eq(index).addClass("hide")
+	}
+});
 
 //product_add.html
 //-----------------------------------------------------------------------------------
@@ -35,25 +42,26 @@ if (query_url == "/product_add"){
     var stock;
     var in_price;
 
-//增加sku
-    function AddSku() {
-        $("#add_spec").parent("div").append('<input type="text" class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
+	//增加sku
+	function AddSku() {
+		$("#add_spec").parent("div").append('<input type="text" class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
 
-        delete_sku = $(".delete_sku");
-        spec = $(".spec");
-        stock = $(".stock");
-        in_price = $(".in_price");
+		delete_sku = $(".delete_sku");
+		spec = $(".spec");
+		stock = $(".stock");
+		in_price = $(".in_price");
 
-        $.each(delete_sku, function (index) {
-            delete_sku.eq(index).click(function () {
-                index += 1;
-                spec.eq(index).remove();
-                stock.eq(index).remove();
-                in_price.eq(index).remove();
-                $(this).remove();
-            })
-        });
-    }
+		$.each(delete_sku, function (index) {
+			delete_sku.eq(index).click(function () {
+				index += 1;
+				spec.eq(index).remove();
+				stock.eq(index).remove();
+				in_price.eq(index).remove();
+				$(this).remove();
+			})
+		});
+	}
+
 
 //通过货号快速填充商品信息
     var products = [];
@@ -999,3 +1007,38 @@ $.each(permission_member_tds, function (index) {
 		permission_member_tds.eq(index).html("<i class='Hui-iconfont Hui-iconfont-close c-danger'></i>")
 	}
 });
+
+//product_template_add.html
+//增加sku
+function AddTemplateSku() {
+	$("#add_spec").parent("div").append('<input type="text" class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
+
+	delete_sku = $(".delete_sku");
+	spec = $(".spec");
+	stock = $(".stock");
+	in_price = $(".in_price");
+
+	$.each(delete_sku, function (index) {
+		delete_sku.eq(index).click(function () {
+			index += 1;
+			spec.eq(index).remove();
+			stock.eq(index).remove();
+			in_price.eq(index).remove();
+			$(this).remove();
+		})
+	});
+}
+
+function AppendSupplier() {
+	var supplier_input = $("#supplier");
+	var supplier_list = $("#supplier-list");
+	if (supplier_input.val() !== "") {
+		if (supplier_list.val() === ""){
+			supplier_list.val(supplier_input.val());
+		}else {
+			supplier_list.val(supplier_list.val() + "," + supplier_input.val());
+		}
+
+		supplier_input.val("");
+	}
+}

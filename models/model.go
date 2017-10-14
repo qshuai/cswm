@@ -28,25 +28,25 @@ type User struct {
 }
 
 type Brand struct {
-	Id      int
-	Name    string        `orm:"size(20);unique"`
-	Product []*Product    `orm:"reverse(many)"`
-	Created time.Time    `orm:"auto_now_add;type(datetime)"`
+	Id              int
+	Name            string        `orm:"size(20);unique"`
+	ProductTemplate []*ProductTemplate    `orm:"reverse(many)"`
+	Created         time.Time    `orm:"auto_now_add;type(datetime)"`
 }
 
 type Category struct {
-	Id         int
-	Primary    string `orm:"size(10)"`            //一级分类；字典：01-试剂， 02-耗材， 03-仪器
-	TwoStage   string `orm:"size(20);null"`       //二级分类
-	ThreeStage string `orm:"size(50);null;index"` //三级分类
-	Is_hidden  bool                               //是否隐藏
-	Product    []*Product `orm:"reverse(many)"`
+	Id              int
+	Primary         string `orm:"size(10)"`            //一级分类；字典：01-试剂， 02-耗材， 03-仪器
+	TwoStage        string `orm:"size(20);null"`       //二级分类
+	ThreeStage      string `orm:"size(50);null;index"` //三级分类
+	Is_hidden       bool                               //是否隐藏
+	ProductTemplate []*ProductTemplate `orm:"reverse(many)"`
 }
 
 type Store struct {
 	Id      int
-	Pool    string `orm:"size(10)"` //总库房名称
-	Name    string `orm:"size(20)"` //分库房名称，不能含有`-`
+	Pool    string `orm:"size(10)"` //总库房名称, 不能含有`-`
+	Name    string `orm:"size(20)"` //分库房名称, 不能含有`-`
 	Product []*Product `orm:"reverse(many)"`
 }
 
@@ -66,24 +66,33 @@ type Dealer struct {
 }
 
 type Product struct {
-	Id         int
-	User       *User    `orm:"rel(fk)"`                         //备注：用户
-	Title      string        `orm:"size(100)"`                  //备注：商品名称
-	Brand      *Brand        `orm:"rel(fk)"`                    //备注：商标
-	ArtNum     string        `orm:"size(20);index"`             //备注：货号
-	LotNum     string        `orm:"size(20);null"`              //备注：批号
-	CatNum     *Category    `orm:"rel(fk)"`                     //备注：分类号
-	Spec       string        `orm:"size(100)"`                  //备注：规格
-	Stock      uint32                                           //备注：库存数量
-	Unit       string        `orm:"size(5)"`                    //单位
-	Store      *Store        `orm:"rel(fk)"`                    //备注：库房信息
-	InTime     time.Time    `orm:"type(datetime);auto_now_add"` //备注：入库时间
-	Supplier   *Supplier    `orm:"rel(fk)"`                     //备注：供应商
-	Dealer     *Dealer        `orm:"rel(fk);null"`              //经销商
-	InPrice    float64        `orm:"digits(10);decimals(2)"`    //备注：进库价格
-	HasPay     bool        `orm:"default(false)"`               //备注：是否已经支付货款； 字典：0-否定, 1-肯定
-	HasInvioce bool        `orm:"default(false)"`               //备注：是否提供发票； 字典：0-否定, 1-肯定
-	GetInvioce time.Time    `orm:"type(date);null"`             //备注：发票接收日期
+	Id              int
+	User            *User    `orm:"rel(fk)"`                         //备注：用户
+	ProductTemplate *ProductTemplate `orm:"rel(fk)"`                 //商品模板
+	LotNum          string        `orm:"size(20);null"`              //备注：批号
+	Stock           uint32                                           //备注：库存数量
+	Store           *Store        `orm:"rel(fk)"`                    //备注：库房信息
+	InTime          time.Time    `orm:"type(datetime);auto_now_add"` //备注：入库时间
+	Supplier        *Supplier    `orm:"rel(fk)"`                     //备注：供应商
+	Dealer          *Dealer        `orm:"rel(fk);null"`              //经销商
+	InPrice         float64        `orm:"digits(10);decimals(2)"`    //备注：进库价格
+	HasPay          bool        `orm:"default(false)"`               //备注：是否已经支付货款； 字典：0-否定, 1-肯定
+	HasInvioce      bool        `orm:"default(false)"`               //备注：是否提供发票； 字典：0-否定, 1-肯定
+	GetInvioce      time.Time    `orm:"type(date);null"`             //备注：发票接收日期
+}
+
+type ProductTemplate struct {
+	Id        int
+	Product   []*Product    `orm:"reverse(many)"`         //商品
+	Title     string        `orm:"size(100)"`             //备注：商品名称
+	Brand     *Brand        `orm:"rel(fk)"`               //备注：商标
+	ArtNum    string        `orm:"size(20);index"`        //备注：货号
+	CatNum    *Category    `orm:"rel(fk)"`                //备注：分类号
+	Spec      string        `orm:"size(100)"`             //备注：规格
+	Unit      string        `orm:"size(5)"`               //单位
+	Suppliers string                                      //备注：供应商列表(以逗号分隔)
+	Dealer    *Dealer        `orm:"rel(fk);null"`         //经销商
+	InPrice   float64 `orm:"digits(10);decimals(2);null"` //备注：进库价格
 }
 
 type Move struct {
@@ -224,9 +233,9 @@ func init() {
 	//orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
 
-	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission))
+	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
 
-	//orm.RunSyncdb("default", true, true)
+	orm.RunSyncdb("default", true, true)
 	////
 	//o := orm.NewOrm()
 	//defaultPermission := DefaultPermission{}

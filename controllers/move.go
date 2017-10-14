@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"strconv"
 	"strings"
-	"github.com/astaxie/beego/logs"
 	"time"
 )
 
@@ -97,35 +96,35 @@ func (c *MoveController) Move_request_post() {
 
 	//事务
 	o.Begin()
-	mid, err1 := o.Insert(&move)
-	_, err2 := o.QueryTable("product").Filter("id", pid).Update(orm.Params{
-		"stock" : orm.ColValue(orm.ColMinus, move.Num),
-	})
-	if err1 == nil && err2 == nil{
-		o.Commit()
-		//为目标库房总库管理员和分库管理员发送message
-		message := models.Message{}
-		for _, item := range pool_user  {
-			if item.PoolName != user.PoolName {
-				message.From = &user
-				message.To = &item
-				message.Content = "<span class='c-warning'>"+user.Name + "</span> 将商品： <a href='/product_track/"+ strconv.Itoa(product.Id) +"' class='c-primary'>" + product.Title + "</a> 从 <span class='c-danger'>" + store_from.Pool + "-" + store_from.Name +
-					"</span> 移库到 <span class='c-danger'>" + c.GetString("move_to") + "</span><br />具体请查看：<a href='"+ c.Ctx.Input.Site() + ":" +strconv.Itoa(c.Ctx.Input.Port()) +
-					"/move_info/" + strconv.FormatInt(mid, 10) + "' target='blank'><u>移库详情</u></a>"
-				o.Insert(&message)
-			}
-		}
-
-		c.Data["url"] = "/move_list"
-		c.Data["msg"] = "成功发起移库请求！"
-		c.TplName = "jump/success.html"
-	} else {
-		o.Rollback()
-		logs.Error("用户Id： ", uid, "移库失败！ 商品id: ", pid, "; 从库房Id：", product.Stock, " 到 ", c.GetString("move_to"), "原因:", err1, err2)
-		c.Data["url"] = "/move_request/" + strconv.Itoa(pid)
-		c.Data["msg"] = "发起移库请求失败"
-		c.TplName = "jump/error.html"
-	}
+	//mid, err1 := o.Insert(&move)
+	//_, err2 := o.QueryTable("product").Filter("id", pid).Update(orm.Params{
+	//	"stock" : orm.ColValue(orm.ColMinus, move.Num),
+	//})
+	//if err1 == nil && err2 == nil{
+	//	o.Commit()
+	//	//为目标库房总库管理员和分库管理员发送message
+	//	message := models.Message{}
+	//	for _, item := range pool_user  {
+	//		if item.PoolName != user.PoolName {
+	//			message.From = &user
+	//			message.To = &item
+	//			//message.Content = "<span class='c-warning'>"+user.Name + "</span> 将商品： <a href='/product_track/"+ strconv.Itoa(product.Id) +"' class='c-primary'>" + product.Title + "</a> 从 <span class='c-danger'>" + store_from.Pool + "-" + store_from.Name +
+	//			//	"</span> 移库到 <span class='c-danger'>" + c.GetString("move_to") + "</span><br />具体请查看：<a href='"+ c.Ctx.Input.Site() + ":" +strconv.Itoa(c.Ctx.Input.Port()) +
+	//			//	"/move_info/" + strconv.FormatInt(mid, 10) + "' target='blank'><u>移库详情</u></a>"
+	//			o.Insert(&message)
+	//		}
+	//	}
+	//
+	//	c.Data["url"] = "/move_list"
+	//	c.Data["msg"] = "成功发起移库请求！"
+	//	c.TplName = "jump/success.html"
+	//} else {
+	//	o.Rollback()
+	//	logs.Error("用户Id： ", uid, "移库失败！ 商品id: ", pid, "; 从库房Id：", product.Stock, " 到 ", c.GetString("move_to"), "原因:", err1, err2)
+	//	c.Data["url"] = "/move_request/" + strconv.Itoa(pid)
+	//	c.Data["msg"] = "发起移库请求失败"
+	//	c.TplName = "jump/error.html"
+	//}
 }
 
 //移库列表

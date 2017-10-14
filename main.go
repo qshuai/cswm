@@ -13,7 +13,6 @@ import (
 	"strconv"
 	"ERP/plugins/permission"
 	"ERP/plugins/position"
-	"fmt"
 )
 
 func init() {
@@ -55,8 +54,14 @@ var FilterUserInfo = func(c *context.Context) {
 
 //为每个页面都赋予authority变量（用户权限map）
 var PermissionAssign = func(c *context.Context) {
-	uid, _ := c.Input.Session("uid").(int)
-	c.Input.SetData("authority", permission.GetOneRowPermission(uid))
+	username, _ := c.Input.Session("username").(string)
+	c.Input.SetData("authority", permission.GetOneRowPermission(username))
+}
+
+var PositionAssign = func(c *context.Context) {
+	username, _ := c.Input.Session("username").(string)
+	c.Input.SetData("username", username)
+	c.Input.SetData("grade", position.GetOnePosition(username))
 }
 
 //模板函数
@@ -101,6 +106,7 @@ func main() {
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterLogin)
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterUserInfo)
 	beego.InsertFilter("/*", beego.BeforeRouter, PermissionAssign)
+	beego.InsertFilter("/*", beego.BeforeRouter, PositionAssign)
 
 	//自定义错误界面
 	beego.ErrorController(&controllers.ErrorController{})

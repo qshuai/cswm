@@ -25,11 +25,11 @@ func AsyncMysql2RedisOne(uid int) {
 }
 
 //获取某个人的permission的一行数据
-func GetOneRowPermission(uid int) map[string]bool {
-	return redis_orm.RedisPool.GetOneRowPermission(uid)
+func GetOneRowPermission(username string) map[string]bool {
+	return redis_orm.RedisPool.GetOneRowPermission(username)
 }
 
 //获取某个人的permission的某个权限数据
-func GetOneItemPermission(uid int, key string) bool {
-	return redis_orm.RedisPool.GetOneItemPermission(uid, key)
+func GetOneItemPermission(username, key string) bool {
+	return redis_orm.RedisPool.GetOneItemPermission(username, key)
 }

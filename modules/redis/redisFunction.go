@@ -4,7 +4,6 @@ import (
 	"ERP/models"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 	"github.com/garyburd/redigo/redis"
 	"strconv"
 )
@@ -15,6 +14,7 @@ func (r *RedisStorage) StorePermission(permission_items []models.Permission) err
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
 
 	ri := r.pool.Get()
+	defer ri.Close()
 	var err error
 	for _, item := range permission_items {
 		_, err = ri.Do("HMSET", permission_prefix+item.User.Username,
@@ -61,6 +61,7 @@ func (r *RedisStorage) StoreOnePermission(permission models.Permission) error {
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
 
 	ri := r.pool.Get()
+	defer ri.Close()
 	var err error
 	_, err = ri.Do("HMSET", permission_prefix+permission.User.Username,
 		"AddMember", permission.AddMember,
@@ -101,16 +102,13 @@ func (r *RedisStorage) StoreOnePermission(permission models.Permission) error {
 }
 
 //获取某个人的permission的一行数据
-func (r *RedisStorage) GetOneRowPermission(uid int) map[string]bool {
+func (r *RedisStorage) GetOneRowPermission(username string) map[string]bool {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
 
-	//获取用户名
-	user := models.User{}
-	o := orm.NewOrm()
-	o.QueryTable("user").Filter("id", uid).One(&user, "username")
 	ri := r.pool.Get()
-	res, _ := redis.StringMap(ri.Do("HGETALL", permission_prefix+user.Username))
+	defer ri.Close()
+	res, _ := redis.StringMap(ri.Do("HGETALL", permission_prefix+username))
 	var maps = make(map[string]bool, len(res))
 	for key, value := range res {
 		maps[key], _ = strconv.ParseBool(value)
@@ -119,17 +117,13 @@ func (r *RedisStorage) GetOneRowPermission(uid int) map[string]bool {
 }
 
 //获取某个人的permission的某个权限数据
-func (r *RedisStorage) GetOneItemPermission(uid int, key string) bool {
+func (r *RedisStorage) GetOneItemPermission(username string, key string) bool {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
 
-	//获取用户名
-	user := models.User{}
-	o := orm.NewOrm()
-	o.QueryTable("user").Filter("id", uid).One(&user, "username")
-
 	ri := r.pool.Get()
-	b, _ := redis.Bool(ri.Do("HGET", permission_prefix+user.Username, key))
+	defer ri.Close()
+	b, _ := redis.Bool(ri.Do("HGET", permission_prefix+username, key))
 	return b
 }
 
@@ -139,6 +133,7 @@ func (r *RedisStorage) StorePosition(position_items []models.User) error {
 	position_fix := beego.AppConfig.String("redis::position_prefix")
 
 	ri := r.pool.Get()
+	defer ri.Close()
 	var err error
 	for _, item := range position_items {
 		_, err = ri.Do("SET", position_fix+item.Username, item.Position)
@@ -155,6 +150,7 @@ func (r *RedisStorage) StoreOnePosition(position_item models.User) error {
 	position_fix := beego.AppConfig.String("redis::position_prefix")
 
 	ri := r.pool.Get()
+	defer ri.Close()
 	var err error
 
 	_, err = ri.Do("SET", position_fix+position_item.Username, position_item.Position)
@@ -170,6 +166,7 @@ func (r *RedisStorage) GetOnePosition(username string) string {
 	position_fix := beego.AppConfig.String("redis::position_prefix")
 
 	ri := r.pool.Get()
-	res, _ := redis.String(ri.Do("GET", position_fix + username))
+	defer ri.Close()
+	res, _ := redis.String(ri.Do("GET", position_fix+username))
 	return res
 }
