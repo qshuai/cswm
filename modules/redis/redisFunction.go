@@ -132,3 +132,44 @@ func (r *RedisStorage) GetOneItemPermission(uid int, key string) bool {
 	b, _ := redis.Bool(ri.Do("HGET", permission_prefix+user.Username, key))
 	return b
 }
+
+//存储所有user数据表中的position到redis
+func (r *RedisStorage) StorePosition(position_items []models.User) error {
+	//获取position redis存储前缀
+	position_fix := beego.AppConfig.String("redis::position_prefix")
+
+	ri := r.pool.Get()
+	var err error
+	for _, item := range position_items {
+		_, err = ri.Do("SET", position_fix+item.Username, item.Position)
+		if err != nil {
+			logs.Error("存储position redis错误", err)
+		}
+	}
+	return nil
+}
+
+//存储某个user的position到redis
+func (r *RedisStorage) StoreOnePosition(position_item models.User) error {
+	//获取position redis存储前缀
+	position_fix := beego.AppConfig.String("redis::position_prefix")
+
+	ri := r.pool.Get()
+	var err error
+
+	_, err = ri.Do("SET", position_fix+position_item.Username, position_item.Position)
+	if err != nil {
+		logs.Error("存储position redis错误", err)
+	}
+	return nil
+}
+
+//从redis中获取某个人员的position数据
+func (r *RedisStorage) GetOnePosition(username string) string {
+	//获取position redis存储前缀
+	position_fix := beego.AppConfig.String("redis::position_prefix")
+
+	ri := r.pool.Get()
+	res, _ := redis.String(ri.Do("GET", position_fix + username))
+	return res
+}

@@ -48,13 +48,20 @@ func (c *LoginController) Post(){
 		uu.Ip = c.Ctx.Input.IP()
 		uu.LastLogin = time.Now()
 		o.Update(&uu, "ip", "last_login")
+
+		//设置session数据，保存user.Id和user.Username
 		c.SetSession("uid", uu.Id)
+
 		c.Redirect("/", 302)
 	} else {
 		u.Ip = c.Ctx.Input.IP()
 		u.LastLogin = time.Now()
 		o.Update(&u, "ip", "last_login")
+
+		//设置session数据，保存user.Id和user.Username
 		c.SetSession("uid", u.Id)
+		c.SetSession("username", u.Username)
+
 		c.Redirect("/", 302)
 	}
 }
@@ -62,5 +69,9 @@ func (c *LoginController) Post(){
 //退出登录
 func (c *LoginController) Logout(){
 	c.DelSession("uid")
+	c.DelSession("username")
+
+	//用户退出是
+	c.SetSecureCookie("userinfo_secret", "is_first", "")
 	c.Redirect("/login", 302)
 }

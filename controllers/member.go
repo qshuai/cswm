@@ -9,7 +9,8 @@ import (
 	"crypto/md5"
 	"fmt"
 	"strconv"
-	"ERP/permission"
+	"ERP/plugins/permission"
+	"ERP/plugins/position"
 )
 
 type MemberController struct {
@@ -116,6 +117,12 @@ func (c *MemberController) UserInfo_post() {
 		log.Fatal("完善用户信息错误：", err)
 		c.Redirect("/userinfo", 302)
 	}
+	//设置session数据，存储user.Username
+	c.SetSession("username", u.Username)
+
+	//同步当前用户的position数据到redis
+	position.AsyncOnePosition(u)
+
 	c.SetSecureCookie("userinfo_secret", "is_first", "false")
 	c.Redirect("/", 302)
 }

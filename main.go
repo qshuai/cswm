@@ -11,7 +11,9 @@ import (
 	"github.com/astaxie/beego/orm"
 	"regexp"
 	"strconv"
-	"ERP/permission"
+	"ERP/plugins/permission"
+	"ERP/plugins/position"
+	"fmt"
 )
 
 func init() {
@@ -31,16 +33,17 @@ var FilterLogin = func(c *context.Context) {
 //验证用户是否完善用户名和密码信息
 var FilterUserInfo = func(c *context.Context) {
 	o := orm.NewOrm()
-	uid := c.Input.Session("uid")
+	uid, _ := c.Input.Session("uid").(int)
 
 	//is_first变量是为了屏蔽用户登陆后还进行数据库查询操作
-	is_first, _ := c.GetSecureCookie("userinfo_secret", "is_first")
-	if is_first != "false" && uid != nil {
+	is_first, _ := c.GetSecureCookie(strconv.Itoa(uid), "is_first")
+	if is_first != "false" && uid != 0 {
 		exist := o.QueryTable("user").Filter("id", uid).Filter("username", "").Exist()
 		if exist && c.Request.RequestURI != "/userinfo" {
 			c.Redirect(302, "/userinfo")
 		} else if !exist {
-			c.SetSecureCookie("userinfo_secret", "is_first", "false")
+			c.SetSecureCookie(strconv.Itoa(uid), "is_first", "false")
+			c.Redirect(302, "/")
 
 		}
 	}
@@ -90,6 +93,9 @@ func stringToInt(str string) int {
 func main() {
 	//同步mysql数据表permission到redis
 	permission.AsyncMysql2RedisAll()
+
+	//同步mysql数据表position到redis
+	position.AsyncAllPosition()
 
 	//过滤器
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterLogin)
