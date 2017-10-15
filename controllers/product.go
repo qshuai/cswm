@@ -9,6 +9,7 @@ import (
 	"time"
 	"strconv"
 	"encoding/json"
+	"fmt"
 )
 
 type ProductController struct {
@@ -17,11 +18,50 @@ type ProductController struct {
 
 //获取商品列表
 func (c *ProductController) Get() {
-	o := orm.NewOrm()
-	product := []models.Product{}
-	o.QueryTable("product").RelatedSel().OrderBy("-id").All(&product)
+	type product struct {
+		Id           int
+		UserName     string
+		Title        string
+		BrandName    string
+		ArtNum       string
+		LotNum       string
+		ThreeStage   string
+		Spec         string
+		Stock        uint32
+		Unit         string
+		Pool         string
+		StoreName    string
+		InTime       time.Time
+		SupplierName string
+		InPrice      float64
+		HasPay       bool
+		HasInvoice   bool
+		GetInvoice   time.Time
+	}
 
-	product_byte, _ := json.Marshal(product)
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+		"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+		"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+		"store.pool", "store.name as store_name").
+		From("product").
+		LeftJoin("brand").
+		On("brand.id = product.brand_id").
+		LeftJoin("supplier").
+		On("supplier.id = product.supplier_id").
+		LeftJoin("category").
+		On("category.id = product.cat_num_id").
+		LeftJoin("user").
+		On("user.id = product.user_id").
+		LeftJoin("store").
+		On("store.id = product.store_id").
+		OrderBy("in_time").Desc()
+	sql := qb.String()
+	o := orm.NewOrm()
+	p := []product{}
+	o.Raw(sql).QueryRows(&p)
+
+	product_byte, _ := json.Marshal(p)
 	c.Data["product"] = string(product_byte)
 	c.Data["xsrf_token"] = c.XSRFToken()
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
@@ -82,23 +122,23 @@ func (c *ProductController) Product_item_edit() {
 	o := orm.NewOrm()
 
 	product.Id, _ = c.GetInt("product_id")
-	//product.Title = c.GetString("title")
+	product.Title = c.GetString("title")
 
-	//product.ArtNum = c.GetString("atr_num")
+	product.ArtNum = c.GetString("atr_num")
 	product.LotNum = c.GetString("lot_num")
 
-	//product.Spec = c.GetString("spec")
+	product.Spec = c.GetString("spec")
 	product.Stock, _ = c.GetUint32("stock")
 	product.InPrice, _ = c.GetFloat("in_price")
-	//product.Unit = c.GetString("unit")
+	product.Unit = c.GetString("unit")
 
 	brand := models.Brand{}
 	o.QueryTable("brand").Filter("name", c.GetString("brand")).One(&brand, "id")
-	//product.Brand = &brand
+	product.Brand = &brand
 
 	category := models.Category{}
 	o.QueryTable("category").Filter("three_stage", c.GetString("three_stage")).One(&category, "id")
-	//product.CatNum = &category
+	product.CatNum = &category
 
 	supplier := models.Supplier{}
 	o.QueryTable("supplier").Filter("name", c.GetString("supplier")).One(&supplier, "id")
@@ -110,9 +150,9 @@ func (c *ProductController) Product_item_edit() {
 	product.Store = &store
 
 	product.HasPay, _ = c.GetBool("has_pay_edit")
-	product.HasInvioce, _ = c.GetBool("has_invioce_edit")
+	product.HasInvoice, _ = c.GetBool("has_invioce_edit")
 
-	product.GetInvioce, _ = time.Parse("2006-1-2", c.GetString("get_invioce_edit"))
+	product.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce_edit"))
 
 	num, err := o.Update(&product, "title", "brand_id", "art_num", "lot_num", "cat_num_id", "spec", "stock", "unit", "store_id", "supplier_id", "in_price", "has_pay", "has_invioce", "get_invioce")
 	if num == 1 && err == nil {
@@ -150,22 +190,22 @@ func (c *ProductController) Add_post() {
 	user := models.User{}
 	user.Id = c.GetSession("uid").(int)
 	product.User = &user
-	//product.Title = c.GetString("title")
-	//product.ArtNum = c.GetString("atr_num")
+	product.Title = c.GetString("title")
+	product.ArtNum = c.GetString("atr_num")
 	product.LotNum = c.GetString("lot_num")
-	//product.Unit = c.GetString("unit")
+	product.Unit = c.GetString("unit")
 	product.HasPay, _ = c.GetBool("has_pay")
-	product.HasInvioce, _ = c.GetBool("has_invioce")
+	product.HasInvoice, _ = c.GetBool("has_invioce")
 
 	o := orm.NewOrm()
 
 	brand := models.Brand{}
 	o.QueryTable("brand").Filter("name", c.GetString("brand")).One(&brand, "id")
-	//product.Brand = &brand
+	product.Brand = &brand
 
 	category := models.Category{}
 	o.QueryTable("category").Filter("three_stage", c.GetString("three_stage")).One(&category, "id")
-	//product.CatNum = &category
+	product.CatNum = &category
 
 	supplier := models.Supplier{}
 	o.QueryTable("supplier").Filter("name", c.GetString("supplier")).One(&supplier, "id")
@@ -176,29 +216,30 @@ func (c *ProductController) Add_post() {
 	o.QueryTable("store").Filter("pool", store_string[0]).Filter("name", store_string[1]).One(&store, "id")
 	product.Store = &store
 
-	product.GetInvioce, _ = time.Parse("2006-1-2", c.GetString("get_invioce"))
+	product.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce"))
 
-	//spec_slice := c.GetStrings("spec")
-	//stock_slice := c.GetStrings("stock")
-	//inprice_slice := c.GetStrings("in_price")
+	spec_slice := c.GetStrings("spec")
+	stock_slice := c.GetStrings("stock")
+	inprice_slice := c.GetStrings("in_price")
 
-	//for index, item := range spec_slice {
-	//	product.Spec = item
-	//	stock_temp, _ := strconv.ParseUint(stock_slice[index], 10, 0)
-	//	product.Stock = uint32(stock_temp)
-	//	product.InPrice, _ = strconv.ParseFloat(inprice_slice[index], 64)
-	//	_, err := o.Insert(&product)
-	//
-	//	//防止出现重复主键值
-	//	product.Id++
-	//
-	//	if err != nil {
-	//		c.Data["msg"] = "添加商品失败~"
-	//		c.Data["url"] = "/product_add"
-	//		c.TplName = "jump/error.html"
-	//		return
-	//	}
-	//}
+	for index, item := range spec_slice {
+		product.Spec = item
+		stock_temp, _ := strconv.ParseUint(stock_slice[index], 10, 0)
+		product.Stock = uint32(stock_temp)
+		product.InPrice, _ = strconv.ParseFloat(inprice_slice[index], 64)
+		fmt.Printf("%#v", product)
+		_, err := o.Insert(&product)
+
+		//防止出现重复主键值
+		product.Id++
+
+		if err != nil {
+			c.Data["msg"] = "添加商品失败~"
+			c.Data["url"] = "/product_add"
+			c.TplName = "jump/error.html"
+			return
+		}
+	}
 	c.Data["msg"] = "添加商品成功~"
 	c.Data["url"] = "/product_list"
 	c.TplName = "jump/error.html"
@@ -210,23 +251,45 @@ func (c *ProductController) SearchByCatnum() {
 		return
 	}
 
-	art_num := c.GetString("art_num")
+	type product_template struct {
+		Title      string
+		BrandName  string
+		ThreeStage string
+		Spec       string
+		Unit       string
+		Suppliers  string
+		InPrice    float64
+	}
 
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("product_template.title", "product_template.spec", "product_template.unit", "product_template.suppliers",
+		"product_template.in_price", "brand.name as brand_name", "category.three_stage").
+		From("product_template").
+		InnerJoin("brand").
+		On("brand.id = product_template.brand_id").
+		InnerJoin("category").
+		On("category.id = product_template.cat_num_id").
+		Where("art_num = ?")
+	sql := qb.String()
 	o := orm.NewOrm()
-	product := []models.Product{}
-	product_spec := []models.Product{}
-	product_temp := models.Product{}
+	p := []product_template{}
+	o.Raw(sql, c.GetString("art_num")).QueryRows(&p)
 
-	//获取不同spec类别
-	o.QueryTable("product").Distinct().Filter("art_num", art_num).All(&product_spec, "spec")
-
-	//通过spec和art_num限定，循环查询
+	//o := orm.NewOrm()
+	//product := []models.Product{}
+	//product_spec := []models.Product{}
+	//product_temp := models.Product{}
+	//
+	////获取不同spec类别
+	//o.QueryTable("product").Distinct().Filter("art_num", art_num).All(&product_spec, "spec")
+	//
+	////通过spec和art_num限定，循环查询
 	//for _, item := range product_spec {
-		//o.QueryTable("product").Filter("art_num", art_num).Filter("spec", item.Spec).RelatedSel().One(&product_temp)
-		product = append(product, product_temp)
+	//	o.QueryTable("product").Filter("art_num", art_num).Filter("spec", item.Spec).RelatedSel().One(&product_temp)
+	//	product = append(product, product_temp)
 	//}
 
-	c.Data["json"] = product
+	c.Data["json"] = p
 	c.ServeJSON()
 }
 
@@ -236,6 +299,44 @@ func (c *ProductController) Product_track() {
 
 //管理员添加商品模板
 func (c *ProductController) ProductTemplateList() {
+	//定义querybuiler查询结果的接受结构体
+	type product_template struct {
+		Id         int
+		ThreeStage string
+		Title      string
+		ArtNum     string
+		Spec       string
+		Unit       string
+		Suppliers  string
+		InPrice    float64
+		BrandName  string
+		DealerName string
+	}
+
+	pt := []product_template{}
+
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("product_template.id", "product_template.title", "product_template.art_num",
+		"product_template.spec", "product_template.unit", "product_template.suppliers",
+		"product_template.in_price", "brand.name as brand_name", "category.three_stage",
+		"dealer.name as dealer_name").
+		From("product_template").
+		InnerJoin("brand").
+		On("brand.id = product_template.brand_id").
+		InnerJoin("category").
+		On("category.id = product_template.cat_num_id").
+		LeftJoin("dealer").
+		On("dealer.id = product_template.dealer_id").
+		OrderBy("id").Desc()
+	sql := qb.String()
+	o := orm.NewOrm()
+	o.Raw(sql).QueryRows(&pt)
+
+	c.Data["product_template"] = pt
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
+	c.Data["brand_string"] = GetBrandList()
+	c.Data["supplier_string"] = GetSupplierList()
+	c.Data["three_stage_string"] = GetThreeStageList()
 	c.Layout = "common.tpl"
 	c.TplName = "product/product_template_list.html"
 }
@@ -252,38 +353,47 @@ func (c *ProductController) ProductTemplateAdd() {
 
 //商品模板添加提交
 func (c *ProductController) ProductTemplateAddPost() {
-	product := models.ProductTemplate{}
+	product_template := models.ProductTemplate{}
 
-	product.Title = c.GetString("title")
-	product.ArtNum = c.GetString("atr_num")
-	product.Unit = c.GetString("unit")
+	product_template.Title = c.GetString("title")
+	product_template.ArtNum = c.GetString("atr_num")
+	product_template.Unit = c.GetString("unit")
 
 	o := orm.NewOrm()
 
+	//通过货号判断，数据库中时候已经存在该类商品
+	exist := o.QueryTable("product_template").Filter("art_num", product_template.ArtNum).Exist()
+	if exist {
+		c.Data["msg"] = "该货号的商品模板已经存在~"
+		c.Data["url"] = "/product_template_add"
+		c.TplName = "jump/error.html"
+		return
+	}
+
 	brand := models.Brand{}
 	o.QueryTable("brand").Filter("name", c.GetString("brand")).One(&brand, "id")
-	product.Brand = &brand
+	product_template.Brand = &brand
 
 	category := models.Category{}
 	o.QueryTable("category").Filter("three_stage", c.GetString("three_stage")).One(&category, "id")
-	product.CatNum = &category
+	product_template.CatNum = &category
 
-	supplier := models.Supplier{}
-	o.QueryTable("supplier").Filter("name", c.GetString("supplier")).One(&supplier, "id")
-	//product.Supplier = &supplier
+	product_template.Suppliers = c.GetString("supplier")
 
 	spec_slice := c.GetStrings("spec")
 	inprice_slice := c.GetStrings("in_price")
 
 	for index, item := range spec_slice {
-		product.Spec = item
+		product_template.Spec = item
 		if inprice_slice[index] != "" {
-			product.InPrice, _ = strconv.ParseFloat(inprice_slice[index], 64)
+			product_template.InPrice, _ = strconv.ParseFloat(inprice_slice[index], 64)
+		} else {
+			product_template.InPrice = 0
 		}
-		_, err := o.Insert(&product)
+		_, err := o.Insert(&product_template)
 
 		//防止出现重复主键值
-		product.Id++
+		product_template.Id++
 
 		if err != nil {
 			c.Data["msg"] = "添加商品模板失败~"
@@ -299,7 +409,84 @@ func (c *ProductController) ProductTemplateAddPost() {
 
 //商品模板编辑提交
 func (c *ProductController) ProductTemplateEditPost() {
+	product_template := models.ProductTemplate{}
+	product_template.Id, _ = c.GetInt("template_id")
 
+	o := orm.NewOrm()
+	var template_ids orm.ParamsList
+	var ids_string string
+	if c.GetString("global") == "yes" {
+		temp := models.ProductTemplate{}
+		o.QueryTable("product_template").Filter("id", product_template.Id).One(&temp, "art_num")
+		o.QueryTable("product_template").Filter("art_num", temp.ArtNum).ValuesFlat(&template_ids, "id")
+
+		for index, item := range template_ids {
+			if item != product_template.Id {
+				if index == 0 {
+					ids_string += fmt.Sprintf("%d", item)
+				} else {
+					ids_string += "," + fmt.Sprintf("%d", item)
+				}
+			}
+		}
+		ids_string = "(" + ids_string + ")"
+	}
+
+	product_template.Title = c.GetString("title")
+	product_template.ArtNum = c.GetString("atr_num")
+	product_template.Unit = c.GetString("unit")
+
+	product_template.Brand = GetBrand(c.GetString("brand"))
+	product_template.CatNum = GetCategory(c.GetString("three_stage"))
+
+	product_template.Suppliers = c.GetString("supplier_list")
+
+	product_template.Spec = c.GetString("spec")
+	if c.GetString("in_price") == "" {
+		product_template.InPrice, _ = strconv.ParseFloat(c.GetString("in_price"), 64)
+	} else {
+		product_template.InPrice = 0
+	}
+
+	_, err := o.Update(&product_template)
+
+	if c.GetString("global") == "yes" {
+		sql := "UPDATE product_template SET title = ?, brand_id = ?, art_num = ?, cat_num_id = ?, unit = ?, suppliers = ? WHERE id in " + ids_string
+		o.Raw(sql, product_template.Title, product_template.Brand.Id, product_template.ArtNum, product_template.CatNum.Id,
+			product_template.Unit, product_template.Suppliers).Exec()
+	}
+
+	if err != nil {
+		c.Data["msg"] = "编辑商品模板失败~"
+		c.Data["url"] = "/product_template_add"
+		c.TplName = "jump/error.html"
+		return
+	}
+	c.Data["msg"] = "编辑商品模板成功~"
+	c.Data["url"] = "/product_template_list"
+	c.TplName = "jump/error.html"
+}
+
+//删除指定product_template
+func (c *ProductController) ProductTemplateDeletePost() {
+	if c.IsAjax() {
+		template := models.ProductTemplate{}
+		template.Id, _ = c.GetInt("pid")
+		o := orm.NewOrm()
+		_, err := o.Delete(&template)
+		if err != nil {
+			c.Data["json"] = ResponseInfo{
+				Code:    "failed",
+				Message: "删除失败",
+			}
+			c.ServeJSON()
+		}
+		c.Data["json"] = ResponseInfo{
+			Code:    "success",
+			Message: "删除成功",
+		}
+		c.ServeJSON()
+	}
 }
 
 //公共函数
@@ -357,4 +544,36 @@ func GetThreeStageList() string {
 		three_stage_string += item.ThreeStage + ", "
 	}
 	return three_stage_string
+}
+
+//根据brand name 获取 brand
+func GetBrand(name string) *models.Brand {
+	brand := models.Brand{}
+	o := orm.NewOrm()
+	o.QueryTable("brand").Filter("name", name).One(&brand, "id")
+	return &brand
+}
+
+//根据dealer name 获取 dealer
+func GetDealer(name string) *models.Dealer {
+	dealer := models.Dealer{}
+	o := orm.NewOrm()
+	o.QueryTable("dealer").Filter("name", name).One(&dealer, "id")
+	return &dealer
+}
+
+//根据三级分类名称获取对应
+func GetCategory(three_stage string) *models.Category {
+	category := models.Category{}
+	o := orm.NewOrm()
+	o.QueryTable("category").Filter("three_stage", three_stage).One(&category, "id")
+	return &category
+}
+
+//根据供应商名称获取供应商
+func GetSupplier(name string) *models.Supplier {
+	supplier := models.Supplier{}
+	o := orm.NewOrm()
+	o.QueryTable("supplier").Filter("name", name).One(&supplier, "id")
+	return &supplier
 }

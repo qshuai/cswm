@@ -59,6 +59,6 @@ func (c *StoreController) Store_add_post() {
 		return
 	}
 	c.Data["url"] = "/store_list"
-	c.Data["msg"] = "添加库房"+ store.Name +"成功~"
+	c.Data["msg"] = "添加库房 "+ store.Name +" 成功~"
 	c.TplName = "jump/error.html"
 }

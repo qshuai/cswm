@@ -26,6 +26,8 @@ var FilterLogin = func(c *context.Context) {
 	_, ok := c.Input.Session("uid").(int)
 	if !ok && c.Request.RequestURI != "/login" {
 		c.Redirect(302, "/login")
+	} else if ok && c.Request.RequestURI == "/login"{
+		c.Redirect(302, "/")
 	}
 }
 

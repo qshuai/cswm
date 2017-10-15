@@ -6,25 +6,29 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="title"><span class="c-red">*</span>产品名称：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius" value="" placeholder="" id="title" name="title">
+                    <input required type="text" class="input-text radius" value="" placeholder="" id="title" name="title" readonly>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="brand">品牌：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.brand_string}}" id="brand" name="brand">
+                    <input required type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.brand_string}}" id="brand" name="brand" readonly>
                 </div>
             </div>
 			<div class="row cl">
-				<label class="form-label col-xs-4 col-sm-2" for="supplier">供应商：</label>
+				<label class="form-label col-xs-4 col-sm-2">供应商：</label>
 				<div class="formControls col-xs-8 col-sm-9">
-					<input type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.supplier_string}}" value="" id="supplier" name="supplier">
+                <span class="select-box radius" style="width: 21%;">
+                    <select class="select" name="supplier">
+
+                    </select>
+				</span>
 				</div>
 			</div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="art_num"><span class="c-red">*</span>货号：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius" value="" placeholder="" id="art_num" name="atr_num" style="width: 21%">
+                    <input required type="text" class="input-text radius" value="" placeholder="" id="art_num" name="atr_num" style="width: 21%">
                     <a class="btn btn-secondary-outline radius" id="art_num_search"><i class="Hui-iconfont Hui-iconfont-search1"></i></a>
                     <a class="btn btn-success radius" id="confirm_in">确定键入</a>
                     <span class="c-warning" id="result_art"></span>
@@ -39,51 +43,52 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="three_stage">三级分类：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius awesomplete" name="three_stage" autocomplete="on" placeholder="检索" data-list="{{.three_stage_string}}"
-                           id="three_stage">
+                    <input required type="text" class="input-text radius awesomplete" name="three_stage" autocomplete="on" placeholder="检索" data-list="{{.three_stage_string}}"
+                           id="three_stage" readonly>
                 </div>
             </div>
 
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2">sku信息：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius spec" value="" placeholder="规格" id="spec" name="spec" style="width: 40%">
-                    <input type="text" class="input-text radius stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%">
-                    <input type="text" class="input-text radius in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%">
-                    <a class="btn btn-primary radius" id="add_spec" onclick="AddSku()">增加sku</a>
+                <div class="formControls col-xs-8 col-sm-9" id="add_spec">
+                    <input required type="text" class="input-text radius spec" value="" placeholder="规格" id="spec" name="spec" style="width: 40%"  readonly>
+                    <input required type="text" class="input-text radius stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%">
+                    <input required type="text" class="input-text radius in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%">
+					<a onclick="DeleteSku(this)" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a>
                 </div>
             </div>
 
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="store">单位：</label>
                 <div class="formControls col-xs-8 col-sm-9 mt-5 radios">
-                    <input type="radio" name="unit" class="ml-5" value="箱" id="box"><label for="box">&nbsp;&nbsp;箱</label>
-                    <input type="radio" name="unit" class="ml-5" value="瓶" id="bottle"><label for="bottle">&nbsp;&nbsp;瓶</label>
-                    <input type="radio" name="unit" class="ml-5" value="个" id="individual"><label for="individual">&nbsp;&nbsp;个</label>
-                    <input type="radio" name="unit" class="ml-5" value="盒" id="he"><label for="he">&nbsp;&nbsp;盒</label>
-                    <input type="radio" name="unit" class="ml-5" value="袋" id="dai"><label for="dai">&nbsp;&nbsp;袋</label>
-                    <input type="radio" name="unit" class="ml-5" value="支" id="branch"><label for="branch">&nbsp;&nbsp;支</label>
-                    <input type="radio" name="unit" class="ml-5" value="台" id="tai"><label for="tai">&nbsp;&nbsp;台</label>
-                    <input type="radio" name="unit" class="ml-5" value="包" id="bao"><label for="bao">&nbsp;&nbsp;包</label>
-                    <input type="radio" name="unit" class="ml-5" value="套" id="tao"><label for="tao">&nbsp;&nbsp;套</label>
-                    <input type="radio" name="unit" class="ml-5" value="卷" id="juan"><label for="juan">&nbsp;&nbsp;卷</label>
+					<input type="hidden" name="unit">
+                    <input type="radio" disabled class="ml-5" value="箱" id="box"><label for="box">&nbsp;&nbsp;箱</label>
+                    <input type="radio" disabled class="ml-5" value="瓶" id="bottle"><label for="bottle">&nbsp;&nbsp;瓶</label>
+                    <input type="radio" disabled class="ml-5" value="个" id="individual"><label for="individual">&nbsp;&nbsp;个</label>
+                    <input type="radio" disabled class="ml-5" value="盒" id="he"><label for="he">&nbsp;&nbsp;盒</label>
+                    <input type="radio" disabled class="ml-5" value="袋" id="dai"><label for="dai">&nbsp;&nbsp;袋</label>
+                    <input type="radio" disabled class="ml-5" value="支" id="branch"><label for="branch">&nbsp;&nbsp;支</label>
+                    <input type="radio" disabled class="ml-5" value="台" id="tai"><label for="tai">&nbsp;&nbsp;台</label>
+                    <input type="radio" disabled class="ml-5" value="包" id="bao"><label for="bao">&nbsp;&nbsp;包</label>
+                    <input type="radio" disabled class="ml-5" value="套" id="tao"><label for="tao">&nbsp;&nbsp;套</label>
+                    <input type="radio" disabled class="ml-5" value="卷" id="juan"><label for="juan">&nbsp;&nbsp;卷</label>
                     <br>
-                    <input type="radio" name="unit" class="ml-5" value="包" id="bag"><label for="bag">&nbsp;&nbsp;包</label>
-                    <input type="radio" name="unit" class="ml-5" value="副" id="pair"><label for="pair">&nbsp;&nbsp;副</label>
-                    <input type="radio" name="unit" class="ml-5" value="张" id="sheet"><label for="sheet">&nbsp;&nbsp;张</label>
-                    <input type="radio" name="unit" class="ml-5" value="本" id="ben"><label for="ben">&nbsp;&nbsp;本</label>
-                    <input type="radio" name="unit" class="ml-5" value="只" id="zhi"><label for="zhi">&nbsp;&nbsp;只</label>
-                    <input type="radio" name="unit" class="ml-5" value="包" id="group"><label for="group">&nbsp;&nbsp;组</label>
-                    <input type="radio" name="unit" class="ml-5" value="块" id="block"><label for="block">&nbsp;&nbsp;块</label>
-                    <input type="radio" name="unit" class="ml-5" value="把" id="ba"><label for="ba">&nbsp;&nbsp;把</label>
-                    <input type="radio" name="unit" class="ml-5" value="根" id="gen"><label for="gen">&nbsp;&nbsp;根</label>
-                    <input type="radio" name="unit" class="ml-5" value="片" id="piece"><label for="piece">&nbsp;&nbsp;片</label>
+                    <input type="radio" disabled class="ml-5" value="包" id="bag"><label for="bag">&nbsp;&nbsp;包</label>
+                    <input type="radio" disabled class="ml-5" value="副" id="pair"><label for="pair">&nbsp;&nbsp;副</label>
+                    <input type="radio" disabled class="ml-5" value="张" id="sheet"><label for="sheet">&nbsp;&nbsp;张</label>
+                    <input type="radio" disabled class="ml-5" value="本" id="ben"><label for="ben">&nbsp;&nbsp;本</label>
+                    <input type="radio" disabled class="ml-5" value="只" id="zhi"><label for="zhi">&nbsp;&nbsp;只</label>
+                    <input type="radio" disabled class="ml-5" value="包" id="group"><label for="group">&nbsp;&nbsp;组</label>
+                    <input type="radio" disabled class="ml-5" value="块" id="block"><label for="block">&nbsp;&nbsp;块</label>
+                    <input type="radio" disabled class="ml-5" value="把" id="ba"><label for="ba">&nbsp;&nbsp;把</label>
+                    <input type="radio" disabled class="ml-5" value="根" id="gen"><label for="gen">&nbsp;&nbsp;根</label>
+                    <input type="radio" disabled class="ml-5" value="片" id="piece"><label for="piece">&nbsp;&nbsp;片</label>
                 </div>
             </div>
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="store">所在库房：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.store_string}}" value="" id="store" name="store">
+                    <input required type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.store_string}}" value="" id="store" name="store">
                 </div>
             </div>
             <div class="row cl">

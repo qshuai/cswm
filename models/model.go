@@ -9,7 +9,7 @@ import (
 
 type User struct {
 	Id         int
-	Username   string        `orm:"size(20);default();index"`   //备注：用户名
+	Username   string        `orm:"size(20);default();unique"`  //备注：用户名
 	Password   string        `orm:"size(50)"`                   //备注：密码
 	Name       string        `orm:"size(20);unique"`            //备注：姓名
 	Tel        string        `orm:"size(15)"`                   //备注：电话
@@ -66,27 +66,31 @@ type Dealer struct {
 }
 
 type Product struct {
-	Id              int
-	User            *User    `orm:"rel(fk)"`                         //备注：用户
-	ProductTemplate *ProductTemplate `orm:"rel(fk)"`                 //商品模板
-	LotNum          string        `orm:"size(20);null"`              //备注：批号
-	Stock           uint32                                           //备注：库存数量
-	Store           *Store        `orm:"rel(fk)"`                    //备注：库房信息
-	InTime          time.Time    `orm:"type(datetime);auto_now_add"` //备注：入库时间
-	Supplier        *Supplier    `orm:"rel(fk)"`                     //备注：供应商
-	Dealer          *Dealer        `orm:"rel(fk);null"`              //经销商
-	InPrice         float64        `orm:"digits(10);decimals(2)"`    //备注：进库价格
-	HasPay          bool        `orm:"default(false)"`               //备注：是否已经支付货款； 字典：0-否定, 1-肯定
-	HasInvioce      bool        `orm:"default(false)"`               //备注：是否提供发票； 字典：0-否定, 1-肯定
-	GetInvioce      time.Time    `orm:"type(date);null"`             //备注：发票接收日期
+	Id         int
+	User       *User    `orm:"rel(fk)"`                         //备注：用户
+	Title      string        `orm:"size(100)"`                  //备注：商品名称
+	Brand      *Brand        `orm:"rel(fk)"`                    //备注：商标
+	ArtNum     string        `orm:"size(20);index"`             //备注：货号
+	LotNum     string        `orm:"size(20);null"`              //备注：批号
+	CatNum     *Category    `orm:"rel(fk)"`                     //备注：分类号
+	Spec       string        `orm:"size(100)"`                  //备注：规格
+	Stock      uint32                                           //备注：库存数量
+	Unit       string        `orm:"size(5)"`                    //单位
+	Store      *Store        `orm:"rel(fk)"`                    //备注：库房信息
+	InTime     time.Time    `orm:"type(datetime);auto_now_add"` //备注：入库时间
+	Supplier   *Supplier    `orm:"rel(fk)"`                     //备注：供应商
+	Dealer     *Dealer        `orm:"rel(fk);null"`              //经销商
+	InPrice    float64        `orm:"digits(10);decimals(2)"`    //备注：进库价格
+	HasPay     bool        `orm:"default(false)"`               //备注：是否已经支付货款； 字典：0-否定, 1-肯定
+	HasInvoice bool        `orm:"default(false)"`               //备注：是否提供发票； 字典：0-否定, 1-肯定
+	GetInvoice time.Time    `orm:"type(date);null"`             //备注：发票接收日期
 }
 
 type ProductTemplate struct {
 	Id        int
-	Product   []*Product    `orm:"reverse(many)"`         //商品
 	Title     string        `orm:"size(100)"`             //备注：商品名称
 	Brand     *Brand        `orm:"rel(fk)"`               //备注：商标
-	ArtNum    string        `orm:"size(20);index"`        //备注：货号
+	ArtNum    string        `orm:"size(20)"`              //备注：货号
 	CatNum    *Category    `orm:"rel(fk)"`                //备注：分类号
 	Spec      string        `orm:"size(100)"`             //备注：规格
 	Unit      string        `orm:"size(5)"`               //单位
@@ -235,8 +239,8 @@ func init() {
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
 
-	orm.RunSyncdb("default", true, true)
-	////
+	//orm.RunSyncdb("default", true, true)
+	//
 	//o := orm.NewOrm()
 	//defaultPermission := DefaultPermission{}
 	//

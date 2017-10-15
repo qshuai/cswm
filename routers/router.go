@@ -51,6 +51,7 @@ func init() {
 		beego.Router("/product_template_add", &controllers.ProductController{}, "get:ProductTemplateAdd")
 		beego.Router("/product_template_add", &controllers.ProductController{}, "post:ProductTemplateAddPost")
 		beego.Router("/product_template_edit", &controllers.ProductController{}, "post:ProductTemplateEditPost")
+		beego.Router("/product_template_delete", &controllers.ProductController{}, "post:ProductTemplateDeletePost")
 	}
 
 	{
