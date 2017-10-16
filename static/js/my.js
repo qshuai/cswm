@@ -632,6 +632,110 @@ if (query_url === "/consumer_add") {
 	$("#prov").ProvinceCity()
 }
 
+
+//product_template_list.html
+//-----------------------------------------------------------------------------------
+if (query_url === "/product_template_list") {
+	var template = $.parseJSON(template);
+	$.cookie("template_offset", 0);
+	$.cookie("template_current_page", 1);
+
+	ProductTemplatePaginator(template);
+
+	//加载更多
+	$(".load-more-template").click(function () {
+		$.cookie("template_offset", parseInt($.cookie("template_offset")) + 1);
+		$.ajax({
+			url : "/template_load_more",
+			type : "post",
+			data : {
+				"offset" : $.cookie("template_offset"),
+				"_xsrf" : $("input[name=_xsrf]").val()
+			},
+			success : function (response) {
+				template = template.concat($.parseJSON(response));
+				ProductTemplatePaginator(template)
+			}
+		})
+	});
+
+	//用户选择每页显示的条目数，也就是page_size
+	var page_size_btn = $(".page_size");
+	$.each(page_size_btn, function (index) {
+		page_size_btn.eq(index).click(function () {
+
+			//通过hui-ui.js的cookie()方法直接在浏览器设置cookie减少http请求（替代以上ajax请求）
+			$.cookie('template_page_size', $(this).attr("data"), {expires: 366});
+
+			//指示为第一页
+			var num = 1;
+
+			var page_size_temp = $.cookie("template_page_size");
+			if (page_size_temp !== null) {
+				page_size = page_size_temp
+			}
+
+			ProductTemplatePaginator(template);
+		})
+	});
+}
+
+function ProductTemplatePaginator(template) {
+	//计算page_num
+	var page_num;
+	var total_item = template.length;
+	console.log("total_item", total_item);
+
+	var page_size = $.cookie("template_page_size");
+	if (page_size === undefined) {
+		page_size = 10
+	}else{
+		page_size = parseInt(page_size)
+	}
+	console.log("page_size", page_size);
+	if (total_item % page_size === 0) {
+		page_num = total_item / page_size
+	} else {
+		page_num = Math.ceil(total_item / page_size)
+	}
+
+	var current_page = parseInt($.cookie("template_current_page"));
+	if (current_page > page_num){
+		current_page = page_num
+	}
+	$.jqPaginator("#template_pagination", {
+		totalPages: page_num,
+		visiblePages: 10,
+		currentPage: 1,
+		onPageChange: function (num, type) {
+			$.cookie("template_current_page", num);
+			var template_node = $("#template");
+			template_node.html("");
+			var is_out = num * page_size;
+			if (is_out > total_item) {
+				is_out = total_item
+			}
+
+			for (var i = page_size * (num - 1); i < is_out; i++) {
+				var row = $('<tr class="text-c tds-list"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="hide"></td><td></td></tr>');
+				var tds = row.find("td");
+				tds.eq(0).text(template[i].Title);
+				tds.eq(1).text(template[i].BrandName);
+				tds.eq(2).text(template[i].ArtNum);
+				tds.eq(3).text(template[i].ThreeStage);
+				tds.eq(4).text(template[i].Suppliers);
+				tds.eq(5).text(template[i].DealerName);
+				tds.eq(6).text(template[i].Spec);
+				tds.eq(7).text(template[i].Unit);
+				tds.eq(8).text(template[i].InPrice);
+				tds.eq(9).text(template[i].Id);
+				tds.eq(10).html('<a onclick="ProductTemplateEdit(this)" class="btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>' +
+				'<a onclick="DeleteTemplateRow(this,'+template[i].Id+')" class="btn size-MINI btn-danger-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-close"></i>&nbsp;</a>');
+				template_node.append(row)
+			}
+		}
+	});
+}
 //admin_member_edit.html
 //-----------------------------------------------------------------------------------
 //人员检索
@@ -1018,15 +1122,6 @@ function finishMove(obj) {
 		})
 	}
 }
-
-$.jqPaginator($("#brand_pagination"), {
-	totalPages: 3,
-	visiblePages: 10,
-	currentPage: 1,
-	onPageChange: function (num, type) {
-
-	}
-});
 
 //category_edit.html
 //-----------------------------------------------------------------------------------

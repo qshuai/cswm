@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/static/css/paginator.css">
 <section class="Hui-article-box">
 	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
 		<span class="c-999 en">&gt;</span>
@@ -26,28 +27,28 @@
 					<th>操作</th>
 				</tr>
 				</thead>
-				<tbody>
-				{{range .product_template}}
-				<tr class="text-c tds-list">
-					<td>{{.Title}}</td>
-					<td>{{.BrandName}}</td>
-					<td>{{.ArtNum}}</td>
-					<td>{{.ThreeStage}}</td>
-					<td>{{.Suppliers}}</td>
-					<td>{{.DealerName}}</td>
-					<td>{{.Spec}}</td>
-					<td>{{.Unit}}</td>
-					<td>{{.InPrice}}</td>
-					<td class="hide">{{.Id}}</td>
-					<td>
-						<a onclick="ProductTemplateEdit(this)" class="btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>
-						<a onclick="DeleteTemplateRow(this, {{.Id}})" class="btn size-MINI btn-danger-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-close"></i>&nbsp;</a>
-					</td>
-				</tr>
-				{{end}}
+				<tbody id="template">
+
 				</tbody>
 			</table>
 		</article>
+
+		<div class="text-c">
+			<!--<input type="hidden" id="total_page" value="{{.total_page}}">-->
+			<span class="dropDown page_size_btn" style="position: relative; top: -33px">
+                <a class="dropDown_A btn btn-default radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >每页显示</a>
+                <ul class="dropDown-menu menu radius box-shadow">
+                    <li><a class="page_size" data="5">5条</a></li>
+                    <li><a class="page_size" data="10">10条</a></li>
+                    <li><a class="page_size" data="20">20条</a></li>
+                    <li><a class="page_size" data="30">30条</a></li>
+                    <li><a class="page_size" data="50">50条</a></li>
+                    <li><a class="page_size" data="100">100条</a></li>
+                </ul>
+            </span>
+			<ul class="pagination" id="template_pagination"></ul>
+			<a class="btn btn-primary radius load-more-template" style="position: relative; top: -35px">加载更多</a>
+		</div>
 
 		<!--商品模板修改弹出层-->
 		<div id="product_template_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
@@ -153,6 +154,6 @@
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-
+	var template = {{.template}}
 </script>
 <!--/请在上方写此页面业务相关的脚本-->

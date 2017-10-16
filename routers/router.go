@@ -54,6 +54,8 @@ func init() {
 		beego.Router("/product_template_delete", &controllers.ProductController{}, "post:ProductTemplateDeletePost")
 		//加载更多商品
 		beego.Router("/product_load_more", &controllers.ProductController{}, "post:ProductLoadMore")
+		//加载更多模板
+		beego.Router("/template_load_more", &controllers.ProductController{}, "post:TemplateLoadMore")
 	}
 
 	{

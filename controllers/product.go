@@ -39,8 +39,23 @@ type product struct {
 	GetInvoice   time.Time
 }
 
+//定义querybuiler查询结果的接受结构体
+type product_template struct {
+	Id         int
+	ThreeStage string
+	Title      string
+	ArtNum     string
+	Spec       string
+	Unit       string
+	Suppliers  string
+	InPrice    float64
+	BrandName  string
+	DealerName string
+}
+
 //每次获取的product数据条数
-const ProductLimit = 10
+const ProductLimit = 100
+const TemplateLimit = 100
 
 //获取商品列表
 func (c *ProductController) Get() {
@@ -266,10 +281,6 @@ func (c *ProductController) Add_get() {
 
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
-	c.Data["brand_string"] = GetBrandList()
-	c.Data["supplier_string"] = GetSupplierList()
-	c.Data["store_string"] = GetStoreList(user.PoolName)
-	c.Data["three_stage_string"] = GetThreeStageList()
 	c.TplName = "product/product_add.html"
 }
 
@@ -340,7 +351,7 @@ func (c *ProductController) SearchByCatnum() {
 		c.Abort("401")
 	}
 
-	type product_template struct {
+	type ajax_template struct {
 		Title      string
 		BrandName  string
 		ThreeStage string
@@ -361,7 +372,7 @@ func (c *ProductController) SearchByCatnum() {
 		Where("art_num = ?")
 	sql := qb.String()
 	o := orm.NewOrm()
-	p := []product_template{}
+	p := []ajax_template{}
 	o.Raw(sql, c.GetString("art_num")).QueryRows(&p)
 
 	c.Data["json"] = p
@@ -378,19 +389,6 @@ func (c *ProductController) ProductTemplateList() {
 	if pos != "超级管理员" && pos != "总库管理员" {
 		c.Abort("401")
 	}
-	//定义querybuiler查询结果的接受结构体
-	type product_template struct {
-		Id         int
-		ThreeStage string
-		Title      string
-		ArtNum     string
-		Spec       string
-		Unit       string
-		Suppliers  string
-		InPrice    float64
-		BrandName  string
-		DealerName string
-	}
 
 	pt := []product_template{}
 
@@ -406,18 +404,57 @@ func (c *ProductController) ProductTemplateList() {
 		On("category.id = product_template.cat_num_id").
 		LeftJoin("dealer").
 		On("dealer.id = product_template.dealer_id").
-		OrderBy("id").Desc()
+		OrderBy("id").Desc().
+		Limit(TemplateLimit)
 	sql := qb.String()
 	o := orm.NewOrm()
 	o.Raw(sql).QueryRows(&pt)
 
-	c.Data["product_template"] = pt
+	template_byte, _ := json.Marshal(pt)
+	c.Data["template"] = string(template_byte)
+
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["brand_string"] = GetBrandList()
 	c.Data["supplier_string"] = GetSupplierList()
 	c.Data["three_stage_string"] = GetThreeStageList()
 	c.Layout = "common.tpl"
 	c.TplName = "product/product_template_list.html"
+}
+
+//加载更多模板数据（ajax）
+func (c *ProductController) TemplateLoadMore() {
+	if !c.IsAjax() {
+		return
+	}
+	pos := position.GetOnePosition(c.GetSession("username").(string))
+	if pos != "超级管理员" && pos != "总库管理员" {
+		c.Abort("401")
+	}
+
+	offset, _ := c.GetInt("offset")
+	pt := []product_template{}
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("product_template.id", "product_template.title", "product_template.art_num",
+		"product_template.spec", "product_template.unit", "product_template.suppliers",
+		"product_template.in_price", "brand.name as brand_name", "category.three_stage",
+		"dealer.name as dealer_name").
+		From("product_template").
+		InnerJoin("brand").
+		On("brand.id = product_template.brand_id").
+		InnerJoin("category").
+		On("category.id = product_template.cat_num_id").
+		LeftJoin("dealer").
+		On("dealer.id = product_template.dealer_id").
+		OrderBy("id").Desc().
+		Limit(TemplateLimit).
+		Offset(TemplateLimit * offset)
+	sql := qb.String()
+	o := orm.NewOrm()
+	o.Raw(sql).QueryRows(&pt)
+
+	template_byte, _ := json.Marshal(pt)
+	c.Data["json"] = string(template_byte)
+	c.ServeJSON()
 }
 
 //商品模板添加页面
