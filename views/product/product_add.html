@@ -37,7 +37,7 @@
             <div class="row cl">
                 <label class="form-label col-xs-4 col-sm-2" for="lot_num"><span class="c-red">*</span>批号：</label>
                 <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" class="input-text radius" value="" placeholder="" id="lot_num" name="lot_num" style="width: 21%">
+                    <input type="text" class="input-text radius" value="" placeholder="批号" id="lot_num" name="lot_num" style="width: 21%">
                 </div>
             </div>
             <div class="row cl">
@@ -89,37 +89,6 @@
                 <label class="form-label col-xs-4 col-sm-2" for="store">所在库房：</label>
                 <div class="formControls col-xs-8 col-sm-9">
                     <input required type="text" class="input-text radius awesomplete" placeholder="检索" data-list="{{.store_string}}" value="" id="store" name="store">
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">是否结清货款：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                <span class="select-box radius" style="width: 21%;">
-                    <select class="select" name="has_pay">
-                        <option>请选择</option>
-                        <option value="true">是</option>
-                        <option value="false">否</option>
-                    </select>
-				</span>
-                </div>
-            </div>
-            <div class="row cl">
-                <label class="form-label col-xs-4 col-sm-2">是否开具发票：</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                <span class="select-box radius" style="width: 21%;">
-                    <select class="select" name="has_invioce">
-                        <option>请选择</option>
-                        <option value="true">是</option>
-                        <option value="false" id="no_invioce">否</option>
-                    </select>
-				</span>
-                </div>
-            </div>
-
-            <div class="row cl">
-                <label for="datepicker" class="form-label col-xs-4 col-sm-2">接收发票日期:&nbsp;&nbsp;</label>
-                <div class="formControls col-xs-8 col-sm-9">
-                    <input type="text" id="datepicker" class="input-text radius" value="" name="get_invioce" />
                 </div>
             </div>
 

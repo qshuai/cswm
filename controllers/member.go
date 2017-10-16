@@ -105,7 +105,7 @@ func (c *MemberController) UserInfo_post() {
 	u.Username = c.GetString("username")
 
 	//同步当前用户的permission数据到redis
-	permission.AsyncMysql2RedisOne(u.Id)
+	permission.AsyncMysql2RedisOne(u.Username)
 
 	password := []byte(c.GetString("password"))
 	passwordMD5 := md5.Sum(password)
@@ -255,14 +255,22 @@ func (c *MemberController) Disable_active_member() {
 func (c *MemberController) Admin_edit_all() {
 	user := models.User{}
 	o := orm.NewOrm()
-
 	user.Id, _ = c.GetInt("uid")
+
+	u := models.User{}
+	o.QueryTable("user").Filter("id", user.Id).One(&u, "position", "username")
+
 	user.Tel = c.GetString("tel")
 	user.Position = c.GetString("position")
 	user.PoolName = c.GetString("pool_name")
 
 	_, err := o.Update(&user, "tel", "position", "pool_name")
-	if err == nil {
+
+	if u.Position != user.Position {
+		user.Username = u.Username
+		position.AsyncOnePosition(user)
+	}
+		if err == nil {
 		c.Redirect("/admin_member_edit/"+strconv.Itoa(user.Id), 302)
 	}
 }

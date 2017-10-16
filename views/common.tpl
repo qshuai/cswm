@@ -135,7 +135,11 @@
 					{{if .authority.AddProduct}}
                     	<li><a href="/product_add" title="图片管理">产品录入</a></li>
 					{{end}}
-					{{if .authority.AddProduct}}
+					{{if eq .grade "超级管理员"}}
+						<li><a href="/product_template_list">模板列表</a></li>
+						<li><a href="/product_template_add">模板录入</a></li>
+					{{end}}
+					{{if eq .grade "总库管理员"}}
 						<li><a href="/product_template_list">模板列表</a></li>
 						<li><a href="/product_template_add">模板录入</a></li>
 					{{end}}

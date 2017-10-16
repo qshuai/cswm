@@ -192,6 +192,7 @@
             <ul class="pagination" id="pagination"></ul>
         </div>
 
+		{{if .authority.EditProduct}}
         <!--商品编辑弹出层-->
         <div id="product_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
             <div class="modal-dialog" style="width: 60%;">
@@ -327,6 +328,21 @@
                 </div>
             </div>
         </div>
+		{{else}}
+		<div id="product_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+			<div class="modal-dialog" style="width: 60%;">
+				<div class="modal-content radius">
+					<div class="modal-header">
+						<h3 class="modal-title">警告消息</h3>
+						<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+					</div>
+					<div class="modal-body">
+						<p class="c-danger f-20 text-c">您没有编辑商品的权限，如有需要请联系管理员~</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{end}}
     </div>
 </section>
 

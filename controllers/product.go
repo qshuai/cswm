@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"encoding/json"
 	"fmt"
+	"ERP/plugins/permission"
+	"ERP/plugins/position"
 )
 
 type ProductController struct {
@@ -72,6 +74,10 @@ func (c *ProductController) Get() {
 //删除单条商品信息
 func (c *ProductController) Product_item_delete() {
 	if c.IsAjax() {
+		//判断当前用户是否会有删除商品的权限
+		if !permission.GetOneItemPermission(c.GetSession("username").(string), "DeleteProduct") {
+			c.Abort("401")
+		}
 		o := orm.NewOrm()
 		product := models.Product{}
 		product.Id, _ = c.GetInt("product_id")
@@ -118,6 +124,11 @@ func (c *ProductController) Product_item_delete() {
 
 //编辑单条商品信息
 func (c *ProductController) Product_item_edit() {
+	//判断当前用户时候有权限
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditProduct") {
+		c.Abort("401")
+	}
+
 	product := models.Product{}
 	o := orm.NewOrm()
 
@@ -132,17 +143,11 @@ func (c *ProductController) Product_item_edit() {
 	product.InPrice, _ = c.GetFloat("in_price")
 	product.Unit = c.GetString("unit")
 
-	brand := models.Brand{}
-	o.QueryTable("brand").Filter("name", c.GetString("brand")).One(&brand, "id")
-	product.Brand = &brand
+	product.Brand = GetBrand(c.GetString("brand"))
 
-	category := models.Category{}
-	o.QueryTable("category").Filter("three_stage", c.GetString("three_stage")).One(&category, "id")
-	product.CatNum = &category
+	product.CatNum = GetCategory(c.GetString("three_stage"))
 
-	supplier := models.Supplier{}
-	o.QueryTable("supplier").Filter("name", c.GetString("supplier")).One(&supplier, "id")
-	product.Supplier = &supplier
+	product.Supplier = GetSupplier(c.GetString("supplier"))
 
 	store_string := strings.Split(c.GetString("store"), "-")
 	store := models.Store{}
@@ -154,7 +159,7 @@ func (c *ProductController) Product_item_edit() {
 
 	product.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce_edit"))
 
-	num, err := o.Update(&product, "title", "brand_id", "art_num", "lot_num", "cat_num_id", "spec", "stock", "unit", "store_id", "supplier_id", "in_price", "has_pay", "has_invioce", "get_invioce")
+	num, err := o.Update(&product, "title", "brand_id", "art_num", "lot_num", "cat_num_id", "spec", "stock", "unit", "store_id", "supplier_id", "in_price", "has_pay", "has_invoice", "get_invoice")
 	if num == 1 && err == nil {
 		c.Data["url"] = "/product_list"
 		c.Data["msg"] = "商品信息修改成功"
@@ -169,6 +174,11 @@ func (c *ProductController) Product_item_edit() {
 
 //商品添加页面
 func (c *ProductController) Add_get() {
+	//判断当前用户时候有权限
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddProduct") {
+		c.Abort("401")
+	}
+
 	o := orm.NewOrm()
 	user := models.User{}
 	user.Id, _ = c.GetSession("uid").(int)
@@ -185,8 +195,12 @@ func (c *ProductController) Add_get() {
 
 //商品添加post
 func (c *ProductController) Add_post() {
-	product := models.Product{}
+	//判断当前用户时候有权限
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddProduct") {
+		c.Abort("401")
+	}
 
+	product := models.Product{}
 	user := models.User{}
 	user.Id = c.GetSession("uid").(int)
 	product.User = &user
@@ -195,28 +209,19 @@ func (c *ProductController) Add_post() {
 	product.LotNum = c.GetString("lot_num")
 	product.Unit = c.GetString("unit")
 	product.HasPay, _ = c.GetBool("has_pay")
-	product.HasInvoice, _ = c.GetBool("has_invioce")
 
 	o := orm.NewOrm()
 
-	brand := models.Brand{}
-	o.QueryTable("brand").Filter("name", c.GetString("brand")).One(&brand, "id")
-	product.Brand = &brand
+	product.Brand = GetBrand(c.GetString("brand"))
 
-	category := models.Category{}
-	o.QueryTable("category").Filter("three_stage", c.GetString("three_stage")).One(&category, "id")
-	product.CatNum = &category
+	product.CatNum = GetCategory(c.GetString("three_stage"))
 
-	supplier := models.Supplier{}
-	o.QueryTable("supplier").Filter("name", c.GetString("supplier")).One(&supplier, "id")
-	product.Supplier = &supplier
+	product.Supplier = GetSupplier(c.GetString("supplier"))
 
 	store_string := strings.Split(c.GetString("store"), "-")
 	store := models.Store{}
 	o.QueryTable("store").Filter("pool", store_string[0]).Filter("name", store_string[1]).One(&store, "id")
 	product.Store = &store
-
-	product.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce"))
 
 	spec_slice := c.GetStrings("spec")
 	stock_slice := c.GetStrings("stock")
@@ -227,7 +232,6 @@ func (c *ProductController) Add_post() {
 		stock_temp, _ := strconv.ParseUint(stock_slice[index], 10, 0)
 		product.Stock = uint32(stock_temp)
 		product.InPrice, _ = strconv.ParseFloat(inprice_slice[index], 64)
-		fmt.Printf("%#v", product)
 		_, err := o.Insert(&product)
 
 		//防止出现重复主键值
@@ -249,6 +253,11 @@ func (c *ProductController) Add_post() {
 func (c *ProductController) SearchByCatnum() {
 	if !c.IsAjax() {
 		return
+	}
+
+	//判断当前用户时候有权限
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddProduct") {
+		c.Abort("401")
 	}
 
 	type product_template struct {
@@ -275,20 +284,6 @@ func (c *ProductController) SearchByCatnum() {
 	p := []product_template{}
 	o.Raw(sql, c.GetString("art_num")).QueryRows(&p)
 
-	//o := orm.NewOrm()
-	//product := []models.Product{}
-	//product_spec := []models.Product{}
-	//product_temp := models.Product{}
-	//
-	////获取不同spec类别
-	//o.QueryTable("product").Distinct().Filter("art_num", art_num).All(&product_spec, "spec")
-	//
-	////通过spec和art_num限定，循环查询
-	//for _, item := range product_spec {
-	//	o.QueryTable("product").Filter("art_num", art_num).Filter("spec", item.Spec).RelatedSel().One(&product_temp)
-	//	product = append(product, product_temp)
-	//}
-
 	c.Data["json"] = p
 	c.ServeJSON()
 }
@@ -299,6 +294,10 @@ func (c *ProductController) Product_track() {
 
 //管理员添加商品模板
 func (c *ProductController) ProductTemplateList() {
+	pos := position.GetOnePosition(c.GetSession("username").(string))
+	if pos != "超级管理员" && pos != "总库管理员"{
+		c.Abort("401")
+	}
 	//定义querybuiler查询结果的接受结构体
 	type product_template struct {
 		Id         int
@@ -343,6 +342,11 @@ func (c *ProductController) ProductTemplateList() {
 
 //商品模板添加页面
 func (c *ProductController) ProductTemplateAdd() {
+	pos := position.GetOnePosition(c.GetSession("username").(string))
+	if pos != "超级管理员" && pos != "总库管理员"{
+		c.Abort("401")
+	}
+
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Data["brand_string"] = GetBrandList()
 	c.Data["supplier_string"] = GetSupplierList()
@@ -353,6 +357,11 @@ func (c *ProductController) ProductTemplateAdd() {
 
 //商品模板添加提交
 func (c *ProductController) ProductTemplateAddPost() {
+	pos := position.GetOnePosition(c.GetSession("username").(string))
+	if pos != "超级管理员" && pos != "总库管理员"{
+		c.Abort("401")
+	}
+
 	product_template := models.ProductTemplate{}
 
 	product_template.Title = c.GetString("title")
@@ -370,13 +379,9 @@ func (c *ProductController) ProductTemplateAddPost() {
 		return
 	}
 
-	brand := models.Brand{}
-	o.QueryTable("brand").Filter("name", c.GetString("brand")).One(&brand, "id")
-	product_template.Brand = &brand
+	product_template.Brand = GetBrand(c.GetString("brand"))
 
-	category := models.Category{}
-	o.QueryTable("category").Filter("three_stage", c.GetString("three_stage")).One(&category, "id")
-	product_template.CatNum = &category
+	product_template.CatNum = GetCategory(c.GetString("three_stage"))
 
 	product_template.Suppliers = c.GetString("supplier")
 
@@ -409,6 +414,11 @@ func (c *ProductController) ProductTemplateAddPost() {
 
 //商品模板编辑提交
 func (c *ProductController) ProductTemplateEditPost() {
+	pos := position.GetOnePosition(c.GetSession("username").(string))
+	if pos != "超级管理员" && pos != "总库管理员"{
+		c.Abort("401")
+	}
+
 	product_template := models.ProductTemplate{}
 	product_template.Id, _ = c.GetInt("template_id")
 
@@ -469,6 +479,11 @@ func (c *ProductController) ProductTemplateEditPost() {
 
 //删除指定product_template
 func (c *ProductController) ProductTemplateDeletePost() {
+	pos := position.GetOnePosition(c.GetSession("username").(string))
+	if pos != "超级管理员" && pos != "总库管理员"{
+		c.Abort("401")
+	}
+
 	if c.IsAjax() {
 		template := models.ProductTemplate{}
 		template.Id, _ = c.GetInt("pid")

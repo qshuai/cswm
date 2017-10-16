@@ -5,7 +5,7 @@ import "ERP/models"
 type RedisInterface interface {
 	//权限操作
 	StorePermission(permission_items []models.Permission) error
-	StoreOnePermission(permission models.Permission) error
+	StoreOnePermission(username string, permission models.Permission) error
 	GetOneRowPermission(username string) map[string]bool
 	GetOneItemPermission(username, key string) bool
 

@@ -17,11 +17,11 @@ func AsyncMysql2RedisAll() {
 }
 
 //同步一个用户的permission数据到redis中
-func AsyncMysql2RedisOne(uid int) {
+func AsyncMysql2RedisOne(username string) {
 	o := orm.NewOrm()
 	permission_item := models.Permission{}
-	o.QueryTable("permission").Filter("user__id", uid).RelatedSel().One(&permission_item)
-	redis_orm.RedisPool.StoreOnePermission(permission_item)
+	o.QueryTable("permission").Filter("user__username", username).One(&permission_item)
+	redis_orm.RedisPool.StoreOnePermission(username, permission_item)
 }
 
 //获取某个人的permission的一行数据

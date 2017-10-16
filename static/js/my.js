@@ -142,6 +142,11 @@ if (query_url === "/product_add") {
 			}
 			$(".spec").eq(i).val(products[i].Spec);
 			$(".in_price").eq(i).val(products[i].InPrice);
+			if (products[i].InPrice !== 0){
+				$(".in_price").eq(i).attr("type", "password").attr("readonly", true);
+			}else{
+				$(".in_price").eq(i).val("");
+			}
 		}
 
 		delete_sku = $(".delete_sku");
@@ -823,6 +828,11 @@ function delete_row(obj) {
 					alert(response.Message)
 				} else {
 					alert("未知错误，请报告管理员~")
+				}
+			},
+			error: function (response, status, xhr) {
+				if (xhr === "Unauthorized") {
+					$("#product_edit_modal").modal("show").find(".modal-body p").text("您没有删除商品的权限，如有需要请联系管理员~");
 				}
 			}
 		});
