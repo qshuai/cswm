@@ -9,6 +9,7 @@ import (
 	"ERP/models"
 	"github.com/astaxie/beego/orm"
 	"fmt"
+	"ERP/plugins/permission"
 )
 
 type CategoryController struct {
@@ -61,6 +62,9 @@ func (c *CategoryController) Get() {
 
 //提交分类表excel界面展示
 func (c *CategoryController) Category_upload() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
+	}
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.TplName = "category/category_upload.html"
@@ -68,6 +72,9 @@ func (c *CategoryController) Category_upload() {
 
 //分类表excel文件上传，以及更新数据库分类表
 func (c *CategoryController) Category_upload_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
+	}
 	f, h, err := c.GetFile("category_file")
 	if err != nil {
 		logs.Error("用户ID：", c.GetSession("uid"), "上传category_file失败，原因:", err)
@@ -140,6 +147,9 @@ func (c *CategoryController) Category_upload_post() {
 
 //添加分类
 func (c *CategoryController) Category_add() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
+	}
 	category := []models.Category{}
 	o := orm.NewOrm()
 
@@ -165,6 +175,9 @@ func (c *CategoryController) Category_add() {
 
 //添加分类提交
 func (c *CategoryController) Category_add_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
+	}
 	primary := c.GetString("primary")
 	two_stage := c.GetString("two_stage")
 	three_stage := c.GetString("three_stage")
@@ -211,6 +224,9 @@ func (c *CategoryController) Category_add_post() {
 
 //分类编辑
 func (c *CategoryController) Category_edit() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
+	}
 	category := []models.Category{}
 	o := orm.NewOrm()
 	//这里只对常用的三级分类添加检索便利
@@ -231,6 +247,9 @@ func (c *CategoryController) Category_edit() {
 func (c *CategoryController) Category_search() {
 	if !c.IsAjax() {
 		return
+	}
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
 	}
 
 	o := orm.NewOrm()
@@ -272,6 +291,10 @@ func (c *CategoryController) Category_search() {
 
 //分类编辑post
 func ( c *CategoryController) Category_edit_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
+		c.Abort("401")
+	}
+
 	category := models.Category{}
 	category.Id, _ = c.GetInt("category_id")
 	category.Primary = c.GetString("primary")

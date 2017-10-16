@@ -19,6 +19,9 @@ type MemberController struct {
 
 //添加用户页面
 func (c *MemberController) Member_add() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddMember") {
+		c.Abort("401")
+	}
 	c.Data["level"] = beego.AppConfig.Strings("level")
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
@@ -27,6 +30,9 @@ func (c *MemberController) Member_add() {
 
 //添加用户提交逻辑
 func (c *MemberController) Member_add_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddMember") {
+		c.Abort("401")
+	}
 	u := models.User{}
 
 	//md5 crypt password
@@ -184,6 +190,9 @@ func (c *MemberController) Member_edit_post() {
 
 //管理员修改人员信息页面
 func (c *MemberController) Admin_member_edit() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
+		c.Abort("401")
+	}
 	uid, _ := c.GetInt(":uid")
 	if uid != 0 {
 		o := orm.NewOrm()
@@ -200,6 +209,10 @@ func (c *MemberController) Admin_member_edit() {
 
 //管理员检索所要修改的用户
 func (c *MemberController) Admin_member_edit_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
+		c.Abort("401")
+	}
+
 	if (c.IsAjax()) {
 		search_entry := c.GetString("search_entry")
 		if search_entry != "" {
@@ -219,6 +232,10 @@ func (c *MemberController) Admin_member_edit_post() {
 
 //管理员禁用或激活用户账号
 func (c *MemberController) Disable_active_member() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ActiveMember") {
+		c.Abort("401")
+	}
+
 	if c.IsAjax() {
 		action := c.GetString("action")
 		uid, _ := c.GetInt("uid")
@@ -253,6 +270,9 @@ func (c *MemberController) Disable_active_member() {
 
 //管理员修改账户信息
 func (c *MemberController) Admin_edit_all() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
+		c.Abort("401")
+	}
 	user := models.User{}
 	o := orm.NewOrm()
 	user.Id, _ = c.GetInt("uid")
@@ -277,6 +297,9 @@ func (c *MemberController) Admin_edit_all() {
 
 //获取禁用账户列表
 func (c *MemberController) Disable_member_list() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ActiveMember") {
+		c.Abort("401")
+	}
 	user := []models.User{}
 	o := orm.NewOrm()
 

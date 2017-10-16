@@ -10,6 +10,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	"strconv"
 	"fmt"
+	"ERP/plugins/permission"
 )
 
 type StoreoutController struct {
@@ -18,6 +19,10 @@ type StoreoutController struct {
 
 //渲染出库页面
 func (c *StoreoutController) Store_out_action() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OutputProduct") {
+		c.Abort("401")
+	}
+
 	o := orm.NewOrm()
 	product := models.Product{}
 	pid, _ := c.GetInt(":pid")
@@ -51,6 +56,10 @@ func (c *StoreoutController) Store_out_action() {
 
 //出库post
 func (c *StoreoutController) Store_out_action_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OutputProduct") {
+		c.Abort("401")
+	}
+
 	sale := models.Sale{}
 	o := orm.NewOrm()
 

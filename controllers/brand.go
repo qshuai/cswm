@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"html/template"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/permission"
 )
 
 type BrandController struct {
@@ -25,6 +26,9 @@ func (c *BrandController) Get(){
 
 //添加商标页面
 func (c *BrandController) Brand_add(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddBrand") {
+		c.Abort("401")
+	}
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "brand/brand_add.html"
@@ -32,6 +36,9 @@ func (c *BrandController) Brand_add(){
 
 //添加商标 post提交
 func (c *BrandController) Brand_add_post(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddBrand") {
+		c.Abort("401")
+	}
 	brand := models.Brand{}
 	brand.Name = c.GetString("name")
 

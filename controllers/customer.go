@@ -7,14 +7,18 @@ import (
 	"ERP/models"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/permission"
 )
 
 type ConsumerController struct {
 	beego.Controller
 }
 
-//获取客户裂变
+//获取客户列表
 func (c *ConsumerController) Get(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewConsumer") {
+		c.Abort("401")
+	}
 	consumer := []models.Consumer{}
 	o := orm.NewOrm()
 	o.QueryTable("consumer").All(&consumer)
@@ -26,12 +30,19 @@ func (c *ConsumerController) Get(){
 }
 
 func (c *ConsumerController) Consumer_add(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddConsumer") {
+		c.Abort("401")
+	}
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "consumer/consumer_add.html"
 }
 
 func (c *ConsumerController) Consumer_add_post(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddConsumer") {
+		c.Abort("401")
+	}
+
 	consumer := models.Consumer{}
 	consumer.Name = c.GetString("name")
 	consumer.Tel = c.GetString("tel")
@@ -66,6 +77,9 @@ func (c *ConsumerController) Consumer_add_post(){
 }
 
 func (c *ConsumerController) Consumer_edit() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditConsumer") {
+		c.Abort("401")
+	}
 	consumer := models.Consumer{}
 	consumer.Id, _ = c.GetInt("consumer_id")
 	consumer.Tel = c.GetString("tel")

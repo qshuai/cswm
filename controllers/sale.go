@@ -6,6 +6,7 @@ import (
 	"ERP/models"
 	"html/template"
 	"time"
+	"ERP/plugins/permission"
 )
 
 type SaleController struct {
@@ -13,7 +14,11 @@ type SaleController struct {
 }
 
 //获取销售列表数据
-func (c *SaleController) Sale_list()  {
+func (c *SaleController) Sale_list() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSale") {
+		c.Abort("401")
+	}
+
 	o := orm.NewOrm()
 	sale := []models.Sale{}
 
@@ -27,8 +32,11 @@ func (c *SaleController) Sale_list()  {
 
 //单条销售记录修改post
 func (c *SaleController) Sale_edit() {
-	sale := models.Sale{}
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditSale") {
+		c.Abort("401")
+	}
 
+	sale := models.Sale{}
 	salesman := models.User{}
 
 	o := orm.NewOrm()

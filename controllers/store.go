@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"html/template"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/permission"
 )
 
 type StoreController struct {
@@ -14,6 +15,9 @@ type StoreController struct {
 
 //获取库房列表
 func (c *StoreController) Get(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewStore") {
+		c.Abort("401")
+	}
 	store := []models.Store{}
 	o := orm.NewOrm()
 	o.QueryTable("store").OrderBy("pool").All(&store)
@@ -38,6 +42,10 @@ func (c *StoreController) Get(){
 
 //添加库房页面
 func (c *StoreController) Store_add() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddStore") {
+		c.Abort("401")
+	}
+
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "store/store_add.html"
@@ -45,6 +53,10 @@ func (c *StoreController) Store_add() {
 
 //添加库房页面post
 func (c *StoreController) Store_add_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddStore") {
+		c.Abort("401")
+	}
+
 	store := models.Store{}
 	o := orm.NewOrm()
 

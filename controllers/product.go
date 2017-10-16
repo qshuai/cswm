@@ -63,6 +63,26 @@ func (c *ProductController) Get() {
 	p := []product{}
 	o.Raw(sql).QueryRows(&p)
 
+	username := c.GetSession("username").(string)
+	view_product_store := !permission.GetOneItemPermission(username, "ViewProductStore")
+	view_stock := !permission.GetOneItemPermission(username, "ViewStock")
+	view_in_price := !permission.GetOneItemPermission(username, "ViewInPrice")
+	if view_product_store || view_stock || view_in_price {
+		length := len(p)
+		for index := 0; index < length; index++ {
+			if view_product_store {
+				p[index].Pool = "**"
+				p[index].StoreName = "**"
+			}
+			if view_stock {
+				p[index].Stock = 0
+			}
+			if view_in_price {
+				p[index].InPrice = 0
+			}
+		}
+	}
+
 	product_byte, _ := json.Marshal(p)
 	c.Data["product"] = string(product_byte)
 	c.Data["xsrf_token"] = c.XSRFToken()
@@ -295,7 +315,7 @@ func (c *ProductController) Product_track() {
 //管理员添加商品模板
 func (c *ProductController) ProductTemplateList() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
-	if pos != "超级管理员" && pos != "总库管理员"{
+	if pos != "超级管理员" && pos != "总库管理员" {
 		c.Abort("401")
 	}
 	//定义querybuiler查询结果的接受结构体
@@ -343,7 +363,7 @@ func (c *ProductController) ProductTemplateList() {
 //商品模板添加页面
 func (c *ProductController) ProductTemplateAdd() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
-	if pos != "超级管理员" && pos != "总库管理员"{
+	if pos != "超级管理员" && pos != "总库管理员" {
 		c.Abort("401")
 	}
 
@@ -358,7 +378,7 @@ func (c *ProductController) ProductTemplateAdd() {
 //商品模板添加提交
 func (c *ProductController) ProductTemplateAddPost() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
-	if pos != "超级管理员" && pos != "总库管理员"{
+	if pos != "超级管理员" && pos != "总库管理员" {
 		c.Abort("401")
 	}
 
@@ -415,7 +435,7 @@ func (c *ProductController) ProductTemplateAddPost() {
 //商品模板编辑提交
 func (c *ProductController) ProductTemplateEditPost() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
-	if pos != "超级管理员" && pos != "总库管理员"{
+	if pos != "超级管理员" && pos != "总库管理员" {
 		c.Abort("401")
 	}
 
@@ -480,7 +500,7 @@ func (c *ProductController) ProductTemplateEditPost() {
 //删除指定product_template
 func (c *ProductController) ProductTemplateDeletePost() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
-	if pos != "超级管理员" && pos != "总库管理员"{
+	if pos != "超级管理员" && pos != "总库管理员" {
 		c.Abort("401")
 	}
 

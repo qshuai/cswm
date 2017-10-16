@@ -7,6 +7,7 @@ import (
 	"ERP/models"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/permission"
 )
 
 type SupplierController struct{
@@ -14,6 +15,9 @@ type SupplierController struct{
 }
 
 func (c *SupplierController) Get(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSupplier") {
+		c.Abort("401")
+	}
 	supplier := []models.Supplier{}
 	o := orm.NewOrm()
 	o.QueryTable("supplier").All(&supplier)
@@ -25,6 +29,10 @@ func (c *SupplierController) Get(){
 
 //添加供应商页面
 func (c *SupplierController) Supplier_add(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddSupplier") {
+		c.Abort("401")
+	}
+
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "supplier/supplier_add.html"
@@ -32,6 +40,10 @@ func (c *SupplierController) Supplier_add(){
 
 //添加供应商 post提交
 func (c *SupplierController) Supplier_add_post(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddSupplier") {
+		c.Abort("401")
+	}
+
 	supplier := models.Supplier{}
 	supplier.Name = c.GetString("name")
 

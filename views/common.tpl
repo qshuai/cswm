@@ -114,19 +114,20 @@
             </dd>
         </dl>
 		{{end}}
-		{{if .authority.OperateCategory}}
+
         <dl id="menu-product" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe681;</i> 分类管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
                     <li><a href="/category_list" title="产品管理">分类列表</a></li>
-                    <li><a href="/category_upload" title="产品管理">更新分类</a></li>
-                    <li><a href="/category_add" title="产品管理">添加分类</a></li>
-                    <li><a href="/category_edit" title="产品管理">编辑分类</a></li>
+					{{if .authority.OperateCategory}}
+                    	<li><a href="/category_upload" title="产品管理">更新分类</a></li>
+                    	<li><a href="/category_add" title="产品管理">添加分类</a></li>
+                    	<li><a href="/category_edit" title="产品管理">编辑分类</a></li>
+					{{end}}
                 </ul>
             </dd>
         </dl>
-		{{end}}
         <dl id="menu-picture" class="nav-left-list">
             <dt><i class="Hui-iconfont">&#xe620;</i> 产品管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>

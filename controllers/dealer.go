@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	"ERP/models"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/permission"
 )
 
 type DealerController struct {
@@ -14,6 +15,9 @@ type DealerController struct {
 }
 
 func (c *DealerController) Get(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewDealer") {
+		c.Abort("401")
+	}
 	dealer := []models.Dealer{}
 	o := orm.NewOrm()
 	o.QueryTable("dealer").All(&dealer)
@@ -25,6 +29,9 @@ func (c *DealerController) Get(){
 
 //添加经销商页面
 func (c *DealerController) Dealer_add(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddDealer") {
+		c.Abort("401")
+	}
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "dealer/dealer_add.html"
@@ -32,6 +39,9 @@ func (c *DealerController) Dealer_add(){
 
 //添加经销商 post提交
 func (c *DealerController) Dealer_add_post(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddDealer") {
+		c.Abort("401")
+	}
 	dealer := models.Dealer{}
 	dealer.Name = c.GetString("name")
 

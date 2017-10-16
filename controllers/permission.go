@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"strconv"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/position"
 )
 
 type Permission struct {
@@ -15,6 +16,10 @@ type Permission struct {
 
 //默认权限展示页面
 func (c *Permission) DefaultPermission(){
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
 	defaultPermission := []models.DefaultPermission{}
 	o := orm.NewOrm()
 	o.QueryTable("default_permission").All(&defaultPermission)
@@ -26,6 +31,10 @@ func (c *Permission) DefaultPermission(){
 
 //默认权限编辑页面
 func (c *Permission) DefaultPermissionEdit(){
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
 	defaultPermission := models.DefaultPermission{}
 	defaultPermission.Id, _ = c.GetInt(":item")
 
@@ -40,6 +49,10 @@ func (c *Permission) DefaultPermissionEdit(){
 
 //默认权限编辑post提交
 func (c *Permission) DefaultPermissionEditPost(){
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
 	defaultPermission := models.DefaultPermission{}
 	defaultPermission.Id, _ = c.GetInt("permission_id")
 	defaultPermission.Position = c.GetString("permission_position")
@@ -89,6 +102,10 @@ func (c *Permission) DefaultPermissionEditPost(){
 
 //人员列表
 func (c *Permission) PermissionMemberList(){
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
 	u := []models.User{}
 	o := orm.NewOrm()
 	o.QueryTable("user").All(&u)
@@ -99,6 +116,10 @@ func (c *Permission) PermissionMemberList(){
 
 //人员权限编辑页面
 func (c *Permission) PermissionMemberEdit(){
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
 	o := orm.NewOrm()
 	permission := models.Permission{}
 	defaultPermission := models.DefaultPermission{}
@@ -118,6 +139,10 @@ func (c *Permission) PermissionMemberEdit(){
 
 //人员权限编辑post提交
 func (c *Permission) PermissionMemberEditPost(){
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
 	permission := models.Permission{}
 	permission.Id, _ = c.GetInt("permission_id")
 	permission.AddMember = ConvertPermissionBool(c.GetString("AddMember"))

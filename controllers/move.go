@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/permission"
 )
 
 type MoveController struct{
@@ -17,6 +18,9 @@ type MoveController struct{
 
 //移库请求页面
 func (c *MoveController) Move_request() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "RequestMove") {
+		c.Abort("401")
+	}
 	product := models.Product{}
 	o := orm.NewOrm()
 
@@ -44,6 +48,9 @@ func (c *MoveController) Move_request() {
 
 //移库post提交
 func (c *MoveController) Move_request_post() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "RequestMove") {
+		c.Abort("401")
+	}
 	pid, _ := c.GetInt("product_id")
 	o := orm.NewOrm()
 	product := models.Product{}
@@ -130,6 +137,9 @@ func (c *MoveController) Move_request_post() {
 
 //移库列表
 func (c *MoveController) Move_list() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewMove") {
+		c.Abort("401")
+	}
 	uid := c.GetSession("uid").(int)
 	user := models.User{}
 	o := orm.NewOrm()
@@ -148,6 +158,9 @@ func (c *MoveController) Move_list() {
 
 //移库接受
 func (c *MoveController) Move_accept(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
+		c.Abort("401")
+	}
 	if c.IsAjax() {
 		o := orm.NewOrm()
 		move := models.Move{}
@@ -168,6 +181,9 @@ func (c *MoveController) Move_accept(){
 
 //拒绝移库
 func (c *MoveController) Move_deny(){
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
+		c.Abort("401")
+	}
 	if c.IsAjax() {
 		o := orm.NewOrm()
 		move := models.Move{}
@@ -188,6 +204,9 @@ func (c *MoveController) Move_deny(){
 
 //移库完成
 func (c *MoveController) Move_finish() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
+		c.Abort("401")
+	}
 	if c.IsAjax() {
 		o := orm.NewOrm()
 		move := models.Move{}
@@ -209,6 +228,9 @@ func (c *MoveController) Move_finish() {
 
 //移库详情页面
 func (c *MoveController) Move_info() {
+	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewMove") {
+		c.Abort("401")
+	}
 	mid, _ := c.GetInt(":mid")
 
 	o := orm.NewOrm()
