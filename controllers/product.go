@@ -18,29 +18,32 @@ type ProductController struct {
 	beego.Controller
 }
 
+type product struct {
+	Id           int
+	UserName     string
+	Title        string
+	BrandName    string
+	ArtNum       string
+	LotNum       string
+	ThreeStage   string
+	Spec         string
+	Stock        uint32
+	Unit         string
+	Pool         string
+	StoreName    string
+	InTime       time.Time
+	SupplierName string
+	InPrice      float64
+	HasPay       bool
+	HasInvoice   bool
+	GetInvoice   time.Time
+}
+
+//每次获取的product数据条数
+const ProductLimit = 10
+
 //获取商品列表
 func (c *ProductController) Get() {
-	type product struct {
-		Id           int
-		UserName     string
-		Title        string
-		BrandName    string
-		ArtNum       string
-		LotNum       string
-		ThreeStage   string
-		Spec         string
-		Stock        uint32
-		Unit         string
-		Pool         string
-		StoreName    string
-		InTime       time.Time
-		SupplierName string
-		InPrice      float64
-		HasPay       bool
-		HasInvoice   bool
-		GetInvoice   time.Time
-	}
-
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
 		"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
@@ -57,7 +60,8 @@ func (c *ProductController) Get() {
 		On("user.id = product.user_id").
 		LeftJoin("store").
 		On("store.id = product.store_id").
-		OrderBy("in_time").Desc()
+		OrderBy("in_time").Desc().
+		Limit(ProductLimit)
 	sql := qb.String()
 	o := orm.NewOrm()
 	p := []product{}
@@ -89,6 +93,62 @@ func (c *ProductController) Get() {
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "product/product_list.html"
+}
+
+//ajax加载更多商品
+func (c *ProductController) ProductLoadMore() {
+	if !c.IsAjax(){
+		return
+	}
+
+	offset,_ := c.GetInt("offset")
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+		"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+		"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+		"store.pool", "store.name as store_name").
+		From("product").
+		LeftJoin("brand").
+		On("brand.id = product.brand_id").
+		LeftJoin("supplier").
+		On("supplier.id = product.supplier_id").
+		LeftJoin("category").
+		On("category.id = product.cat_num_id").
+		LeftJoin("user").
+		On("user.id = product.user_id").
+		LeftJoin("store").
+		On("store.id = product.store_id").
+		OrderBy("in_time").Desc().
+		Limit(ProductLimit).
+		Offset(offset * ProductLimit)
+	sql := qb.String()
+	o := orm.NewOrm()
+	p := []product{}
+	o.Raw(sql).QueryRows(&p)
+
+	username := c.GetSession("username").(string)
+	view_product_store := !permission.GetOneItemPermission(username, "ViewProductStore")
+	view_stock := !permission.GetOneItemPermission(username, "ViewStock")
+	view_in_price := !permission.GetOneItemPermission(username, "ViewInPrice")
+	if view_product_store || view_stock || view_in_price {
+		length := len(p)
+		for index := 0; index < length; index++ {
+			if view_product_store {
+				p[index].Pool = "**"
+				p[index].StoreName = "**"
+			}
+			if view_stock {
+				p[index].Stock = 0
+			}
+			if view_in_price {
+				p[index].InPrice = 0
+			}
+		}
+	}
+
+	product_byte, _ := json.Marshal(p)
+	c.Data["json"] = string(product_byte)
+	c.ServeJSON()
 }
 
 //删除单条商品信息

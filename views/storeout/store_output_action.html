@@ -1,3 +1,8 @@
+<style type="text/css">
+	input:read-only{
+		color: #000;
+	}
+</style>
 <div class="page-container">
     <div style="width: 70%; margin: 0 auto;">
         <h1 class="text-c">出库录入</h1>
@@ -6,11 +11,11 @@
             <ul>
                 <li>名称: {{.product_item.Title}}</li>
                 <li>货号: {{.product_item.ArtNum}}</li>
-                <li class="c-primary">库房: {{.product_item.Store.Pool}}-{{.product_item.Store.Name}}</li>
+				<li>库房: <span class="c-primary">{{.product_item.Store.Pool}}-{{.product_item.Store.Name}}</span></li>
                 <li>规格: {{.product_item.Spec}}</li>
                 <li>单位: {{.product_item.Unit}}</li>
-                <li class="c-primary">库存: {{.product_item.Stock}}</li>
-                <li class="c-primary">进价: {{.product_item.InPrice}}</li>
+				<li>库存: <span class="c-primary">{{.product_item.Stock}}</span></li>
+				<li>进价: <span class="c-primary">{{.product_item.InPrice}}</span> 元</li>
             </ul>
         </div>
         <div class="f-r" style="width: 60%;">
@@ -48,7 +53,7 @@
                 <div class="row cl">
                     <label for="send" class="form-label col-xs-4 col-sm-2">发货日期:&nbsp;&nbsp;</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" id="send" class="input-text radius" value="" name="send" />
+                        <input readonly type="text" id="send" class="input-text radius" value="" name="send" />
                     </div>
                 </div>
 
@@ -75,14 +80,14 @@
                 <div class="row cl">
                     <label for="sendinvioce" class="form-label col-xs-4 col-sm-2">开票日期:&nbsp;&nbsp;</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" id="sendinvioce" class="input-text radius" value="" name="send_invioce" />
+                        <input readonly type="text" id="sendinvioce" class="input-text radius" value="" name="send_invioce" />
                     </div>
                 </div>
 
                 <div class="row cl">
                     <label for="getInvoice" class="form-label col-xs-4 col-sm-2">递交发票:&nbsp;&nbsp;</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" id="getInvoice" class="input-text radius" value="" name="get_invioce" />
+                        <input readonly type="text" id="getInvoice" class="input-text radius" value="" name="get_invioce" />
                     </div>
                 </div>
 
@@ -102,7 +107,7 @@
                 <div class="row cl">
                     <label for="getdate" class="form-label col-xs-4 col-sm-2">汇款日期:&nbsp;&nbsp;</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" id="getdate" class="input-text radius" value="" name="get_date" />
+                        <input readonly type="text" id="getdate" class="input-text radius" value="" name="get_date" />
                     </div>
                 </div>
 

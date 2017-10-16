@@ -178,7 +178,6 @@ if (query_url === "/product_list") {
 
 	//默认page_size为10
 	var page_size = 10;
-	var total_item = product.length;
 
 	//隐藏某些列的索引数组
 	var hidden_index = [];
@@ -188,10 +187,13 @@ if (query_url === "/product_list") {
 		page_size = page_size_temp
 	}
 
+	$.cookie("product_offset", 0);
+	$.cookie("product_current_page", 1);
+
 	var product_rows = $("#product_row");
 	product_rows.html("");
 	var i = 0;
-	product_paginator(product, '#pagination', page_size, total_item, product_rows, hidden_index);
+	product_paginator(product, '#pagination', page_size, product.length, product_rows, hidden_index);
 
 	//用户选择每页显示的条目数，也就是page_size
 	var page_size_btn = $(".page_size");
@@ -209,7 +211,7 @@ if (query_url === "/product_list") {
 				page_size = page_size_temp
 			}
 
-			product_paginator(product, '#pagination', page_size, total_item, product_rows, hidden_index);
+			product_paginator(product, '#pagination', page_size, product.length, product_rows, hidden_index);
 		})
 	});
 
@@ -223,7 +225,7 @@ if (query_url === "/product_list") {
 
 			//设置隐藏索引到全局变量
 			hidden_index.push(index);
-			product_paginator(product, '#pagination', page_size, total_item, product_rows, hidden_index);
+			product_paginator(product, '#pagination', page_size, product.length, product_rows, hidden_index);
 		})
 	});
 
@@ -330,7 +332,7 @@ if (query_url === "/product_list") {
 					asc = !asc;
 					break;
 			}
-			product_paginator(product, '#pagination', page_size, total_item, product_rows, hidden_index);
+			product_paginator(product, '#pagination', page_size, product.length, product_rows, hidden_index);
 		})
 	});
 
@@ -460,8 +462,25 @@ if (query_url === "/product_list") {
 			ab++
 		});
 
-		product_paginator(product_copy, '#pagination', page_size, product_copy.length, product_rows, hidden_index);
+		product_paginator(product_copy, '#pagination', page_size, product.length, product_rows, hidden_index);
 	});
+
+	//加载更多product
+	$(".load-more").click(function () {
+		$.cookie("product_offset", parseInt($.cookie("product_offset")) + 1);
+		$.ajax({
+			url : "/product_load_more",
+			type : "post",
+			data : {
+				"offset" : $.cookie("product_offset"),
+				"_xsrf" : $("meta[name=_xsrf]").attr("content")
+			},
+			success : function (response) {
+				product = product.concat($.parseJSON(response));
+				product_paginator(product, '#pagination', page_size, product.length, product_rows, hidden_index);
+			}
+		})
+	})
 }
 
 //分页函数（抽象）
@@ -485,12 +504,16 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 		page_num = Math.ceil(total_item / page_size)
 	}
 
+	var current_page = parseInt($.cookie("product_current_page"));
+	if (current_page > page_num){
+		current_page = page_num
+	}
 	$.jqPaginator(paginator_node, {
 		totalPages: page_num,
 		visiblePages: 10,
-		currentPage: 1,
+		currentPage:  current_page,
 		onPageChange: function (num, type) {
-
+			$.cookie("product_current_page", num);
 			content_node_obj.html("");
 			var is_out = num * page_size;
 			if (is_out > total_item) {
