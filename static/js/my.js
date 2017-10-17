@@ -1,6 +1,23 @@
-/**
- * Created by scrapup on 2017/9/12.
- */
+Date.prototype.format = function(fmt) {
+	var o = {
+		"M+" : this.getMonth()+1,                 //月份
+		"d+" : this.getDate(),                    //日
+		"h+" : this.getHours(),                   //小时
+		"m+" : this.getMinutes(),                 //分
+		"s+" : this.getSeconds(),                 //秒
+		"q+" : Math.floor((this.getMonth()+3)/3), //季度
+		"S"  : this.getMilliseconds()             //毫秒
+	};
+	if(/(y+)/.test(fmt)) {
+		fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+	}
+	for(var k in o) {
+		if(new RegExp("("+ k +")").test(fmt)){
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+		}
+	}
+	return fmt;
+};
 
 //全局js
 	//判断当前页面是否展示侧边栏
@@ -524,12 +541,12 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 				var row = $("<tr product_item_no=''><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
 					"<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
 					'<td class="text-c">' +
-					'<a class="product_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;' +
+					'<a class="product_item_edit btn size-MINI btn-secondary-outline radius" title="编辑">&nbsp;' +
 					'<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a> ' +
-					' <a class="move_btn btn size-MINI btn-danger-outline radius" href="">&nbsp;' +
+					' <a class="move_btn btn size-MINI btn-danger-outline radius" href="" title="移库">&nbsp;' +
 					'<i class="Hui-iconfont Hui-iconfont-fabu">' +
 					'</i>&nbsp;</a> ' +
-					'<a class="product_item_delete btn size-MINI btn-danger-outline radius" onclick=delete_row(this)>&nbsp;' +
+					'<a class="product_item_delete btn size-MINI btn-danger-outline radius" title="删除" onclick=delete_row(this)>&nbsp;' +
 					'<i class="Hui-iconfont Hui-iconfont-close">' +
 					'</i>&nbsp;</a>' +
 					'</td></tr>');
@@ -539,7 +556,7 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 
 				var tds = row.find("td");
 				tds.eq(0).html('<a href="/product_track/' + product[i].Id + '">' + product[i].Title + '</a>').addClass();
-				var sale = $('<a href="/store_output_action/' + product[i].Id + '"target="_blank"><i class="Hui-iconfont Hui-iconfont-daochu"></i></a> ').addClass("c-danger");
+				var sale = $('<a href="/store_output_action/' + product[i].Id + '"target="_blank"><i class="Hui-iconfont Hui-iconfont-daochu" title="商品出库"></i></a> ').addClass("c-danger");
 				tds.eq(0).prepend(sale);
 
 				tds.eq(16).find(".move_btn").attr("href", "/move_request/" + product[i].Id);
@@ -684,7 +701,6 @@ function ProductTemplatePaginator(template) {
 	//计算page_num
 	var page_num;
 	var total_item = template.length;
-	console.log("total_item", total_item);
 
 	var page_size = $.cookie("template_page_size");
 	if (page_size === undefined) {
@@ -692,7 +708,6 @@ function ProductTemplatePaginator(template) {
 	}else{
 		page_size = parseInt(page_size)
 	}
-	console.log("page_size", page_size);
 	if (total_item % page_size === 0) {
 		page_num = total_item / page_size
 	} else {
@@ -706,7 +721,7 @@ function ProductTemplatePaginator(template) {
 	$.jqPaginator("#template_pagination", {
 		totalPages: page_num,
 		visiblePages: 10,
-		currentPage: 1,
+		currentPage: current_page,
 		onPageChange: function (num, type) {
 			$.cookie("template_current_page", num);
 			var template_node = $("#template");
@@ -736,6 +751,115 @@ function ProductTemplatePaginator(template) {
 		}
 	});
 }
+
+//sale_list.html
+//-----------------------------------------------------------------------------------
+if (query_url === "/sale_list") {
+	var sale = $.parseJSON(sale);
+	$.cookie("sale_offset", 0);
+	$.cookie("sale_current_page", 1);
+
+	SalePaginator(sale);
+
+	//加载更多
+	$(".load-more-template").click(function () {
+		$.cookie("sale_offset", parseInt($.cookie("sale_offset")) + 1);
+		$.ajax({
+			url : "/sale_load_more",
+			type : "post",
+			data : {
+				"offset" : $.cookie("sale_offset"),
+				"_xsrf" : $("input[name=_xsrf]").val()
+			},
+			success : function (response) {
+				sale = sale.concat($.parseJSON(response));
+				SalePaginator(sale)
+			}
+		})
+	});
+
+	//用户选择每页显示的条目数，也就是page_size
+	var page_size_btn = $(".page_size");
+	$.each(page_size_btn, function (index) {
+		page_size_btn.eq(index).click(function () {
+
+			//通过hui-ui.js的cookie()方法直接在浏览器设置cookie减少http请求（替代以上ajax请求）
+			$.cookie('sale_page_size', $(this).attr("data"), {expires: 366});
+
+			//指示为第一页
+			var num = 1;
+
+			var page_size_temp = $.cookie("sale_page_size");
+			if (page_size_temp !== null) {
+				page_size = page_size_temp
+			}
+
+			SalePaginator(sale);
+		})
+	});
+}
+
+function SalePaginator(sale) {
+	//计算page_num
+	var page_num;
+	var total_item = sale.length;
+
+	var page_size = $.cookie("sale_page_size");
+	if (page_size === undefined) {
+		page_size = 10
+	}else{
+		page_size = parseInt(page_size)
+	}
+	if (total_item % page_size === 0) {
+		page_num = total_item / page_size
+	} else {
+		page_num = Math.ceil(total_item / page_size)
+	}
+
+	var current_page = parseInt($.cookie("sale_current_page"));
+	if (current_page > page_num){
+		current_page = page_num
+	}
+	$.jqPaginator("#sale_pagination", {
+		totalPages: page_num,
+		visiblePages: 10,
+		currentPage: current_page,
+		onPageChange: function (num, type) {
+			$.cookie("sale_current_page", num);
+			var sale_node = $("#sale");
+			sale_node.html("");
+			var is_out = num * page_size;
+			if (is_out > total_item) {
+				is_out = total_item
+			}
+
+			for (var i = page_size * (num - 1); i < is_out; i++) {
+				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
+					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
+				var tds = row.find("td");
+				row.find("input").val(sale[i].id);
+				tds.eq(0).text(sale[i].Title);
+				tds.eq(1).text(sale[i].ArtNum);
+				tds.eq(2).text(sale[i].SalesmanName);
+				tds.eq(3).text(sale[i].ConsumerName);
+				tds.eq(4).text(sale[i].InPrice);
+				tds.eq(5).text(sale[i].OutPrice);
+				tds.eq(6).text(sale[i].Num);
+				tds.eq(7).text(sale[i].Send);
+				tds.eq(8).text(sale[i].HasInvoice ? "是" : "否");
+				tds.eq(9).text(sale[i].InvoiceNum);
+				tds.eq(10).text(sale[i].SendInvoice);
+				tds.eq(11).text(sale[i].GetInvoice);
+				tds.eq(12).text(sale[i].GetMoney ? "是" : "否");
+				tds.eq(13).text(sale[i].GetDate);
+				tds.eq(14).text(sale[i].Created);
+				tds.eq(15).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
+				sale_node.append(row)
+			}
+		}
+	});
+}
+
 //admin_member_edit.html
 //-----------------------------------------------------------------------------------
 //人员检索

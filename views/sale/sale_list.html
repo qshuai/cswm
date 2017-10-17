@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/static/css/paginator.css">
 <section class="Hui-article-box">
     <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
         <span class="c-999 en">&gt;</span>
@@ -32,46 +33,32 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody>
-                {{range .sale}}
-                <tr class="text-c">
-                    <input type="hidden" class="sale_id" value="{{.Id}}">
-                    <td>{{.Product.Title}}</td>
-                    <td>{{.Product.ArtNum}}</td>
-                    <td>{{.Salesman.Name}}</td>
-                    <td>{{.Consumer.Name}}</td>
-                    <td>{{.Product.InPrice}}</td>
-                    <td>{{.OutPrice}}</td>
-                    <td>{{.Num}}</td>
-                    <td>{{date .Send "Y-m-d"}}</td>
+                <tbody id="sale">
 
-                    {{if .HasInvoice}}
-                        <td>是</td>
-                    {{else}}
-                        <td>否</td>
-                    {{end}}
-
-                    <td>{{.InvoiceNum}}</td>
-                    <td>{{date .SendInvoice "Y-m-d"}}</td>
-                    <td>{{date .GetInvoice "Y-m-d"}}</td>
-
-                    {{if .GetMoney}}
-                        <td>是</td>
-                    {{else}}
-                        <td>否</td>
-                    {{end}}
-
-                    <td>{{date .GetDate "Y-m-d"}}</td>
-
-                    <td>{{date .Created "Y-m-d H:i:s"}}</td>
-                    <td><a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a></td>
-                </tr>
-                {{end}}
                 </tbody>
             </table>
         </article>
+
+		<div class="text-c">
+			<!--<input type="hidden" id="total_page" value="{{.total_page}}">-->
+			<span class="dropDown page_size_btn" style="position: relative; top: -33px">
+                <a class="dropDown_A btn btn-default radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >每页显示</a>
+                <ul class="dropDown-menu menu radius box-shadow">
+                    <li><a class="page_size" data="5">5条</a></li>
+                    <li><a class="page_size" data="10">10条</a></li>
+                    <li><a class="page_size" data="20">20条</a></li>
+                    <li><a class="page_size" data="30">30条</a></li>
+                    <li><a class="page_size" data="50">50条</a></li>
+                    <li><a class="page_size" data="100">100条</a></li>
+                </ul>
+            </span>
+			<ul class="pagination" id="sale_pagination"></ul>
+			<a class="btn btn-primary radius load-more-template" style="position: relative; top: -35px">加载更多</a>
+		</div>
+
     </div>
 
+	{{if .authority.EditSale}}
     <!--修改销售记录弹窗-->
     <div id="sale_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
         <div class="modal-dialog" style="width: 60%">
@@ -207,11 +194,26 @@
             </div>
         </div>
     </div>
+	{{else}}
+	<div id="sale_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+		<div class="modal-dialog" style="width: 60%;">
+			<div class="modal-content radius">
+				<div class="modal-header">
+					<h3 class="modal-title">警告消息</h3>
+					<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+				</div>
+				<div class="modal-body">
+					<p class="c-danger f-20 text-c">您没有编辑销售记录的权限，如有需要请联系管理员~</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	{{end}}
 
 </section>
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-
+	var sale = {{.sale}}
 </script>
 <!--/请在上方写此页面业务相关的脚本-->

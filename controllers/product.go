@@ -27,13 +27,13 @@ type product struct {
 	LotNum       string
 	ThreeStage   string
 	Spec         string
-	Stock        uint32
+	Stock        string
 	Unit         string
 	Pool         string
 	StoreName    string
 	InTime       time.Time
 	SupplierName string
-	InPrice      float64
+	InPrice      string
 	HasPay       bool
 	HasInvoice   bool
 	GetInvoice   time.Time
@@ -94,10 +94,10 @@ func (c *ProductController) Get() {
 				p[index].StoreName = "**"
 			}
 			if view_stock {
-				p[index].Stock = 0
+				p[index].Stock = "***"
 			}
 			if view_in_price {
-				p[index].InPrice = 0
+				p[index].InPrice = "***"
 			}
 		}
 	}
@@ -153,10 +153,10 @@ func (c *ProductController) ProductLoadMore() {
 				p[index].StoreName = "**"
 			}
 			if view_stock {
-				p[index].Stock = 0
+				p[index].Stock = "***"
 			}
 			if view_in_price {
-				p[index].InPrice = 0
+				p[index].InPrice = "***"
 			}
 		}
 	}

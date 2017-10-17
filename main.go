@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"ERP/plugins/permission"
 	"ERP/plugins/position"
+	"ERP/plugins/message"
 )
 
 func init() {
@@ -66,6 +67,11 @@ var PositionAssign = func(c *context.Context) {
 	c.Input.SetData("grade", position.GetOnePosition(username))
 }
 
+var MessageAssign = func(c *context.Context) {
+	username, _ := c.Input.Session("username").(string)
+	c.Input.SetData("message_num", msg.GetOneMessageNum(username))
+}
+
 //模板函数
 func ToString(s int) string {
 	o := strconv.Itoa(s)
@@ -104,11 +110,15 @@ func main() {
 	//同步mysql数据表position到redis
 	position.AsyncAllPosition()
 
+	//同步mysql数据表message到redis
+	msg.AsyncAllMessage2Redis()
+
 	//过滤器
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterLogin)
 	beego.InsertFilter("/*", beego.BeforeRouter, FilterUserInfo)
 	beego.InsertFilter("/*", beego.BeforeRouter, PermissionAssign)
 	beego.InsertFilter("/*", beego.BeforeRouter, PositionAssign)
+	beego.InsertFilter("/*", beego.BeforeRouter, MessageAssign)
 
 	//自定义错误界面
 	beego.ErrorController(&controllers.ErrorController{})

@@ -6,6 +6,7 @@ import (
 	"ERP/models"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/logs"
+	"ERP/plugins/message"
 )
 
 type MessageController struct {
@@ -21,7 +22,7 @@ func (c *MessageController) Message_list() {
 	cond_build := cond.And("from", current_uid).Or("to", current_uid)
 
 	o := orm.NewOrm()
-	o.QueryTable("message").SetCond(cond_build).RelatedSel().All(&message)
+	o.QueryTable("message").SetCond(cond_build).RelatedSel().OrderBy("-created").All(&message)
 
 	c.Data["message"] = message
 	c.Data["xsrftoken"] = c.XSRFToken()
@@ -47,6 +48,9 @@ func (c *MessageController) Message_info() {
 		//更新消息表中的IsRead字段，设置为true
 		message.IsRead = true
 		o.Update(&message, "is_read")
+
+		//redis
+		msg.DecrOneMessage(c.GetSession("username").(string))
 	}
 
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
@@ -92,6 +96,9 @@ func (c *MessageController) Message_add_post() {
 	message.Content = c.GetString("message_content")
 
 	_, err := o.Insert(&message)
+
+	//redis
+	msg.IncrOneMessage(user_to.Username)
 	if err != nil {
 		logs.Error("/message_add ", user_from.Name, " 向 ", user_to.Name, " 发送信息失败：", err)
 		c.Data["url"] = "/message_add"

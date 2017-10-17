@@ -10,6 +10,7 @@ import (
 	"time"
 	"github.com/astaxie/beego/logs"
 	"ERP/plugins/permission"
+	"ERP/plugins/message"
 )
 
 type MoveController struct{
@@ -120,6 +121,7 @@ func (c *MoveController) Move_request_post() {
 					"</span> 移库到 <span class='c-danger'>" + c.GetString("move_to") + "</span><br />具体请查看：<a href='"+ c.Ctx.Input.Site() + ":" +strconv.Itoa(c.Ctx.Input.Port()) +
 					"/move_info/" + strconv.FormatInt(mid, 10) + "' target='blank'><u>移库详情</u></a>"
 				o.Insert(&message)
+				msg.IncrOneMessage(item.Username)
 			}
 		}
 

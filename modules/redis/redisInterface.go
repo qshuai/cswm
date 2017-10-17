@@ -13,4 +13,10 @@ type RedisInterface interface {
 	StorePosition(position_items []models.User) error
 	StoreOnePosition(position_item models.User) error
 	GetOnePosition(username string) string
+
+	//消息操作
+	IncrOneMessage(username string) error
+	DecrOneMessage(username string) error
+	GetOneMessageNum(username string) int
+	StoreAllMessage2Redis(message []M) error
 }

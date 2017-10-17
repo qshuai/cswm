@@ -170,3 +170,56 @@ func (r *RedisStorage) GetOnePosition(username string) string {
 	res, _ := redis.String(ri.Do("HGET", userdata_prefix+username, "position"))
 	return res
 }
+
+//增加某人的消息数量
+func (r *RedisStorage) IncrOneMessage(username string) error {
+	//获取position redis存储前缀
+	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
+
+	ri := r.pool.Get()
+	defer ri.Close()
+	_, err := ri.Do("HINCRBY", userdata_prefix+username, "message", 1)
+	return err
+}
+
+//减少某人的消息数量
+func (r *RedisStorage) DecrOneMessage(username string) error {
+	//获取position redis存储前缀
+	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
+
+	ri := r.pool.Get()
+	defer ri.Close()
+	_, err := ri.Do("HINCRBY", userdata_prefix+username, "message", -1)
+	return err
+}
+
+//获取某人的消息数量
+func (r *RedisStorage) GetOneMessageNum(username string) int {
+	//获取position redis存储前缀
+	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
+
+	ri := r.pool.Get()
+	defer ri.Close()
+	res, _ := redis.Int(ri.Do("HGET", userdata_prefix+username, "message"))
+	return res
+}
+
+//存储所有的未读message到redis
+
+type M struct {
+	Username string
+	Num      string
+}
+
+func (r *RedisStorage) StoreAllMessage2Redis(message []M) error {
+	//获取position redis存储前缀
+	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
+
+	ri := r.pool.Get()
+	defer ri.Close()
+
+	for _, item := range message{
+		ri.Do("HSET", userdata_prefix+item.Username, "message", item.Num)
+	}
+	return nil
+}

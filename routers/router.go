@@ -114,6 +114,7 @@ func init() {
 		//销售
 		beego.Router("/sale_list", &controllers.SaleController{}, "get:Sale_list") //销售记录列表
 		beego.Router("/sale_edit", &controllers.SaleController{}, "post:Sale_edit")
+		beego.Router("/sale_load_more", &controllers.SaleController{}, "post:SaleLoadMore")
 
 		//移库
 		beego.Router("/move_request/:pid:int", &controllers.MoveController{}, "get:Move_request")  //移库请求页面
