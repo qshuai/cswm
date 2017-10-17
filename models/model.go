@@ -238,7 +238,7 @@ func init() {
 	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
-
+	//
 	//orm.RunSyncdb("default", true, true)
 	//
 	//o := orm.NewOrm()
@@ -374,9 +374,6 @@ func init() {
 	//defaultPermission.AddStore = false
 	//defaultPermission.ViewStore = false
 	//o.Insert(&defaultPermission)
-	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `created`, `updated`) VALUES (1, 'scrapup', 'ae9586ada632a35ee545ba75edf788f0', '戚帅', '18543131640', '管理员', '2017-09-11 15:06:47', '127.0.0.1', 0, '2017-09-10 00:00:00', '2017-09-10 16:35:42'), (2, 'tony', 'ae9586ada632a35ee545ba75edf788f0', '王宇', '18543131641', '业务员', '2017-09-11 10:03:58', '127.0.0.1', 0, '2017-09-10 00:00:00', '2017-09-10 16:35:42');").Exec()
-	//o.Raw("INSERT INTO `brand` (`id`, `name`, `created`) VALUES (1, 'TaKaRa', '2017-09-11 00:00:00'),(2, 'Axygen', '2017-09-11 00:00:00');").Exec()
-	//o.Raw("INSERT INTO `consumer` (`id`, `name`, `province`, `city`, `region`, `department`, `tel`, `introduction`, `created`, `updated`)VALUES(1, '杨雨', '吉林省', '长春市', '绿园区', '微生物实验室', '13890345678', '吉林大学动物医学学院', '2017-09-11 00:00:00', '2017-09-11 00:00:00'),(2, '王健林', '浙江省', '杭州市', '襄垣区', '病理实验室', '13890345645', '浙江大学动物病理实验室', '2017-09-11 00:00:00', '2017-09-11 00:00:00');").Exec()
-	//o.Raw("INSERT INTO `store` (`id`, `num`, `name`)VALUES(1, 45, '长春库房'),(2, 46, '大连库房'),(3, 167, '北京库房'),(4, 198, '大连库房'),(5, 23, '哈尔冰库房');").Exec()
-	//o.Raw("INSERT INTO `supplier` (`id`, `name`, `created`)VALUES(1, '华晨生物', '2017-09-11 00:00:00'),(2, '康泰生物', '2017-09-11 00:00:00');").Exec()
+	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'scrapup', 'ae9586ada632a35ee545ba75edf788f0', '戚帅', '13944119825', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
+	//o.Raw("INSERT INTO `permission` (`id`, `user_id`, `add_member`, `edit_member`, `active_member`, `add_consumer`, `edit_consumer`, `view_consumer`, `add_brand`, `add_dealer`, `view_dealer`, `add_supplier`, `view_supplier`, `add_product`, `input_in_price`, `view_product_store`, `view_stock`, `view_in_price`, `edit_product`, `delete_product`, `output_product`, `view_sale`, `view_sale_consumer`, `view_sale_in_price`, `edit_sale`, `operate_category`, `request_move`, `response_move`, `view_move`, `add_store`, `view_store`)VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);").Exec()
 }

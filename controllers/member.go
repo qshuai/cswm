@@ -23,7 +23,7 @@ func (c *MemberController) Member_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddMember") {
 		c.Abort("401")
 	}
-	c.Data["level"] = beego.AppConfig.Strings("level")
+	c.Data["level"] = modify(beego.AppConfig.Strings("level"), redis_orm.RedisPool.GetOnePosition(c.GetSession("username").(string)))
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.TplName = "member/member_add.html"
@@ -91,7 +91,7 @@ func (c *MemberController) Member_add_post() {
 	permission.ViewStore = defaultPermission.ViewStore
 
 	_, err = o.Insert(&permission)
-	if err !=nil {
+	if err != nil {
 		log.Fatal("assign permission failure: ", u.Name, "-", err)
 	}
 
@@ -176,7 +176,6 @@ func (c *MemberController) Member_edit_post() {
 		redis_orm.RedisPool.RenameKey(uu.Username, u.Username)
 	}
 
-
 	var err error
 	if password == "" {
 		_, err = o.Update(&u, "username", "tel")
@@ -202,15 +201,21 @@ func (c *MemberController) Admin_member_edit() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
 		c.Abort("401")
 	}
+
+	level := beego.AppConfig.Strings("level")
+	p := redis_orm.RedisPool.GetOnePosition(c.GetSession("username").(string))
 	uid, _ := c.GetInt(":uid")
 	if uid != 0 {
 		o := orm.NewOrm()
 		user := models.User{}
 
 		o.QueryTable("user").Filter("id", uid).One(&user)
+		if !judge(level, p, user.Position){
+			c.Abort("401")
+		}
 		c.Data["user"] = user
 	}
-	c.Data["level"] = beego.AppConfig.Strings("level")
+	c.Data["level"] = modify(level, p)
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "member/admin_edit.html"
@@ -223,6 +228,9 @@ func (c *MemberController) Admin_member_edit_post() {
 	}
 
 	if (c.IsAjax()) {
+		level := beego.AppConfig.Strings("level")
+		p := redis_orm.RedisPool.GetOnePosition(c.GetSession("username").(string))
+
 		search_entry := c.GetString("search_entry")
 		if search_entry != "" {
 			user := models.User{}
@@ -233,6 +241,9 @@ func (c *MemberController) Admin_member_edit_post() {
 			sql := qb.String()
 			o := orm.NewOrm()
 			o.Raw(sql, search_entry, search_entry).QueryRow(&user)
+			if !judge(level, p, user.Position){
+				c.Abort("401")
+			}
 			c.Data["json"] = user
 			c.ServeJSON()
 		}
@@ -299,7 +310,7 @@ func (c *MemberController) Admin_edit_all() {
 		user.Username = u.Username
 		position.AsyncOnePosition(user)
 	}
-		if err == nil {
+	if err == nil {
 		c.Redirect("/admin_member_edit/"+strconv.Itoa(user.Id), 302)
 	}
 }
@@ -317,4 +328,31 @@ func (c *MemberController) Disable_member_list() {
 	c.Data["user"] = user
 	c.Layout = "common.tpl"
 	c.TplName = "member/disable_member_list.html"
+}
+
+//只允许添加比自己等级低的人员
+func modify(pp []string, position string) []string {
+	for index, _ := range pp {
+		if pp[index] == position {
+			return pp[index+1:]
+		}
+	}
+	return []string{}
+}
+
+//判断自己的等级是否高于林外一个人
+func judge(pp []string, my string, your string) bool {
+	var mindex, yindex int
+	for index, _ := range pp {
+		if my == pp[index] {
+			mindex = index
+		}
+		if your == pp[index] {
+			yindex = index
+		}
+	}
+	if mindex < yindex {
+		return true
+	}
+	return false
 }
