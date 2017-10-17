@@ -13,8 +13,27 @@ import (
 	"ERP/plugins/message"
 )
 
-type MoveController struct{
+type MoveController struct {
 	beego.Controller
+}
+
+type movelist struct {
+	Id           int
+	Title        string
+	ArtNum       string
+	Fp           string
+	Fn           string
+	Tp           string
+	Tn           string
+	Num          string
+	Unit         string
+	InPrice      string
+	Request      string
+	Response     string
+	Operate      string
+	Created      time.Time
+	Finished     time.Time
+	OperatedTime time.Time
 }
 
 //移库请求页面
@@ -33,8 +52,8 @@ func (c *MoveController) Move_request() {
 	//获取库房列表
 	store := []models.Store{}
 	o.QueryTable("store").All(&store, "pool", "name")
-	var store_string  string
-	for _, item := range store{
+	var store_string string
+	for _, item := range store {
 		store_string += item.Pool + "-" + item.Name + ", "
 	}
 
@@ -103,22 +122,17 @@ func (c *MoveController) Move_request_post() {
 	//初始化操作
 	move.Operate = "0"
 
-	//事务
-	o.Begin()
 	mid, err1 := o.Insert(&move)
-	_, err2 := o.QueryTable("product").Filter("id", pid).Update(orm.Params{
-		"stock" : orm.ColValue(orm.ColMinus, move.Num),
-	})
-	if err1 == nil && err2 == nil{
-		o.Commit()
+
+	if err1 == nil {
 		//为目标库房总库管理员和分库管理员发送message
 		message := models.Message{}
-		for _, item := range pool_user  {
+		for _, item := range pool_user {
 			if item.PoolName != user.PoolName {
 				message.From = &user
 				message.To = &item
-				message.Content = "<span class='c-warning'>"+user.Name + "</span> 将商品： <a href='/product_track/"+ strconv.Itoa(product.Id) +"' class='c-primary'>" + product.Title + "</a> 从 <span class='c-danger'>" + store_from.Pool + "-" + store_from.Name +
-					"</span> 移库到 <span class='c-danger'>" + c.GetString("move_to") + "</span><br />具体请查看：<a href='"+ c.Ctx.Input.Site() + ":" +strconv.Itoa(c.Ctx.Input.Port()) +
+				message.Content = "<span class='c-warning'>" + user.Name + "</span> 将商品： <a href='/product_track/" + strconv.Itoa(product.Id) + "' class='c-primary'>" + product.Title + "</a> 从 <span class='c-danger'>" + store_from.Pool + "-" + store_from.Name +
+					"</span> 移库到 <span class='c-danger'>" + c.GetString("move_to") + "</span><br />具体请查看：<a href='" + c.Ctx.Input.Site() + ":" + strconv.Itoa(c.Ctx.Input.Port()) +
 					"/move_info/" + strconv.FormatInt(mid, 10) + "' target='blank'><u>移库详情</u></a>"
 				o.Insert(&message)
 				msg.IncrOneMessage(item.Username)
@@ -129,8 +143,7 @@ func (c *MoveController) Move_request_post() {
 		c.Data["msg"] = "成功发起移库请求！"
 		c.TplName = "jump/success.html"
 	} else {
-		o.Rollback()
-		logs.Error("用户Id： ", uid, "移库失败！ 商品id: ", pid, "; 从库房Id：", product.Stock, " 到 ", c.GetString("move_to"), "原因:", err1, err2)
+		logs.Error("用户Id： ", uid, "移库失败！ 商品id: ", pid, "; 从库房Id：", product.Stock, " 到 ", c.GetString("move_to"), "原因:", err1)
 		c.Data["url"] = "/move_request/" + strconv.Itoa(pid)
 		c.Data["msg"] = "发起移库请求失败"
 		c.TplName = "jump/error.html"
@@ -142,24 +155,37 @@ func (c *MoveController) Move_list() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewMove") {
 		c.Abort("401")
 	}
-	uid := c.GetSession("uid").(int)
-	user := models.User{}
-	o := orm.NewOrm()
-	o.QueryTable("user").Filter("id", uid).One(&user)
 
-	move := []models.Move{}
-	conf := orm.NewCondition()
-	con := conf.Or("request_id", uid).Or("response_id", uid).Or("From__pool", user.PoolName)
-	o.QueryTable("move").SetCond(con).RelatedSel().All(&move)
+	m := []movelist{}
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("move.id", "move.num", "move.operate", "move.created", "move.finished", "product.title",
+		"product.art_num", "f.pool as fp", "f.name as fn", "t.pool as tp", "t.name as tn",
+		"request.name as request", "response.name as response").
+		From("move").
+		LeftJoin("product").
+		On("product.id = move.origin_id").
+		LeftJoin("store as f").
+		On("f.id = move.from_id").
+		LeftJoin("store as t").
+		On("t.id = move.to_id").
+		LeftJoin("user as request").
+		On("request.id = move.request_id").
+		LeftJoin("user as response").
+		On("response.id = move.response_id").
+		OrderBy("created").
+		Desc()
+	sql := qb.String()
+	o := orm.NewOrm()
+	o.Raw(sql).QueryRows(&m)
 
 	c.Data["xsrf_token"] = c.XSRFToken()
-	c.Data["move"] = move
+	c.Data["move"] = m
 	c.Layout = "common.tpl"
 	c.TplName = "move/move_list.html"
 }
 
 //移库接受
-func (c *MoveController) Move_accept(){
+func (c *MoveController) Move_accept() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
 		c.Abort("401")
 	}
@@ -173,16 +199,16 @@ func (c *MoveController) Move_accept(){
 		o.Update(&move, "operate", "operated_time")
 
 		c.Data["json"] = ResponseInfo{
-			Code : "success",
+			Code:    "success",
 			Message: "您已同意此次移库操作",
-			Data: "",
+			Data:    "",
 		}
 		c.ServeJSON()
 	}
 }
 
 //拒绝移库
-func (c *MoveController) Move_deny(){
+func (c *MoveController) Move_deny() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
 		c.Abort("401")
 	}
@@ -196,9 +222,9 @@ func (c *MoveController) Move_deny(){
 		o.Update(&move, "operate", "operated_time")
 
 		c.Data["json"] = ResponseInfo{
-			Code : "success",
+			Code:    "success",
 			Message: "您已拒绝此次移库操作",
-			Data: "",
+			Data:    "",
 		}
 		c.ServeJSON()
 	}
@@ -218,11 +244,22 @@ func (c *MoveController) Move_finish() {
 		move.OperatedTime = time.Now()
 		move.Finished = time.Now()
 		o.Update(&move, "operate", "operated_time", "finished")
+		o.QueryTable("move").Filter("id", move.Id).One(&move, "origin", "num", "to")
+		product := models.Product{}
+		o.QueryTable("product").Filter("id", move.Origin).One(&product)
+		product.Stock = move.Num
+		product.Store = move.To
+		product.Id = 0
+		o.Insert(&product)
+
+		o.QueryTable("product").Filter("id", move.Origin).Update(orm.Params{
+			"stock": orm.ColValue(orm.ColMinus, move.Num),
+		})
 
 		c.Data["json"] = ResponseInfo{
-			Code : "success",
+			Code:    "success",
 			Message: "您已拒绝此次移库操作",
-			Data: "",
+			Data:    "",
 		}
 		c.ServeJSON()
 	}
@@ -233,14 +270,33 @@ func (c *MoveController) Move_info() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewMove") {
 		c.Abort("401")
 	}
-	mid, _ := c.GetInt(":mid")
+	mid := c.GetString(":mid")
 
+	m := movelist{}
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("move.id", "move.num", "move.operate", "move.created", "move.finished", "move.operated_time",
+		"product.title", "product.in_price", "product.unit",
+		"product.art_num", "f.pool as fp", "f.name as fn", "t.pool as tp", "t.name as tn",
+		"request.name as request", "response.name as response").
+		From("move").
+		LeftJoin("product").
+		On("product.id = move.origin_id").
+		LeftJoin("store as f").
+		On("f.id = move.from_id").
+		LeftJoin("store as t").
+		On("t.id = move.to_id").
+		LeftJoin("user as request").
+		On("request.id = move.request_id").
+		LeftJoin("user as response").
+		On("response.id = move.response_id").
+		Where("move.id =" + mid).
+		OrderBy("created").
+		Desc()
+	sql := qb.String()
 	o := orm.NewOrm()
-	move := models.Move{}
-	move.Id = mid
-	o.QueryTable("move").Filter("id", mid).RelatedSel().One(&move)
+	o.Raw(sql).QueryRow(&m)
 
-	c.Data["move"] = move
+	c.Data["move"] = m
 	c.Layout = "common.tpl"
 	c.TplName = "move/move_info.html"
 }

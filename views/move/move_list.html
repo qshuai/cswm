@@ -31,13 +31,13 @@
                 {{range .move}}
                     <tr>
                         <input type="hidden" name="mid" value="{{.Id}}">
-                        <td class="text-c">{{.Origin.Title}}</td>
-                        <td class="text-c">{{.Origin.ArtNum}}</td>
-                        <td class="text-c">{{.From.Pool}}-{{.From.Name}}</td>
-                        <td class="text-c">{{.To.Pool}}-{{.To.Name}}</td>
+                        <td class="text-c">{{.Title}}</td>
+                        <td class="text-c">{{.ArtNum}}</td>
+                        <td class="text-c">{{.Fp}}-{{.Fn}}</td>
+                        <td class="text-c">{{.Tp}}-{{.Tn}}</td>
                         <td class="text-c">{{.Num}}</td>
-                        <td class="text-c">{{.Request.Name}}</td>
-                        <td class="text-c">{{.Response.Name}}</td>
+                        <td class="text-c">{{.Request}}</td>
+                        <td class="text-c">{{.Response}}</td>
                         {{if eq .Operate "1"}}
                             <td class="text-c c-success">达成</td>
                         {{else if eq .Operate "0"}}

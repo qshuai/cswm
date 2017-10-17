@@ -34,15 +34,15 @@
     <![endif]-->
     <!--/meta 作为公共模版分离出去-->
 
-    <title>生物圈库存管理系统</title>
+    <title>食物链系统</title>
 </head>
 <body>
 <!--_header 作为公共模版分离出去-->
 <header class="navbar-wrapper">
     <div class="navbar navbar-fixed-top">
         <div class="container-fluid cl">
-            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/">生物圈库存管理系统</a>
-            <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/">生物圈</a>
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/">食物链系统</a>
+            <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/">食物链系统</a>
             <span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0</span>
             <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
             <nav class="nav navbar-nav">
@@ -256,7 +256,7 @@
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="/static/lib/layer/2.4/layer.js"></script>
-<script type="text/javascript" src="/static/static/h-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/static/static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="/static/static/h-ui.admin/js/H-ui.admin.page.js"></script>
 
 <!--城市列表 三级联动-->

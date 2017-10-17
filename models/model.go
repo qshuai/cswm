@@ -238,7 +238,7 @@ func init() {
 	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
-	//
+
 	//orm.RunSyncdb("default", true, true)
 	//
 	//o := orm.NewOrm()
@@ -374,6 +374,6 @@ func init() {
 	//defaultPermission.AddStore = false
 	//defaultPermission.ViewStore = false
 	//o.Insert(&defaultPermission)
-	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'scrapup', 'ae9586ada632a35ee545ba75edf788f0', '戚帅', '13944119825', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
+	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'tony', 'ae9586ada632a35ee545ba75edf788f0', '闪电', '13944119825', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
 	//o.Raw("INSERT INTO `permission` (`id`, `user_id`, `add_member`, `edit_member`, `active_member`, `add_consumer`, `edit_consumer`, `view_consumer`, `add_brand`, `add_dealer`, `view_dealer`, `add_supplier`, `view_supplier`, `add_product`, `input_in_price`, `view_product_store`, `view_stock`, `view_in_price`, `edit_product`, `delete_product`, `output_product`, `view_sale`, `view_sale_consumer`, `view_sale_in_price`, `edit_sale`, `operate_category`, `request_move`, `response_move`, `view_move`, `add_store`, `view_store`)VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);").Exec()
 }

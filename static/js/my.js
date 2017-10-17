@@ -13,7 +13,7 @@ Date.prototype.format = function(fmt) {
 	}
 	for(var k in o) {
 		if(new RegExp("("+ k +")").test(fmt)){
-			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length===1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
 		}
 	}
 	return fmt;
@@ -31,7 +31,7 @@ if (query_url === "/product_list" || query_url === "/sale_list" || query_url ===
 var navlis = $(".nav-left-list");
 $.each(navlis, function (index) {
 	if (navlis.eq(index).find("li").length === 0) {
-		navlis.eq(index).addClass("hide")
+		navlis.eq(index).addClass("hide");
 	}
 });
 
@@ -59,29 +59,9 @@ if (query_url === "/product_add") {
 	var stock;
 	var in_price;
 
-	//product_template_add.html增加sku
-	function AddSku() {
-		$("#add_spec").parent("div").append('<input type="text" class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
-
-		delete_sku = $(".delete_sku");
-		spec = $(".spec");
-		stock = $(".stock");
-		in_price = $(".in_price");
-
-		$.each(delete_sku, function (index) {
-			delete_sku.eq(index).click(function () {
-				index += 1;
-				spec.eq(index).remove();
-				stock.eq(index).remove();
-				in_price.eq(index).remove();
-				$(this).remove();
-			})
-		});
-	}
-
 	//product_add.html 增加sku
 	function AddProductSku() {
-		$("#add_spec").append('<input type="text" readonly class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a onclick="DeleteSku(this)" class="btn btn-danger-outline radius mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
+		$("#add_spec").append('<input type="text" readonly class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a onclick="DeleteSku(this)" class="btn btn-danger-outline radius mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>');
 
 		delete_sku = $(".delete_sku");
 		spec = $(".spec");
@@ -1130,7 +1110,7 @@ function agreeMove(obj) {
 			success: function (response, status, xhr) {
 				if (response.Code === "success") {
 					var tds = $(obj).parent().parent().find("td");
-					tds.eq(6).removeClass("c-danger").addClass("c-success").text("达成");
+					tds.eq(7).removeClass("c-danger").addClass("c-success").text("达成");
 
 					//获取当前时间
 					var date = new Date();
@@ -1173,7 +1153,7 @@ function disagreeMove(obj) {
 			success: function (response, status, xhr) {
 				if (response.Code === "success") {
 					var tds = $(obj).parent().parent().find("td");
-					tds.eq(6).removeClass("c-success").addClass("c-danger").text("拒绝");
+					tds.eq(7).removeClass("c-success").addClass("c-danger").text("拒绝");
 
 					//获取当前时间
 					var date = new Date();
@@ -1217,7 +1197,7 @@ function finishMove(obj) {
 			success: function (response, status, xhr) {
 				if (response.Code === "success") {
 					var tds = $(obj).parent().parent().find("td");
-					tds.eq(6).removeClass("c-danger").addClass("c-success").text("完成");
+					tds.eq(7).removeClass("c-danger").addClass("c-success").text("完成");
 
 					//获取当前时间
 					var date = new Date();

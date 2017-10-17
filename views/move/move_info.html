@@ -307,15 +307,15 @@ Primary style
                     <div class="cd-timeline-content">
                         <h2>移库请求</h2>
                         <ul>
-                            <li>发起人：&nbsp;&nbsp;&nbsp;<span class="c-primary">{{.move.Request.Name}}</span></li>
-                            <li>响应人：&nbsp;&nbsp;&nbsp;<span class="c-primary">{{.move.Response.Name}}</span></li>
-                            <li>商品名称：<span class="c-primary">{{.move.Origin.Title}}</span></li>
-                            <li>货号：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-primary">{{.move.Origin.ArtNum}}</span></li>
-                            <li>起始库房：<span class="c-primary">{{.move.From.Pool}}-{{.move.From.Name}}</span></li>
-                            <li>目标库房：<span class="c-primary">{{.move.To.Pool}}-{{.move.To.Name}}</span></li>
-                            <li>进货价格：<span class="c-primary">{{.move.Origin.InPrice}} 元</span></li>
+                            <li>发起人：&nbsp;&nbsp;&nbsp;<span class="c-primary">{{.move.Request}}</span></li>
+                            <li>响应人：&nbsp;&nbsp;&nbsp;<span class="c-primary">{{.move.Response}}</span></li>
+                            <li>商品名称：<span class="c-primary">{{.move.Title}}</span></li>
+                            <li>货号：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-primary">{{.move.ArtNum}}</span></li>
+                            <li>起始库房：<span class="c-primary">{{.move.Fp}}-{{.move.Fn}}</span></li>
+                            <li>目标库房：<span class="c-primary">{{.move.Tp}}-{{.move.Tn}}</span></li>
+                            <li>进货价格：<span class="c-primary">{{.move.InPrice}} 元</span></li>
                             <li>移库数量：<span class="c-primary">{{.move.Num}}</span></li>
-                            <li>商品单位：<span class="c-primary">{{.move.Origin.Unit}}</span></li>
+                            <li>商品单位：<span class="c-primary">{{.move.Unit}}</span></li>
                         </ul>
                         <span class="cd-date">{{date .move.Created "Y-m-d H:i:s"}}</span>
                     </div>
@@ -338,11 +338,7 @@ Primary style
                                 <li>状态：<span class="c-warning">暂未同意此移库，请保持良好沟通！</span></li>
                             {{end}}
                         </ul>
-                        {{if eq .move.Operate "1"}}
-                            <span class="cd-date">{{date .move.OperatedTime "Y-m-d H:i:s"}}</span>
-                        {{else}}
-                            <span class="cd-date">等待中...</span>
-                        {{end}}
+						<span class="cd-date">{{date .move.OperatedTime "Y-m-d H:i:s"}}</span>
                     </div>
                 </div>
                 {{if eq .move.Operate "-1"}}
@@ -355,7 +351,7 @@ Primary style
                     <div class="cd-timeline-content">
                         <h2>移库正在进行</h2>
                         <p>请耐心等待</p>
-                        <span class="cd-date">2014-12-20</span>
+                        <span class="cd-date"></span>
                     </div>
                 </div>
                 <div class="cd-timeline-block">
@@ -365,7 +361,7 @@ Primary style
 
                     <div class="cd-timeline-content">
                         <h2>移库完成</h2>
-                        <p>完成内容</p>
+                        <p></p>
                         <span class="cd-date">{{date .move.Finished "Y-m-d H:i:s"}}</span>
                     </div>
                 </div>
@@ -376,7 +372,11 @@ Primary style
 
                     <div class="cd-timeline-content">
                         <h2>当前商品状态</h2>
-                        <p>。。。</p>
+						{{if eq .move.Operate "2"}}
+							状态：<p class="c-success">商品当前已被移库到：{{.move.Tp}}-{{.move.Tn}}</p>
+						{{else}}
+							状态：<p class="c-success">未完成移库！</p>
+						{{end}}
                         <a href="http://www.helloweba.com/view-blog-281.html" class="cd-read-more" target="_blank">阅读全文</a>
                         <span class="cd-date">2014-12-05</span>
                     </div>

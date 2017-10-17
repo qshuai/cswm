@@ -127,8 +127,10 @@ func (c *MemberController) UserInfo_post() {
 	//设置session数据，存储user.Username
 	c.SetSession("username", u.Username)
 
+	o.QueryTable("user").Filter("id", u.Id).One(&u)
 	//同步当前用户的position数据到redis
 	position.AsyncOnePosition(u)
+	permission.AsyncMysql2RedisOne(u.Username)
 
 	c.SetSecureCookie("userinfo_secret", "is_first", "false")
 	c.Redirect("/", 302)
