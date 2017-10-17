@@ -205,7 +205,6 @@ func (r *RedisStorage) GetOneMessageNum(username string) int {
 }
 
 //存储所有的未读message到redis
-
 type M struct {
 	Username string
 	Num      string
@@ -221,5 +220,17 @@ func (r *RedisStorage) StoreAllMessage2Redis(message []M) error {
 	for _, item := range message{
 		ri.Do("HSET", userdata_prefix+item.Username, "message", item.Num)
 	}
+	return nil
+}
+
+//修改key
+func (r *RedisStorage) RenameKey(old, new string) error {
+	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
+	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
+
+	ri := r.pool.Get()
+	defer ri.Close()
+	ri.Do("RENAME", userdata_prefix+old, userdata_prefix+new)
+	ri.Do("RENAME", permission_prefix+old, permission_prefix+new)
 	return nil
 }

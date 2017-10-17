@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"ERP/plugins/permission"
 	"ERP/plugins/position"
+	"ERP/modules/redis"
 )
 
 type MemberController struct {
@@ -166,18 +167,26 @@ func (c *MemberController) Member_edit_post() {
 	password := c.GetString("password")
 	u.Tel = c.GetString("tel")
 
+	//判断用户名修改
 	o := orm.NewOrm()
-	var num int64
+	uu := models.User{}
+	o.QueryTable("user").Filter("id", u.Id).One(&uu, "username")
+	if uu.Username != u.Username {
+		c.SetSession("username", u.Username)
+		redis_orm.RedisPool.RenameKey(uu.Username, u.Username)
+	}
+
+
 	var err error
 	if password == "" {
-		num, err = o.Update(&u, "username", "tel")
+		_, err = o.Update(&u, "username", "tel")
 	} else {
 		ps := []byte(password)
 		psMD5 := md5.Sum(ps)
 		u.Password = fmt.Sprintf("%x", psMD5)
-		num, err = o.Update(&u, "username", "password", "tel")
+		_, err = o.Update(&u, "username", "password", "tel")
 	}
-	if num == 1 && err == nil {
+	if err == nil {
 		c.Data["msg"] = "用户信息更新成功～"
 		c.Data["url"] = "/"
 		c.TplName = "jump/success.html"

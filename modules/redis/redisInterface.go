@@ -19,4 +19,7 @@ type RedisInterface interface {
 	DecrOneMessage(username string) error
 	GetOneMessageNum(username string) int
 	StoreAllMessage2Redis(message []M) error
+
+	//修改key
+	RenameKey(old, new string) error
 }

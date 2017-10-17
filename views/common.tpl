@@ -273,6 +273,10 @@
 <!--jquery paginator-->
 <script type="text/javascript" src="/static/paginator/jqPaginator.js"></script>
 
+<!--验证js-->
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+
 <!--自定义js文件-->
 <script type="text/javascript" src="/static/js/my.js"></script>
 

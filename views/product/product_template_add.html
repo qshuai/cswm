@@ -1,7 +1,7 @@
 <div class="page-container">
 	<div style="width: 70%; margin: 0 auto;">
 		<h1 class="text-c">模板信息录入</h1>
-		<form action="" method="post" class="form form-horizontal" id="form-article-add">
+		<form action="" method="post" class="form form-horizontal formvalidte" id="form-article-add">
 			{{.xsrfdata}}
 			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-2" for="title"><span class="c-red">*</span>产品名称：</label>
@@ -49,27 +49,27 @@
 			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-2">单位：</label>
 				<div class="formControls col-xs-8 col-sm-9 mt-5 radios">
-					<input type="radio" name="unit" class="ml-5" value="箱" id="box"><label for="box">&nbsp;&nbsp;箱</label>
-					<input type="radio" name="unit" class="ml-5" value="瓶" id="bottle"><label for="bottle">&nbsp;&nbsp;瓶</label>
-					<input type="radio" name="unit" class="ml-5" value="个" id="individual"><label for="individual">&nbsp;&nbsp;个</label>
-					<input type="radio" name="unit" class="ml-5" value="盒" id="he"><label for="he">&nbsp;&nbsp;盒</label>
-					<input type="radio" name="unit" class="ml-5" value="袋" id="dai"><label for="dai">&nbsp;&nbsp;袋</label>
-					<input type="radio" name="unit" class="ml-5" value="支" id="branch"><label for="branch">&nbsp;&nbsp;支</label>
-					<input type="radio" name="unit" class="ml-5" value="台" id="tai"><label for="tai">&nbsp;&nbsp;台</label>
-					<input type="radio" name="unit" class="ml-5" value="包" id="bao"><label for="bao">&nbsp;&nbsp;包</label>
-					<input type="radio" name="unit" class="ml-5" value="套" id="tao"><label for="tao">&nbsp;&nbsp;套</label>
-					<input type="radio" name="unit" class="ml-5" value="卷" id="juan"><label for="juan">&nbsp;&nbsp;卷</label>
+					<input type="radio" required name="unit" class="ml-5" value="箱" id="box"><label for="box">&nbsp;&nbsp;箱</label>
+					<input type="radio" required name="unit" class="ml-5" value="瓶" id="bottle"><label for="bottle">&nbsp;&nbsp;瓶</label>
+					<input type="radio" required name="unit" class="ml-5" value="个" id="individual"><label for="individual">&nbsp;&nbsp;个</label>
+					<input type="radio" required name="unit" class="ml-5" value="盒" id="he"><label for="he">&nbsp;&nbsp;盒</label>
+					<input type="radio" required name="unit" class="ml-5" value="袋" id="dai"><label for="dai">&nbsp;&nbsp;袋</label>
+					<input type="radio" required name="unit" class="ml-5" value="支" id="branch"><label for="branch">&nbsp;&nbsp;支</label>
+					<input type="radio" required name="unit" class="ml-5" value="台" id="tai"><label for="tai">&nbsp;&nbsp;台</label>
+					<input type="radio" required name="unit" class="ml-5" value="包" id="bao"><label for="bao">&nbsp;&nbsp;包</label>
+					<input type="radio" required name="unit" class="ml-5" value="套" id="tao"><label for="tao">&nbsp;&nbsp;套</label>
+					<input type="radio" required name="unit" class="ml-5" value="卷" id="juan"><label for="juan">&nbsp;&nbsp;卷</label>
 					<br>
-					<input type="radio" name="unit" class="ml-5" value="包" id="bag"><label for="bag">&nbsp;&nbsp;包</label>
-					<input type="radio" name="unit" class="ml-5" value="副" id="pair"><label for="pair">&nbsp;&nbsp;副</label>
-					<input type="radio" name="unit" class="ml-5" value="张" id="sheet"><label for="sheet">&nbsp;&nbsp;张</label>
-					<input type="radio" name="unit" class="ml-5" value="本" id="ben"><label for="ben">&nbsp;&nbsp;本</label>
-					<input type="radio" name="unit" class="ml-5" value="只" id="zhi"><label for="zhi">&nbsp;&nbsp;只</label>
-					<input type="radio" name="unit" class="ml-5" value="包" id="group"><label for="group">&nbsp;&nbsp;组</label>
-					<input type="radio" name="unit" class="ml-5" value="块" id="block"><label for="block">&nbsp;&nbsp;块</label>
-					<input type="radio" name="unit" class="ml-5" value="把" id="ba"><label for="ba">&nbsp;&nbsp;把</label>
-					<input type="radio" name="unit" class="ml-5" value="根" id="gen"><label for="gen">&nbsp;&nbsp;根</label>
-					<input type="radio" name="unit" class="ml-5" value="片" id="piece"><label for="piece">&nbsp;&nbsp;片</label>
+					<input type="radio" required name="unit" class="ml-5" value="包" id="bag"><label for="bag">&nbsp;&nbsp;包</label>
+					<input type="radio" required name="unit" class="ml-5" value="副" id="pair"><label for="pair">&nbsp;&nbsp;副</label>
+					<input type="radio" required name="unit" class="ml-5" value="张" id="sheet"><label for="sheet">&nbsp;&nbsp;张</label>
+					<input type="radio" required name="unit" class="ml-5" value="本" id="ben"><label for="ben">&nbsp;&nbsp;本</label>
+					<input type="radio" required name="unit" class="ml-5" value="只" id="zhi"><label for="zhi">&nbsp;&nbsp;只</label>
+					<input type="radio" required name="unit" class="ml-5" value="包" id="group"><label for="group">&nbsp;&nbsp;组</label>
+					<input type="radio" required name="unit" class="ml-5" value="块" id="block"><label for="block">&nbsp;&nbsp;块</label>
+					<input type="radio" required name="unit" class="ml-5" value="把" id="ba"><label for="ba">&nbsp;&nbsp;把</label>
+					<input type="radio" required name="unit" class="ml-5" value="根" id="gen"><label for="gen">&nbsp;&nbsp;根</label>
+					<input type="radio" required name="unit" class="ml-5" value="片" id="piece"><label for="piece">&nbsp;&nbsp;片</label>
 				</div>
 			</div>
 			<br>

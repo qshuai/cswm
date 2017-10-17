@@ -19,7 +19,7 @@
                     <li>库存单位： {{.product.Unit}}</li>
                 </ul>
             </div>
-            <form action="/move_request" method="post" class="form form-horizontal">
+            <form action="/move_request" method="post" class="form form-horizontal formvalidte">
                 {{ .xsrfdata }}
                 <input type="hidden" name="product_id" value="{{.product.Id}}">
                 <div class="row cl">

@@ -19,20 +19,20 @@
             </ul>
         </div>
         <div class="f-r" style="width: 60%;">
-            <form action="/store_output_action" method="post" class="form form-horizontal" id="form-article-add">
+            <form action="/store_output_action" method="post" class="form form-horizontal formvalidte" id="form-article-add">
                 {{.xsrfdata}}
                 <input type="hidden" name="product_id" value="{{.product_item.Id}}">
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-2" for="salesman"><span class="c-red">*</span>业务员：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" class="input-text radius awesomplete" id="salesman" data-list="{{.salesman_string}}" placeholder="检索" name="salesman">
+                        <input type="text" class="input-text radius awesomplete" id="salesman" data-list="{{.salesman_string}}" placeholder="检索" name="salesman" required>
                     </div>
                 </div>
 
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-2" for="consumer"><span class="c-red">*</span>客户：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" class="input-text radius awesomplete" id="consumer" data-list="{{.consumer_string}}" placeholder="检索" name="consumer">
+                        <input type="text" class="input-text radius awesomplete" id="consumer" data-list="{{.consumer_string}}" placeholder="检索" name="consumer" required>
                     </div>
                 </div>
 

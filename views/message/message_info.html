@@ -20,7 +20,7 @@
             {{else}}
                 <a class="btn btn-success radius text-r" onclick="showReplyForm()">回 复</a>
 
-                <form action="/message_add" method="post" class="form form-horizontal hidden reply-form mt-20" id="form-article-add">
+                <form action="/message_add" method="post" class="form form-horizontal hidden reply-form mt-20 formvalidte" id="form-article-add">
                     {{.xsrfdata}}
                     <input type="hidden" name="message_to" value="{{.message.From.Name}}">
                     <textarea class="textarea radius" placeholder="发送内容..." name="message_content" style="height: 200px;"></textarea>

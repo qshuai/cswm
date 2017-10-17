@@ -11,7 +11,7 @@
             <h1 class="text-c">添加分类</h1>
             <div class="Huialert Huialert-danger" style="width: 80%; margin: 0 auto;"><span class="label label-secondary radius">1</span> 是否隐藏:默认显示，如果所属一级或二级分类隐藏，则隐藏~</div>
             <div class="Huialert Huialert-danger" style="width: 80%; margin: 2px auto;"><span class="label label-secondary radius">2</span> 如果添加一级或二级分类，请在对应的后续表格中输入"-"(不带引号)~</div>
-            <form action="" method="post" class="form form-horizontal" id="form-article-add">
+            <form action="" method="post" class="form form-horizontal formvalidte" id="form-article-add">
                 {{.xsrfdata}}
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-2" for="primary">一级分类：</label>

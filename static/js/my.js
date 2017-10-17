@@ -845,13 +845,13 @@ function SalePaginator(sale) {
 				tds.eq(4).text(sale[i].InPrice);
 				tds.eq(5).text(sale[i].OutPrice);
 				tds.eq(6).text(sale[i].Num);
-				tds.eq(7).text(sale[i].Send);
+				tds.eq(7).text(sale[i].Send.substr(0, 10));
 				tds.eq(8).text(sale[i].HasInvoice ? "是" : "否");
 				tds.eq(9).text(sale[i].InvoiceNum);
-				tds.eq(10).text(sale[i].SendInvoice);
-				tds.eq(11).text(sale[i].GetInvoice);
+				tds.eq(10).text(sale[i].SendInvoice.substr(0, 10));
+				tds.eq(11).text(sale[i].GetInvoice.substr(0, 10));
 				tds.eq(12).text(sale[i].GetMoney ? "是" : "否");
-				tds.eq(13).text(sale[i].GetDate);
+				tds.eq(13).text(sale[i].GetDate.substr(0, 10));
 				tds.eq(14).text(sale[i].Created);
 				tds.eq(15).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
 				sale_node.append(row)
@@ -1407,3 +1407,140 @@ function DeleteTemplateRow(obj, id) {
 		}
 	})
 }
+
+$().ready(function () {
+	$(".formvalidte").validate({
+		rules : {
+			username : {
+				required : true,
+				minlength : 3,
+				maxlength : 20,
+				regusername : /^[a-zA-Z][a-zA-Z0-9]+$/
+			},
+			password : {
+				passlen : true
+			},
+			repassword : {
+				equalTo : "#password",
+				forbid : true
+			},
+			tel : {
+				required : true,
+				minlength : 6,
+				maxlength : 11,
+				test : /^\d+$/
+			},
+			name : {
+				required : true,
+				forbid : true
+			},
+			department : {
+				required : true,
+				forbid : true
+			},
+			introduction : {
+				forbid : true
+			},
+			primary : {
+				forbid : true
+			},
+			two_stage : {
+				forbid : true
+			},
+			three_stage : {
+				forbid: true
+			},
+			message_to : {
+				forbid :true
+			},
+			message_content : {
+				forbid : true
+			},
+			move_to : {
+				forbid : true
+			},
+			num : {
+				number : true
+			},
+			lot_num : {
+				forbid : true,
+				maxlength : 20
+			},
+			stock : {
+				number : true
+			},
+			in_price : {
+				number : true
+			},
+			store : {
+				forbid : true
+			},
+			title: {
+				forbid : true,
+				maxlength : 100,
+				required : true
+			},
+			brand : {
+				forbid : true
+			},
+			supplier : {
+				forbid : true,
+				required : true
+			},
+			atr_num : {
+				required : true,
+				forbid : true
+			},
+			spec:{
+				required :true,
+				forbid : true
+			},
+			outprice : {
+				number : true,
+				required : true
+			},
+			invioce_num : {
+				forbid : true,
+				maxlength : 10
+			},
+			salesman : {
+				forbid : true
+			},
+			consumer : {
+				forbid : true
+			}
+		}
+	});
+
+	//用户名正则规则
+	$.validator.addMethod("regusername",function(value,element,params){
+		if (params.test(value)){
+			return true
+		}
+		return false
+	},"用户名只能包含数字和字母，且以字母开头");
+
+	//普通正则验证
+	$.validator.addMethod("test",function(value,element,params){
+		if (params.test(value)){
+			return true
+		}
+		return false
+	},"格式不正确");
+
+	//开头和结尾不能含有空格
+	$.validator.addMethod("forbid",function(value,element,params){
+		if (/^\s/.test(value) || /\s$/.test(value) || /[<>{}]/.test(value)){
+			return false
+		}
+		return true
+	},"开头和结尾不能含有空格，且不能包含非法字符");
+
+	//对密码长度进行限制
+	$.validator.addMethod("passlen",function(value,element,params){
+		if (value !== "" && value.length < 6){
+				return false
+		}
+		return true
+	},"密码最少6个字符");
+});
