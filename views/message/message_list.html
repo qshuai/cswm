@@ -27,7 +27,7 @@
                 <tr class="text-c">
                     <td>{{.From.Name}}</td>
                     <td>{{.To.Name}}</td>
-                    <td class="text-overflow c-primary" style="max-width: 100px"><a href="/message_info/{{.Id}}">{{stripTags .Content}}</a></td>
+                    <td class="text-overflow c-primary text-l" style="max-width: 100px"><a href="/message_info/{{.Id}}">{{stripTags .Content}}</a></td>
                     {{if .IsRead}}
                         <td>已读</td>
                         <td>{{date .ReadAt "Y-m-d H:i:s"}}</td>

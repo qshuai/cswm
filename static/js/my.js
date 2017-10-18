@@ -856,7 +856,7 @@ $(".member_search").click(function () {
 			tds.eq(0).text(response.Name);
 			tds.eq(1).text(response.Tel);
 			tds.eq(2).text(response.Position);
-			tds.eq(3).text(response.PoolName)
+			tds.eq(3).text(response.PoolName);
 			var control_user = $(".control_user");
 			if (response.IsActive) {
 				tds.eq(4).text("正常");
@@ -931,6 +931,7 @@ $(".edit_user").click(function () {
 	$("input[name=uid]").val($("input[name=userId]").val());
 	$("#name").val(tds.eq(0).text());
 	$("#tel").val(tds.eq(1).text());
+	$("#pool_name").val(tds.eq(3).text());
 	var options = $("#position").find("option");
 	$.each(options, function (index) {
 		if (options.eq(index).text() === tds.eq(2).text()) {

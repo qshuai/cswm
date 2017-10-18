@@ -279,6 +279,7 @@ func (c *ProductController) Add_get() {
 	user.Id, _ = c.GetSession("uid").(int)
 	o.QueryTable("user").Filter("id", user.Id).One(&user, "pool_name")
 
+	c.Data["store_string"] = GetStoreList(user.PoolName)
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.TplName = "product/product_add.html"

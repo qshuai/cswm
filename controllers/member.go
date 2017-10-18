@@ -206,17 +206,23 @@ func (c *MemberController) Admin_member_edit() {
 
 	level := beego.AppConfig.Strings("level")
 	p := redis_orm.RedisPool.GetOnePosition(c.GetSession("username").(string))
+
 	uid, _ := c.GetInt(":uid")
 	if uid != 0 {
 		o := orm.NewOrm()
 		user := models.User{}
 
 		o.QueryTable("user").Filter("id", uid).One(&user)
-		if !judge(level, p, user.Position){
-			c.Abort("401")
+
+		//判断当前用户是否为超级管理员
+		if p != level[0] {
+			if !judge(level, p, user.Position) {
+				c.Abort("401")
+			}
 		}
 		c.Data["user"] = user
 	}
+
 	c.Data["level"] = modify(level, p)
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
@@ -334,6 +340,9 @@ func (c *MemberController) Disable_member_list() {
 
 //只允许添加比自己等级低的人员
 func modify(pp []string, position string) []string {
+	if position  == pp[0] {
+		return pp
+	}
 	for index, _ := range pp {
 		if pp[index] == position {
 			return pp[index+1:]
@@ -342,7 +351,7 @@ func modify(pp []string, position string) []string {
 	return []string{}
 }
 
-//判断自己的等级是否高于林外一个人
+//判断自己的等级是否高于另外一个人
 func judge(pp []string, my string, your string) bool {
 	var mindex, yindex int
 	for index, _ := range pp {
