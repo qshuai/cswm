@@ -132,7 +132,8 @@ func (c *SaleController) SaleLoadMore() {
 
 //单条销售记录修改post
 func (c *SaleController) Sale_edit() {
-	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditSale") {
+	un := c.GetSession("username").(string)
+	if !permission.GetOneItemPermission(un, "EditSale") {
 		c.Abort("401")
 	}
 

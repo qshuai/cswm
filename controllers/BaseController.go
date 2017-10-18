@@ -14,4 +14,3 @@ type ResponseInfo struct {
 type BaseController struct {
 	beego.Controller
 }
-

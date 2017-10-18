@@ -59,33 +59,87 @@ const TemplateLimit = 100
 
 //获取商品列表
 func (c *ProductController) Get() {
-	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
-		"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
-		"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
-		"store.pool", "store.name as store_name").
-		From("product").
-		LeftJoin("brand").
-		On("brand.id = product.brand_id").
-		LeftJoin("supplier").
-		On("supplier.id = product.supplier_id").
-		LeftJoin("category").
-		On("category.id = product.cat_num_id").
-		LeftJoin("user").
-		On("user.id = product.user_id").
-		LeftJoin("store").
-		On("store.id = product.store_id").
-		OrderBy("in_time").Desc().
-		Limit(ProductLimit)
-	sql := qb.String()
-	o := orm.NewOrm()
-	p := []product{}
-	o.Raw(sql).QueryRows(&p)
-
 	username := c.GetSession("username").(string)
+	user := models.User{}
+	o := orm.NewOrm()
+	o.QueryTable("user").Filter("username", username).One(&user, "position", "pool_name")
+	operate_other_store := !permission.GetOneItemPermission(username, "OperateOtherStore")
+
+	qb, _ := orm.NewQueryBuilder("mysql")
+	p := []product{}
+	if user.Position != "超级管理员" {
+		if operate_other_store {
+			if user.PoolName != "" {
+				if strings.Contains(user.PoolName, "-") {
+					store_slice := strings.Split(user.PoolName, "-")
+					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+						"store.pool", "store.name as store_name").
+						From("product").
+						LeftJoin("brand").
+						On("brand.id = product.brand_id").
+						LeftJoin("supplier").
+						On("supplier.id = product.supplier_id").
+						LeftJoin("category").
+						On("category.id = product.cat_num_id").
+						LeftJoin("user").
+						On("user.id = product.user_id").
+						InnerJoin("store").
+						On("store.id = product.store_id AND store.pool = ? AND store.name = ?").
+						OrderBy("in_time").Desc().
+						Limit(ProductLimit)
+					sql := qb.String()
+					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&p)
+				} else {
+					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+						"store.pool", "store.name as store_name").
+						From("product").
+						LeftJoin("brand").
+						On("brand.id = product.brand_id").
+						LeftJoin("supplier").
+						On("supplier.id = product.supplier_id").
+						LeftJoin("category").
+						On("category.id = product.cat_num_id").
+						LeftJoin("user").
+						On("user.id = product.user_id").
+						InnerJoin("store").
+						On("store.id = product.store_id AND store.pool = ?").
+						OrderBy("in_time").Desc().
+						Limit(ProductLimit)
+					sql := qb.String()
+					o.Raw(sql, user.PoolName).QueryRows(&p)
+				}
+			}
+		}
+	} else if user.Position == "超级管理员" || !operate_other_store{
+		qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+			"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+			"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+			"store.pool", "store.name as store_name").
+			From("product").
+			LeftJoin("brand").
+			On("brand.id = product.brand_id").
+			LeftJoin("supplier").
+			On("supplier.id = product.supplier_id").
+			LeftJoin("category").
+			On("category.id = product.cat_num_id").
+			LeftJoin("user").
+			On("user.id = product.user_id").
+			LeftJoin("store").
+			On("store.id = product.store_id").
+			OrderBy("in_time").Desc().
+			Limit(ProductLimit)
+		sql := qb.String()
+		o.Raw(sql).QueryRows(&p)
+	}
+
 	view_product_store := !permission.GetOneItemPermission(username, "ViewProductStore")
 	view_stock := !permission.GetOneItemPermission(username, "ViewStock")
 	view_in_price := !permission.GetOneItemPermission(username, "ViewInPrice")
+
 	if view_product_store || view_stock || view_in_price {
 		length := len(p)
 		for index := 0; index < length; index++ {
@@ -100,6 +154,7 @@ func (c *ProductController) Get() {
 				p[index].InPrice = "***"
 			}
 		}
+
 	}
 
 	product_byte, _ := json.Marshal(p)
@@ -112,36 +167,91 @@ func (c *ProductController) Get() {
 
 //ajax加载更多商品
 func (c *ProductController) ProductLoadMore() {
-	if !c.IsAjax(){
+	if !c.IsAjax() {
 		return
 	}
 
-	offset,_ := c.GetInt("offset")
-	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
-		"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
-		"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
-		"store.pool", "store.name as store_name").
-		From("product").
-		LeftJoin("brand").
-		On("brand.id = product.brand_id").
-		LeftJoin("supplier").
-		On("supplier.id = product.supplier_id").
-		LeftJoin("category").
-		On("category.id = product.cat_num_id").
-		LeftJoin("user").
-		On("user.id = product.user_id").
-		LeftJoin("store").
-		On("store.id = product.store_id").
-		OrderBy("in_time").Desc().
-		Limit(ProductLimit).
-		Offset(offset * ProductLimit)
-	sql := qb.String()
-	o := orm.NewOrm()
-	p := []product{}
-	o.Raw(sql).QueryRows(&p)
-
 	username := c.GetSession("username").(string)
+	user := models.User{}
+	o := orm.NewOrm()
+	o.QueryTable("user").Filter("username", username).One(&user, "position", "pool_name")
+	operate_other_store := !permission.GetOneItemPermission(username, "OperateOtherStore")
+
+	offset, _ := c.GetInt("offset")
+	qb, _ := orm.NewQueryBuilder("mysql")
+	p := []product{}
+	if user.Position != "超级管理员" {
+		if operate_other_store {
+			if user.PoolName != "" {
+				if strings.Contains(user.PoolName, "-") {
+					store_slice := strings.Split(user.PoolName, "-")
+					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+						"store.pool", "store.name as store_name").
+						From("product").
+						LeftJoin("brand").
+						On("brand.id = product.brand_id").
+						LeftJoin("supplier").
+						On("supplier.id = product.supplier_id").
+						LeftJoin("category").
+						On("category.id = product.cat_num_id").
+						LeftJoin("user").
+						On("user.id = product.user_id").
+						InnerJoin("store").
+						On("store.id = product.store_id AND store.pool = ? AND store.name = ?").
+						OrderBy("in_time").Desc().
+						Limit(ProductLimit).
+						Offset(offset * ProductLimit)
+					sql := qb.String()
+					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&p)
+				} else {
+					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+						"store.pool", "store.name as store_name").
+						From("product").
+						LeftJoin("brand").
+						On("brand.id = product.brand_id").
+						LeftJoin("supplier").
+						On("supplier.id = product.supplier_id").
+						LeftJoin("category").
+						On("category.id = product.cat_num_id").
+						LeftJoin("user").
+						On("user.id = product.user_id").
+						InnerJoin("store").
+						On("store.id = product.store_id AND store.pool = ?").
+						OrderBy("in_time").Desc().
+						Limit(ProductLimit).
+						Offset(offset * ProductLimit)
+					sql := qb.String()
+					o.Raw(sql, user.PoolName).QueryRows(&p)
+				}
+			}
+		}
+	} else if user.Position == "超级管理员" || !operate_other_store{
+		qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+			"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+			"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+			"store.pool", "store.name as store_name").
+			From("product").
+			LeftJoin("brand").
+			On("brand.id = product.brand_id").
+			LeftJoin("supplier").
+			On("supplier.id = product.supplier_id").
+			LeftJoin("category").
+			On("category.id = product.cat_num_id").
+			LeftJoin("user").
+			On("user.id = product.user_id").
+			LeftJoin("store").
+			On("store.id = product.store_id").
+			OrderBy("in_time").Desc().
+			Limit(ProductLimit).
+			Offset(offset * ProductLimit)
+		sql := qb.String()
+		o.Raw(sql).QueryRows(&p)
+	}
+
 	view_product_store := !permission.GetOneItemPermission(username, "ViewProductStore")
 	view_stock := !permission.GetOneItemPermission(username, "ViewStock")
 	view_in_price := !permission.GetOneItemPermission(username, "ViewInPrice")
@@ -220,8 +330,20 @@ func (c *ProductController) Product_item_delete() {
 //编辑单条商品信息
 func (c *ProductController) Product_item_edit() {
 	//判断当前用户时候有权限
-	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditProduct") {
+	un := c.GetSession("username").(string)
+	if !permission.GetOneItemPermission(un, "EditProduct") {
 		c.Abort("401")
+	}
+
+	if position.GetOnePosition(un) != "超级管理员" {
+		if !permission.GetOneItemPermission(un, "OperateOtherStore") {
+			user := models.User{}
+			o := orm.NewOrm()
+			o.QueryTable("user").Filter("username", un).One(&user, "pool_name")
+			if !JudgeIsStore(user.PoolName, c.GetString("store")) {
+				c.Abort("401")
+			}
+		}
 	}
 
 	product := models.Product{}
@@ -288,8 +410,20 @@ func (c *ProductController) Add_get() {
 //商品添加post
 func (c *ProductController) Add_post() {
 	//判断当前用户时候有权限
-	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddProduct") {
+	un := c.GetSession("username").(string)
+	if !permission.GetOneItemPermission(un, "AddProduct") {
 		c.Abort("401")
+	}
+
+	if position.GetOnePosition(un) != "超级管理员" {
+		if !permission.GetOneItemPermission(un, "OperateOtherStore") {
+			user := models.User{}
+			o := orm.NewOrm()
+			o.QueryTable("user").Filter("username", un).One(&user, "pool_name")
+			if !JudgeIsStore(user.PoolName, c.GetString("store")) {
+				c.Abort("401")
+			}
+		}
 	}
 
 	product := models.Product{}
@@ -665,6 +799,69 @@ func GetStoreList(pool_name string) string {
 	}
 
 	return store_string
+}
+
+//获取管辖库房列表
+func GetStoreSlice(pool_name string) []string {
+
+	var store_slice []string
+
+	if pool_name == "" {
+		return []string{}
+	}
+
+	if strings.Contains(pool_name, "-") {
+		store_slice = append(store_slice, pool_name)
+	} else {
+		o := orm.NewOrm()
+		store := []models.Store{}
+		o.QueryTable("store").Filter("pool", pool_name).All(&store, "name")
+
+		for _, item := range store {
+			store_slice = append(store_slice, pool_name+"-"+item.Name)
+		}
+	}
+
+	return store_slice
+}
+
+//判断是否属于所管辖库房
+func JudgeStore(store_slice []string, store string) bool {
+	for _, item := range store_slice {
+		if item == store {
+			return true
+		}
+	}
+	return false
+}
+
+//判断是否属于所管辖库房
+func JudgeIsStore(pool_name, input string) bool {
+	if pool_name == "" {
+		return false
+	}
+
+	if pool_name == input {
+		return true
+	}
+
+	store_slice := GetStoreSlice(pool_name)
+	if strings.Contains(pool_name, "-") {
+		for _, item := range store_slice {
+			if input == item {
+				return true
+			}
+		}
+	} else {
+		for _, item := range store_slice {
+			sub := strings.Split(item, "-")
+			if input == sub[0] {
+				return true
+			}
+		}
+	}
+	return false
+
 }
 
 //获取三级分类列表

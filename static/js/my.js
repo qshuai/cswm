@@ -1,24 +1,3 @@
-Date.prototype.format = function(fmt) {
-	var o = {
-		"M+" : this.getMonth()+1,                 //月份
-		"d+" : this.getDate(),                    //日
-		"h+" : this.getHours(),                   //小时
-		"m+" : this.getMinutes(),                 //分
-		"s+" : this.getSeconds(),                 //秒
-		"q+" : Math.floor((this.getMonth()+3)/3), //季度
-		"S"  : this.getMilliseconds()             //毫秒
-	};
-	if(/(y+)/.test(fmt)) {
-		fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-	}
-	for(var k in o) {
-		if(new RegExp("("+ k +")").test(fmt)){
-			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length===1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-		}
-	}
-	return fmt;
-};
-
 //全局js
 	//判断当前页面是否展示侧边栏
 var query_url = window.location.pathname;
@@ -61,7 +40,7 @@ if (query_url === "/product_add") {
 
 	//product_add.html 增加sku
 	function AddProductSku() {
-		$("#add_spec").append('<input type="text" readonly class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a onclick="DeleteSku(this)" class="btn btn-danger-outline radius mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>');
+		$("#add_spec").append('<input type="text" readonly class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%" required> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%" required> <a onclick="DeleteSku(this)" class="btn btn-danger-outline radius mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>');
 
 		delete_sku = $(".delete_sku");
 		spec = $(".spec");
@@ -518,7 +497,7 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 			}
 
 			for (var i = page_size * (num - 1); i < is_out; i++) {
-				var row = $("<tr product_item_no=''><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
+				var row = $("<tr product_item_no=''><td class='text-overflow' style='max-width: 250px'></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
 					"<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
 					'<td class="text-c">' +
 					'<a class="product_item_edit btn size-MINI btn-secondary-outline radius" title="编辑">&nbsp;' +
@@ -712,7 +691,7 @@ function ProductTemplatePaginator(template) {
 			}
 
 			for (var i = page_size * (num - 1); i < is_out; i++) {
-				var row = $('<tr class="text-c tds-list"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="hide"></td><td></td></tr>');
+				var row = $('<tr class="text-c tds-list"><td  class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="hide"></td><td></td></tr>');
 				var tds = row.find("td");
 				tds.eq(0).text(template[i].Title);
 				tds.eq(1).text(template[i].BrandName);
@@ -814,7 +793,7 @@ function SalePaginator(sale) {
 			}
 
 			for (var i = page_size * (num - 1); i < is_out; i++) {
-				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
+				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
 					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
 				var tds = row.find("td");
 				row.find("input").val(sale[i].id);
@@ -1247,7 +1226,7 @@ function StageSearch() {
 			$("select[name=is_hidden]").val(response.Is_hidden ? 0 : 1)
 		},
 		error: function () {
-			alert("请求出错~")
+			alert("请求出错~");
 		}
 	})
 }

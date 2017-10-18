@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"github.com/astaxie/beego/logs"
 	"ERP/plugins/position"
+	permission2 "ERP/plugins/permission"
 )
 
 type Permission struct {
@@ -191,6 +192,11 @@ func (c *Permission) PermissionMemberEditPost(){
 		c.TplName = "jump/error.html"
 		return
 	}
+
+	//redis
+	o.QueryTable("user").Filter("id", user.Id).One(&user, "id", "username")
+	permission2.AsyncMysql2RedisOne(user.Username)
+
 	c.Data["url"] = "/permission_member_edit/" + strconv.Itoa(user.Id)
 	c.Data["msg"] = "权限修改成功~"
 	c.TplName = "jump/success.html"

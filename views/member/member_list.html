@@ -15,6 +15,9 @@
                 </tr>
                 <tr class="text-c">
                     <th>姓名</th>
+					{{if eq .grade "超级管理员"}}
+						<th>用户名</th>
+					{{end}}
                     <th>电话</th>
                     <th>职位</th>
                     <th>库房</th>
@@ -28,6 +31,9 @@
                 {{range .user}}
                     <tr class="text-c">
                         <td><a href="/admin_member_edit/{{.Id}}" class="c-primary">{{.Name}} <i class="Hui-iconfont Hui-iconfont-edit"></i></a></td>
+						{{if eq $.grade "超级管理员"}}
+							<td>{{.Username}}</td>
+						{{end}}
                         <td>{{.Tel}}</td>
                         <td>{{.Position}}</td>
                         <td>{{.PoolName}}</td>

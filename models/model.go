@@ -4,7 +4,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
-	"github.com/astaxie/beego"
 )
 
 type User struct {
@@ -157,86 +156,87 @@ type Message struct {
 }
 
 type Permission struct {
-	Id               int
-	User             *User    `orm:"rel(one);unique"`
-	AddMember        bool `orm:"default(false)"` //添加人员
-	EditMember       bool `orm:"default(false)"` //编辑人员信息
-	ActiveMember     bool `orm:"default(false)"` //激活或禁用账户
-	AddConsumer      bool `orm:"default(false)"` //添加客户信息
-	EditConsumer     bool `orm:"default(false)"` //编辑客户信息
-	ViewConsumer     bool `orm:"default(false)"` //查看客户信息
-	AddBrand         bool `orm:"default(false)"` //添加品牌
-	AddDealer        bool `orm:"default(false)"` //添加经销商
-	ViewDealer       bool `orm:"default(false)"` //查看经销商
-	AddSupplier      bool `orm:"default(false)"` //添加供应商
-	ViewSupplier     bool `orm:"default(false)"` //查看供应商
-	AddProduct       bool `orm:"default(false)"` //录入商品
-	InputInPrice     bool `orm:"default(false)"` //录入商品入库价格
-	ViewProductStore bool `orm:"default(false)"` //查看商品库房
-	ViewStock        bool `orm:"default(false)"` //查看商品库存
-	ViewInPrice      bool `orm:"default(false)"` //查看入库价格
-	EditProduct      bool `orm:"default(false)"` //编辑商品信息
-	DeleteProduct    bool `orm:"default(false)"` //删除商品
-	OutputProduct    bool `orm:"default(false)"` //出库商品
-	ViewSale         bool `orm:"default(false)"` //查看销售记录
-	ViewSaleConsumer bool `orm:"default(false)"` //查看销售客户
-	ViewSaleInPrice  bool `orm:"default(false)"` //查看销售入库价格
-	EditSale         bool `orm:"default(false)"` //编辑销售信息
-	OperateCategory  bool `orm:"default(false)"` //添加或编辑分类信息
-	RequestMove      bool `orm:"default(false)"` //请求移库
-	ResponseMove     bool `orm:"default(false)"` //响应移库
-	ViewMove         bool `orm:"default(false)"` //查看移库
-	AddStore         bool `orm:"default(false)"` //添加库房
-	ViewStore        bool `orm:"default(false)"` //查看库房
+	Id                int
+	User              *User    `orm:"rel(one);unique"`
+	AddMember         bool `orm:"default(false)"` //添加人员
+	EditMember        bool `orm:"default(false)"` //编辑人员信息
+	ActiveMember      bool `orm:"default(false)"` //激活或禁用账户
+	AddConsumer       bool `orm:"default(false)"` //添加客户信息
+	EditConsumer      bool `orm:"default(false)"` //编辑客户信息
+	ViewConsumer      bool `orm:"default(false)"` //查看客户信息
+	AddBrand          bool `orm:"default(false)"` //添加品牌
+	AddDealer         bool `orm:"default(false)"` //添加经销商
+	ViewDealer        bool `orm:"default(false)"` //查看经销商
+	AddSupplier       bool `orm:"default(false)"` //添加供应商
+	ViewSupplier      bool `orm:"default(false)"` //查看供应商
+	AddProduct        bool `orm:"default(false)"` //录入商品
+	InputInPrice      bool `orm:"default(false)"` //录入商品入库价格
+	ViewProductStore  bool `orm:"default(false)"` //查看商品库房
+	ViewStock         bool `orm:"default(false)"` //查看商品库存
+	ViewInPrice       bool `orm:"default(false)"` //查看入库价格
+	EditProduct       bool `orm:"default(false)"` //编辑商品信息
+	DeleteProduct     bool `orm:"default(false)"` //删除商品
+	OutputProduct     bool `orm:"default(false)"` //出库商品
+	ViewSale          bool `orm:"default(false)"` //查看销售记录
+	ViewSaleConsumer  bool `orm:"default(false)"` //查看销售客户
+	ViewSaleInPrice   bool `orm:"default(false)"` //查看销售入库价格
+	EditSale          bool `orm:"default(false)"` //编辑销售信息
+	OperateCategory   bool `orm:"default(false)"` //添加或编辑分类信息
+	RequestMove       bool `orm:"default(false)"` //请求移库
+	ResponseMove      bool `orm:"default(false)"` //响应移库
+	ViewMove          bool `orm:"default(false)"` //查看移库
+	AddStore          bool `orm:"default(false)"` //添加库房
+	ViewStore         bool `orm:"default(false)"` //查看库房
+	OperateOtherStore bool `orm:"default(false)"` //操作非管辖库房
 }
 
 type DefaultPermission struct {
-	Id               int
-	Position         string `orm:"size(20)"`     //人员等级
-	AddMember        bool `orm:"default(false)"` //添加人员
-	EditMember       bool `orm:"default(false)"` //编辑人员信息
-	ActiveMember     bool `orm:"default(false)"` //激活或禁用账户
-	AddConsumer      bool `orm:"default(false)"` //添加客户信息
-	EditConsumer     bool `orm:"default(false)"` //编辑客户信息
-	ViewConsumer     bool `orm:"default(false)"` //查看客户信息
-	AddBrand         bool `orm:"default(false)"` //添加品牌
-	AddDealer        bool `orm:"default(false)"` //添加经销商
-	ViewDealer       bool `orm:"default(false)"` //查看经销商
-	AddSupplier      bool `orm:"default(false)"` //添加供应商
-	ViewSupplier     bool `orm:"default(false)"` //查看供应商
-	AddProduct       bool `orm:"default(false)"` //录入商品
-	InputInPrice     bool `orm:"default(false)"` //录入商品入库价格
-	ViewProductStore bool `orm:"default(false)"` //查看商品库房
-	ViewStock        bool `orm:"default(false)"` //查看商品库存
-	ViewInPrice      bool `orm:"default(false)"` //查看入库价格
-	EditProduct      bool `orm:"default(false)"` //编辑商品信息
-	DeleteProduct    bool `orm:"default(false)"` //删除商品
-	OutputProduct    bool `orm:"default(false)"` //出库商品
-	ViewSale         bool `orm:"default(false)"` //查看销售记录
-	ViewSaleConsumer bool `orm:"default(false)"` //查看销售客户
-	ViewSaleInPrice  bool `orm:"default(false)"` //查看销售入库价格
-	EditSale         bool `orm:"default(false)"` //编辑销售信息
-	OperateCategory  bool `orm:"default(false)"` //添加或编辑分类信息
-	RequestMove      bool `orm:"default(false)"` //请求移库
-	ResponseMove     bool `orm:"default(false)"` //响应移库
-	ViewMove         bool `orm:"default(false)"` //查看移库
-	AddStore         bool `orm:"default(false)"` //添加库房
-	ViewStore        bool `orm:"default(false)"` //查看库房
+	Id                int
+	Position          string `orm:"size(20)"`     //人员等级
+	AddMember         bool `orm:"default(false)"` //添加人员
+	EditMember        bool `orm:"default(false)"` //编辑人员信息
+	ActiveMember      bool `orm:"default(false)"` //激活或禁用账户
+	AddConsumer       bool `orm:"default(false)"` //添加客户信息
+	EditConsumer      bool `orm:"default(false)"` //编辑客户信息
+	ViewConsumer      bool `orm:"default(false)"` //查看客户信息
+	AddBrand          bool `orm:"default(false)"` //添加品牌
+	AddDealer         bool `orm:"default(false)"` //添加经销商
+	ViewDealer        bool `orm:"default(false)"` //查看经销商
+	AddSupplier       bool `orm:"default(false)"` //添加供应商
+	ViewSupplier      bool `orm:"default(false)"` //查看供应商
+	AddProduct        bool `orm:"default(false)"` //录入商品
+	InputInPrice      bool `orm:"default(false)"` //录入商品入库价格
+	ViewProductStore  bool `orm:"default(false)"` //查看商品库房
+	ViewStock         bool `orm:"default(false)"` //查看商品库存
+	ViewInPrice       bool `orm:"default(false)"` //查看入库价格
+	EditProduct       bool `orm:"default(false)"` //编辑商品信息
+	DeleteProduct     bool `orm:"default(false)"` //删除商品
+	OutputProduct     bool `orm:"default(false)"` //出库商品
+	ViewSale          bool `orm:"default(false)"` //查看销售记录
+	ViewSaleConsumer  bool `orm:"default(false)"` //查看销售客户
+	ViewSaleInPrice   bool `orm:"default(false)"` //查看销售入库价格
+	EditSale          bool `orm:"default(false)"` //编辑销售信息
+	OperateCategory   bool `orm:"default(false)"` //添加或编辑分类信息
+	RequestMove       bool `orm:"default(false)"` //请求移库
+	ResponseMove      bool `orm:"default(false)"` //响应移库
+	ViewMove          bool `orm:"default(false)"` //查看移库
+	AddStore          bool `orm:"default(false)"` //添加库房
+	ViewStore         bool `orm:"default(false)"` //查看库房
+	OperateOtherStore bool `orm:"default(false)"` //操作非管辖库房
 }
 
 func init() {
 	orm.Debug = true
 
 	//获取配置信息
-	username := beego.AppConfig.String("mysql::username")
-	password := beego.AppConfig.String("mysql::password")
-	host := beego.AppConfig.String("mysql::host")
-	port := beego.AppConfig.String("mysql::port")
-	database := beego.AppConfig.String("mysql::database")
-	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
+	//username := beego.AppConfig.String("mysql::username")
+	//password := beego.AppConfig.String("mysql::password")
+	//host := beego.AppConfig.String("mysql::host")
+	//port := beego.AppConfig.String("mysql::port")
+	//database := beego.AppConfig.String("mysql::database")
+	//orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
 
-	//orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
-
+	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
 
@@ -275,6 +275,7 @@ func init() {
 	//defaultPermission.ViewMove = true
 	//defaultPermission.AddStore = true
 	//defaultPermission.ViewStore = true
+	//defaultPermission.OperateOtherStore = true
 	//o.Insert(&defaultPermission)
 	//
 	//defaultPermission.Id = 2
@@ -308,6 +309,7 @@ func init() {
 	//defaultPermission.ViewMove = true
 	//defaultPermission.AddStore = true
 	//defaultPermission.ViewStore = true
+	//defaultPermission.OperateOtherStore = true
 	//o.Insert(&defaultPermission)
 	//
 	//defaultPermission.Id = 3
@@ -341,6 +343,7 @@ func init() {
 	//defaultPermission.ViewMove = true
 	//defaultPermission.AddStore = false
 	//defaultPermission.ViewStore = true
+	//defaultPermission.OperateOtherStore = false
 	//o.Insert(&defaultPermission)
 	//
 	//defaultPermission.Id = 4
@@ -374,7 +377,8 @@ func init() {
 	//defaultPermission.ViewMove = false
 	//defaultPermission.AddStore = false
 	//defaultPermission.ViewStore = false
+	//defaultPermission.OperateOtherStore = false
 	//o.Insert(&defaultPermission)
-	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'tony', 'ae9586ada632a35ee545ba75edf788f0', '闪电', '13944119825', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
+	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'scrapup', 'ae9586ada632a35ee545ba75edf788f0', '戚帅', '13944119825', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
 	//o.Raw("INSERT INTO `permission` (`id`, `user_id`, `add_member`, `edit_member`, `active_member`, `add_consumer`, `edit_consumer`, `view_consumer`, `add_brand`, `add_dealer`, `view_dealer`, `add_supplier`, `view_supplier`, `add_product`, `input_in_price`, `view_product_store`, `view_stock`, `view_in_price`, `edit_product`, `delete_product`, `output_product`, `view_sale`, `view_sale_consumer`, `view_sale_in_price`, `edit_sale`, `operate_category`, `request_move`, `response_move`, `view_move`, `add_store`, `view_store`)VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);").Exec()
 }

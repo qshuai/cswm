@@ -4,6 +4,9 @@ import (
 	"ERP/controllers"
 	_ "ERP/models"
 	_ "ERP/modules/redis"
+	"ERP/plugins/message"
+	"ERP/plugins/permission"
+	"ERP/plugins/position"
 	_ "ERP/routers"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
@@ -11,9 +14,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	"regexp"
 	"strconv"
-	"ERP/plugins/permission"
-	"ERP/plugins/position"
-	"ERP/plugins/message"
 )
 
 func init() {
@@ -27,7 +27,7 @@ var FilterLogin = func(c *context.Context) {
 	_, ok := c.Input.Session("uid").(int)
 	if !ok && c.Request.RequestURI != "/login" {
 		c.Redirect(302, "/login")
-	} else if ok && c.Request.RequestURI == "/login"{
+	} else if ok && c.Request.RequestURI == "/login" {
 		c.Redirect(302, "/")
 	}
 }
