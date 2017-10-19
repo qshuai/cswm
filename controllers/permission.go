@@ -86,6 +86,7 @@ func (c *Permission) DefaultPermissionEditPost(){
 	defaultPermission.ViewMove = ConvertPermissionBool(c.GetString("ViewMove"))
 	defaultPermission.AddStore = ConvertPermissionBool(c.GetString("AddStore"))
 	defaultPermission.ViewStore = ConvertPermissionBool(c.GetString("ViewStore"))
+	defaultPermission.OperateOtherStore = ConvertPermissionBool(c.GetString("OperateOtherStore"))
 
 	o := orm.NewOrm()
 	_, err := o.Update(&defaultPermission)
@@ -175,6 +176,7 @@ func (c *Permission) PermissionMemberEditPost(){
 	permission.ViewMove = ConvertPermissionBool(c.GetString("ViewMove"))
 	permission.AddStore = ConvertPermissionBool(c.GetString("AddStore"))
 	permission.ViewStore = ConvertPermissionBool(c.GetString("ViewStore"))
+	permission.OperateOtherStore = ConvertPermissionBool(c.GetString("OperateOtherStore"))
 
 	o := orm.NewOrm()
 	user := models.User{}
