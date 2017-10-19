@@ -47,6 +47,7 @@ type Store struct {
 	Pool    string `orm:"size(10)"` //总库房名称, 不能含有`-`
 	Name    string `orm:"size(20)"` //分库房名称, 不能含有`-`
 	Product []*Product `orm:"reverse(many)"`
+	Sale    []*Sale `orm:"reverse(many)"`
 }
 
 type Supplier struct {
@@ -66,36 +67,36 @@ type Dealer struct {
 
 type Product struct {
 	Id         int
-	User       *User    `orm:"rel(fk)"`                         //备注：用户
-	Title      string        `orm:"size(100)"`                  //备注：商品名称
-	Brand      *Brand        `orm:"rel(fk)"`                    //备注：商标
-	ArtNum     string        `orm:"size(20);index"`             //备注：货号
-	LotNum     string        `orm:"size(20);null"`              //备注：批号
-	CatNum     *Category    `orm:"rel(fk)"`                     //备注：分类号
-	Spec       string        `orm:"size(100)"`                  //备注：规格
-	Stock      uint32                                           //备注：库存数量
-	Unit       string        `orm:"size(5)"`                    //单位
-	Store      *Store        `orm:"rel(fk)"`                    //备注：库房信息
-	InTime     time.Time    `orm:"type(datetime);auto_now_add"` //备注：入库时间
-	Supplier   *Supplier    `orm:"rel(fk)"`                     //备注：供应商
-	Dealer     *Dealer        `orm:"rel(fk);null"`              //经销商
-	InPrice    float64        `orm:"digits(10);decimals(2)"`    //备注：进库价格
-	HasPay     bool        `orm:"default(false)"`               //备注：是否已经支付货款； 字典：0-否定, 1-肯定
-	HasInvoice bool        `orm:"default(false)"`               //备注：是否提供发票； 字典：0-否定, 1-肯定
-	GetInvoice time.Time    `orm:"type(date);null"`             //备注：发票接收日期
+	User       *User    `orm:"rel(fk);on_delete(do_nothing)"`      //备注：用户
+	Title      string        `orm:"size(100)"`                     //备注：商品名称
+	Brand      *Brand        `orm:"rel(fk);on_delete(do_nothing)"` //备注：商标
+	ArtNum     string        `orm:"size(20);index"`                //备注：货号
+	LotNum     string        `orm:"size(20);null"`                 //备注：批号
+	CatNum     *Category    `orm:"rel(fk);on_delete(do_nothing)"`  //备注：分类号
+	Spec       string        `orm:"size(100)"`                     //备注：规格
+	Stock      uint32                                              //备注：库存数量
+	Unit       string        `orm:"size(5)"`                       //单位
+	Store      *Store        `orm:"rel(fk);on_delete(do_nothing)"` //备注：库房信息
+	InTime     time.Time    `orm:"type(datetime);auto_now_add"`    //备注：入库时间
+	Supplier   *Supplier    `orm:"rel(fk);on_delete(do_nothing)"`  //备注：供应商
+	Dealer     *Dealer        `orm:"rel(fk);null"`                 //经销商
+	InPrice    float64        `orm:"digits(10);decimals(2)"`       //备注：进库价格
+	HasPay     bool        `orm:"default(false)"`                  //备注：是否已经支付货款； 字典：0-否定, 1-肯定
+	HasInvoice bool        `orm:"default(false)"`                  //备注：是否提供发票； 字典：0-否定, 1-肯定
+	GetInvoice time.Time    `orm:"type(date);null"`                //备注：发票接收日期
 }
 
 type ProductTemplate struct {
 	Id        int
-	Title     string        `orm:"size(100)"`             //备注：商品名称
-	Brand     *Brand        `orm:"rel(fk)"`               //备注：商标
-	ArtNum    string        `orm:"size(20)"`              //备注：货号
-	CatNum    *Category    `orm:"rel(fk)"`                //备注：分类号
-	Spec      string        `orm:"size(100)"`             //备注：规格
-	Unit      string        `orm:"size(5)"`               //单位
-	Suppliers string                                      //备注：供应商列表(以逗号分隔)
-	Dealer    *Dealer        `orm:"rel(fk);null"`         //经销商
-	InPrice   float64 `orm:"digits(10);decimals(2);null"` //备注：进库价格
+	Title     string        `orm:"size(100)"`                     //备注：商品名称
+	Brand     *Brand        `orm:"rel(fk);on_delete(do_nothing)"` //备注：商标
+	ArtNum    string        `orm:"size(20)"`                      //备注：货号
+	CatNum    *Category    `orm:"rel(fk);on_delete(do_nothing)"`  //备注：分类号
+	Spec      string        `orm:"size(100)"`                     //备注：规格
+	Unit      string        `orm:"size(5)"`                       //单位
+	Suppliers string                                              //备注：供应商列表(以逗号分隔)
+	Dealer    *Dealer        `orm:"rel(fk);null"`                 //经销商
+	InPrice   float64 `orm:"digits(10);decimals(2);null"`         //备注：进库价格
 }
 
 type Move struct {
@@ -103,10 +104,10 @@ type Move struct {
 	Origin       *Product    `orm:"rel(fk);on_delete(do_nothing)"`      //备注：来源产品Id
 	Destination  *Product    `orm:"rel(fk);on_delete(do_nothing);null"` //备注：去处产品Id
 	Num          uint32                                                 //备注：移库数量
-	From         *Store        `orm:"rel(fk)"`                          //备注：移出库房
-	To           *Store        `orm:"rel(fk)"`                          //备注：移入库房
-	Request      *User        `orm:"rel(fk)"`                           //备注：发起人
-	Response     *User        `orm:"rel(fk)"`                           //备注：响应人
+	From         *Store        `orm:"rel(fk);on_delete(do_nothing)"`    //备注：移出库房
+	To           *Store        `orm:"rel(fk);on_delete(do_nothing)"`    //备注：移入库房
+	Request      *User        `orm:"rel(fk);on_delete(do_nothing)"`     //备注：发起人
+	Response     *User        `orm:"rel(fk);on_delete(do_nothing)"`     //备注：响应人
 	Operate      string        `orm:"size(2)"`                          //备注：响应人是否同意		字典：0-未操作，1-同意，-1为拒绝，2-完成移库
 	OperatedTime time.Time   `orm:"type(datetime);null"`                //备注：响应人是否同意
 	Created      time.Time    `orm:"auto_now_add;type(datetime)"`       //备注：创建时间
@@ -129,10 +130,11 @@ type Consumer struct {
 type Sale struct {
 	Id          int
 	Product     *Product    `orm:"rel(fk);on_delete(do_nothing)"` //备注：商品Id
+	Store       *Store        `orm:"rel(fk);on_delete(do_nothing)"`
 	No          string      `orm:"size(40)"`                      //备注：订单编号
 	Send        time.Time   `orm:"type(datetime)"`                //备注：发货时间
-	Consumer    *Consumer   `orm:"rel(fk)"`                       //备注：客户Id
-	Salesman    *User       `orm:"rel(fk)"`                       //备注：销售Id
+	Consumer    *Consumer   `orm:"rel(fk);on_delete(do_nothing)"` //备注：客户Id
+	Salesman    *User       `orm:"rel(fk);on_delete(do_nothing)"` //备注：销售Id
 	Num         uint32                                            //备注：销售数量
 	OutPrice    float64      `orm:"digits(10);decimals(2)"`       //备注：售出价格
 	HasInvoice  bool        `orm:"default(false)"`                //备注：是否已开发票
@@ -147,12 +149,12 @@ type Sale struct {
 
 type Message struct {
 	Id      int
-	From    *User    `orm:"rel(fk)"`                      //发信人
-	To      *User `orm:"rel(fk)"`                         //收信人
-	Content string `orm:"type(text)"`                     //消息内容
-	IsRead  bool    `orm:"default(false)"`                //是否已经读取
-	ReadAt  time.Time `orm:"type(datetime);auto_now"`     //读取时间
-	Created time.Time `orm:"type(datetime);auto_now_add"` //创建时间
+	From    *User    `orm:"rel(fk);on_delete(do_nothing)"` //发信人
+	To      *User `orm:"rel(fk);on_delete(do_nothing)"`    //收信人
+	Content string `orm:"type(text)"`                      //消息内容
+	IsRead  bool    `orm:"default(false)"`                 //是否已经读取
+	ReadAt  time.Time `orm:"type(datetime);auto_now"`      //读取时间
+	Created time.Time `orm:"type(datetime);auto_now_add"`  //创建时间
 }
 
 type Permission struct {
@@ -235,7 +237,6 @@ func init() {
 	//port := beego.AppConfig.String("mysql::port")
 	//database := beego.AppConfig.String("mysql::database")
 	//orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
-
 	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
@@ -379,6 +380,8 @@ func init() {
 	//defaultPermission.ViewStore = false
 	//defaultPermission.OperateOtherStore = false
 	//o.Insert(&defaultPermission)
-	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'scrapup', 'ae9586ada632a35ee545ba75edf788f0', '戚帅', '13944119825', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
+	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(1, 'scrapup', 'ae9586ada632a35ee545ba75edf788f0', '戚帅', '18543131640', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
+	//o.Raw("INSERT INTO `user` (`id`, `username`, `password`, `name`, `tel`, `position`, `last_login`, `ip`, `is_first`, `is_active`, `pool_name`, `created`, `updated`)VALUES(2, 'jack', 'ae9586ada632a35ee545ba75edf788f0', '李纯奇', '18698675977', '超级管理员', '2017-10-17 15:02:20', '127.0.0.1', 0, 1, 'S库', '2017-10-15 21:06:13', '2017-10-15 21:07:13');").Exec()
 	//o.Raw("INSERT INTO `permission` (`id`, `user_id`, `add_member`, `edit_member`, `active_member`, `add_consumer`, `edit_consumer`, `view_consumer`, `add_brand`, `add_dealer`, `view_dealer`, `add_supplier`, `view_supplier`, `add_product`, `input_in_price`, `view_product_store`, `view_stock`, `view_in_price`, `edit_product`, `delete_product`, `output_product`, `view_sale`, `view_sale_consumer`, `view_sale_in_price`, `edit_sale`, `operate_category`, `request_move`, `response_move`, `view_move`, `add_store`, `view_store`)VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);").Exec()
+	//o.Raw("INSERT INTO `permission` (`id`, `user_id`, `add_member`, `edit_member`, `active_member`, `add_consumer`, `edit_consumer`, `view_consumer`, `add_brand`, `add_dealer`, `view_dealer`, `add_supplier`, `view_supplier`, `add_product`, `input_in_price`, `view_product_store`, `view_stock`, `view_in_price`, `edit_product`, `delete_product`, `output_product`, `view_sale`, `view_sale_consumer`, `view_sale_in_price`, `edit_sale`, `operate_category`, `request_move`, `response_move`, `view_move`, `add_store`, `view_store`)VALUES(2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);").Exec()
 }

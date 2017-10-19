@@ -45,7 +45,6 @@ func (c *StoreoutController) Store_out_action() {
 		consumer_string += item.Name + "-" + item.Tel + ", "
 	}
 
-
 	c.Data["salesman_string"] = salesman_string
 	c.Data["consumer_string"] = consumer_string
 	c.Data["product_item"] = product
@@ -56,7 +55,8 @@ func (c *StoreoutController) Store_out_action() {
 
 //出库post
 func (c *StoreoutController) Store_out_action_post() {
-	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OutputProduct") {
+	username := c.GetSession("username").(string)
+	if !permission.GetOneItemPermission(username, "OutputProduct") {
 		c.Abort("401")
 	}
 
@@ -66,7 +66,65 @@ func (c *StoreoutController) Store_out_action_post() {
 	product := models.Product{}
 	pid, _ := c.GetInt("product_id")
 	o.QueryTable("product").Filter("id", pid).One(&product)
+
+	user := models.User{}
+	o.QueryTable("user").Filter("username", username).One(&user, "position", "pool_name")
+
+	qb, _ := orm.NewQueryBuilder("mysql")
+	if user.Position != "超级管理员" {
+		type productcheck struct {
+			Id int
+		}
+		product_check := productcheck{}
+		if user.PoolName != "" {
+			if strings.Contains(user.PoolName, "-") {
+				store_slice := strings.Split(user.PoolName, "-")
+				qb.Select("product.id").
+					From("product").
+					InnerJoin("store").
+					On("store.id = product.store_id AND store.pool = ? AND store.name = ?").
+					Where("product.art_num = ? AND product.spec = ?").
+					OrderBy("in_time").
+					Asc().
+					Limit(1)
+				sql := qb.String()
+				o.Raw(sql, store_slice[0], store_slice[1], product.ArtNum, product.Spec).QueryRow(&product_check)
+			} else {
+				qb.Select("product.id").
+					From("product").
+					InnerJoin("store").
+					On("store.id = product.store_id AND store.pool = ?").
+					Where("product.art_num = ? AND product.spec = ?").
+					OrderBy("in_time").
+					Asc().
+					Limit(1)
+				sql := qb.String()
+				fmt.Println(o.Raw(sql, user.PoolName, product.ArtNum, product.Spec).QueryRow(&product_check))
+			}
+		}
+		fmt.Println(product_check)
+		//检查是否有先录入的商品
+		if product_check.Id != product.Id {
+			c.Data["url"] = "/store_output_action/" + strconv.Itoa(product_check.Id)
+			c.Data["msg"] = "对不起，此规格的商品存在更早录入的，系统已为您自动跳转~"
+			c.TplName = "jump/error.html"
+			return
+		}
+	} else {
+		product_check := models.Product{}
+		o.QueryTable("product").Filter("art_num", product.ArtNum).Filter("spec", product.Spec).OrderBy("in_time").One(&product_check)
+		fmt.Println(product_check)
+		//检查是否有先录入的商品
+		if product_check.Id != product.Id {
+			c.Data["url"] = "/store_output_action/" + strconv.Itoa(product_check.Id)
+			c.Data["msg"] = "对不起，此规格的商品存在更早录入的，系统已为您自动跳转~"
+			c.TplName = "jump/error.html"
+			return
+		}
+	}
+
 	sale.Product = &product
+	sale.Store = product.Store
 
 	//判断当前销售数量时候多于库存
 	sale.Num, _ = c.GetUint32("num")
@@ -109,15 +167,15 @@ func (c *StoreoutController) Store_out_action_post() {
 	o.Begin()
 	_, err1 := o.Insert(&sale)
 	_, err2 := o.QueryTable("product").Filter("id", pid).Update(orm.Params{
-		"stock" : orm.ColValue(orm.ColMinus, sale.Num),
+		"stock": orm.ColValue(orm.ColMinus, sale.Num),
 	})
-	if err1 != nil || err2 != nil{
+	if err1 != nil || err2 != nil {
 		o.Rollback()
 		logs.Error(err1, err2)
 		return
 	} else {
 		o.Commit()
-		c.Data["url"]= "/sale_list"
+		c.Data["url"] = "/sale_list"
 		c.Data["msg"] = "出库成功"
 		c.TplName = "jump/success.html"
 	}

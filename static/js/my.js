@@ -793,26 +793,28 @@ function SalePaginator(sale) {
 			}
 
 			for (var i = page_size * (num - 1); i < is_out; i++) {
-				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
+				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
 					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
 				var tds = row.find("td");
 				row.find("input").val(sale[i].id);
 				tds.eq(0).text(sale[i].Title);
-				tds.eq(1).text(sale[i].ArtNum);
-				tds.eq(2).text(sale[i].SalesmanName);
-				tds.eq(3).text(sale[i].ConsumerName);
-				tds.eq(4).text(sale[i].InPrice);
-				tds.eq(5).text(sale[i].OutPrice);
-				tds.eq(6).text(sale[i].Num);
-				tds.eq(7).text(sale[i].Send.substr(0, 10));
-				tds.eq(8).text(sale[i].HasInvoice ? "是" : "否");
-				tds.eq(9).text(sale[i].InvoiceNum);
-				tds.eq(10).text(sale[i].SendInvoice.substr(0, 10));
-				tds.eq(11).text(sale[i].GetInvoice.substr(0, 10));
-				tds.eq(12).text(sale[i].GetMoney ? "是" : "否");
-				tds.eq(13).text(sale[i].GetDate.substr(0, 10));
-				tds.eq(14).text(sale[i].Created);
-				tds.eq(15).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
+				tds.eq(1).text(sale[i].No);
+				tds.eq(2).text(sale[i].Pool + sale[i].StoreName);
+				tds.eq(3).text(sale[i].ArtNum);
+				tds.eq(4).text(sale[i].SalesmanName);
+				tds.eq(5).text(sale[i].ConsumerName);
+				tds.eq(6).text(sale[i].InPrice);
+				tds.eq(7).text(sale[i].OutPrice);
+				tds.eq(8).text(sale[i].Num);
+				tds.eq(9).text(sale[i].Send.substr(0, 10));
+				tds.eq(10).text(sale[i].HasInvoice ? "是" : "否");
+				tds.eq(11).text(sale[i].InvoiceNum);
+				tds.eq(12).text(sale[i].SendInvoice.substr(0, 10));
+				tds.eq(13).text(sale[i].GetInvoice.substr(0, 10));
+				tds.eq(14).text(sale[i].GetMoney ? "是" : "否");
+				tds.eq(15).text(sale[i].GetDate.substr(0, 10));
+				tds.eq(16).text(sale[i].Created);
+				tds.eq(17).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
 				sale_node.append(row)
 			}
 		}
@@ -977,15 +979,15 @@ $.each(sale_item_edit, function (index) {
 		$("#sale_edit_modal").modal("show");
 		var tds = $(this).parent().parent().find("td");
 		$("#title").val(tds.eq(0).text());
-		$("#artnum").val(tds.eq(1).text());
-		$("#salesman").val(tds.eq(2).text());
-		$("#consumer").val(tds.eq(3).text());
-		$("#inprice").val(tds.eq(4).text());
-		$("#outprice").val(tds.eq(5).text());
-		$("#num").val(tds.eq(6).text());
-		$("#send").val(tds.eq(7).text());
+		$("#artnum").val(tds.eq(3).text());
+		$("#salesman").val(tds.eq(4).text());
+		$("#consumer").val(tds.eq(5).text());
+		$("#inprice").val(tds.eq(6).text());
+		$("#outprice").val(tds.eq(7).text());
+		$("#num").val(tds.eq(8).text());
+		$("#send").val(tds.eq(9).text());
 
-		var hasinvoice = tds.eq(8).text();
+		var hasinvoice = tds.eq(10).text();
 		var options = $("select[name=hasinvoice]").find("option");
 		$.each(options, function (index) {
 			if (options.eq(index).text() === hasinvoice) {
@@ -995,11 +997,11 @@ $.each(sale_item_edit, function (index) {
 			}
 		});
 
-		$("#invioce_num").val(tds.eq(9).text());
-		$("#sendinvioce").val(tds.eq(10).text());
-		$("#getInvoice").val(tds.eq(11).text());
+		$("#invioce_num").val(tds.eq(11).text());
+		$("#sendinvioce").val(tds.eq(12).text());
+		$("#getInvoice").val(tds.eq(13).text());
 
-		var get_money = tds.eq(12).text();
+		var get_money = tds.eq(14).text();
 		var option = $("select[name=get_money]").find("option");
 		$.each(option, function (index) {
 			if (option.eq(index).text() === get_money) {
@@ -1009,7 +1011,7 @@ $.each(sale_item_edit, function (index) {
 			}
 		});
 
-		$("#getdate").val(tds.eq(13).text());
+		$("#getdate").val(tds.eq(15).text());
 
 		$("input[name=sale_id]").val($(".sale_id").eq(index).val());
 	})

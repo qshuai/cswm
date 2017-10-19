@@ -8,7 +8,6 @@ import (
 	"github.com/xuri/excelize"
 	"ERP/models"
 	"github.com/astaxie/beego/orm"
-	"fmt"
 	"ERP/plugins/permission"
 )
 
@@ -52,7 +51,6 @@ func (c *CategoryController) Get() {
 		}
 	}
 
-	fmt.Println(two_stage)
 	c.Data["category"] = category
 	c.Data["primary"] = primary
 	c.Data["two_stage"] = two_stage

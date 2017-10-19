@@ -47,6 +47,7 @@ func (r *RedisStorage) StorePermission(permission_items []models.Permission) err
 			"ViewMove", item.ViewMove,
 			"AddStore", item.AddStore,
 			"ViewStore", item.ViewStore,
+			"OperateOtherStore", item.OperateOtherStore,
 		)
 		if err != nil {
 			logs.Error("存储permission redis错误", err)
@@ -93,6 +94,7 @@ func (r *RedisStorage) StoreOnePermission(username string, permission models.Per
 		"ViewMove", permission.ViewMove,
 		"AddStore", permission.AddStore,
 		"ViewStore", permission.ViewStore,
+		"OperateOtherStore", permission.OperateOtherStore,
 	)
 	if err != nil {
 		logs.Error("存储permission redis错误", err)

@@ -8,6 +8,7 @@ import (
 	"time"
 	"ERP/plugins/permission"
 	"encoding/json"
+	"strings"
 )
 
 type SaleController struct {
@@ -19,6 +20,9 @@ const SaleLimit = 100
 type salelist struct {
 	Id           int
 	Title        string
+	No           string
+	Pool         string
+	StoreName    string
 	ArtNum       string
 	SalesmanName string
 	ConsumerName string
@@ -37,30 +41,79 @@ type salelist struct {
 
 //获取销售列表数据
 func (c *SaleController) Sale_list() {
+	username := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSale") {
 		c.Abort("401")
 	}
 
+	user := models.User{}
+	o := orm.NewOrm()
+	o.QueryTable("user").Filter("username", username).One(&user, "position", "pool_name")
+	operate_other_store := !permission.GetOneItemPermission(username, "OperateOtherStore")
+
 	sale := []salelist{}
 	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num",
-		"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created",
-		"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
-		From("sale").
-		LeftJoin("product").
-		On("product.id = sale.product_id").
-		LeftJoin("user").
-		On("user.id = sale.salesman_id").
-		LeftJoin("consumer").
-		On("consumer.id = sale.consumer_id").
-		OrderBy("created").Desc().
-		Limit(SaleLimit)
 
-	sql := qb.String()
-	o := orm.NewOrm()
-	o.Raw(sql).QueryRows(&sale)
+	if user.Position != "超级管理员" {
+		if operate_other_store {
+			if user.PoolName != "" {
+				if strings.Contains(user.PoolName, "-") {
+					store_slice := strings.Split(user.PoolName, "-")
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
+						From("sale").
+						LeftJoin("product").
+						On("product.id = sale.product_id").
+						LeftJoin("user").
+						On("user.id = sale.salesman_id").
+						LeftJoin("consumer").
+						On("consumer.id = sale.consumer_id").
+						InnerJoin("store").
+						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
+						OrderBy("created").Desc().
+						Limit(SaleLimit)
+					sql := qb.String()
+					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&sale)
+				}else{
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
+						From("sale").
+						LeftJoin("product").
+						On("product.id = sale.product_id").
+						LeftJoin("user").
+						On("user.id = sale.salesman_id").
+						LeftJoin("consumer").
+						On("consumer.id = sale.consumer_id").
+						InnerJoin("store").
+						On("store.id = sale.store_id AND store.pool = ?").
+						OrderBy("created").Desc().
+						Limit(SaleLimit)
+					sql := qb.String()
+					o.Raw(sql, user.PoolName).QueryRows(&sale)
+				}
+			}
+		}
+	} else if user.Position == "超级管理员" || !operate_other_store {
+		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+			"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
+			From("sale").
+			LeftJoin("product").
+			On("product.id = sale.product_id").
+			LeftJoin("user").
+			On("user.id = sale.salesman_id").
+			LeftJoin("consumer").
+			On("consumer.id = sale.consumer_id").
+			InnerJoin("store").
+			On("store.id = sale.store_id").
+			OrderBy("created").Desc().
+			Limit(SaleLimit)
+		sql := qb.String()
+		o.Raw(sql).QueryRows(&sale)
+	}
 
-	username := c.GetSession("username").(string)
 	view_consumer := !permission.GetOneItemPermission(username, "ViewSaleConsumer")
 	view_in_price := !permission.GetOneItemPermission(username, "ViewSaleInPrice")
 	if view_consumer || view_in_price {
@@ -85,32 +138,84 @@ func (c *SaleController) Sale_list() {
 
 //获取更多销售记录
 func (c *SaleController) SaleLoadMore() {
+	username := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSale") {
 		c.Abort("401")
 	}
 
-	offset, _ := c.GetInt("offset")
+	user := models.User{}
+	o := orm.NewOrm()
+	o.QueryTable("user").Filter("username", username).One(&user, "position", "pool_name")
+	operate_other_store := !permission.GetOneItemPermission(username, "OperateOtherStore")
+
 	sale := []salelist{}
 	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num",
-		"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created",
-		"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
-		From("sale").
-		LeftJoin("product").
-		On("product.id = sale.product_id").
-		LeftJoin("user").
-		On("user.id = sale.salesman_id").
-		LeftJoin("consumer").
-		On("consumer.id = sale.consumer_id").
-		OrderBy("created").Desc().
-		Limit(SaleLimit).
-		Offset(SaleLimit * offset)
+	offset, _ := c.GetInt("offset")
 
-	sql := qb.String()
-	o := orm.NewOrm()
-	o.Raw(sql).QueryRows(&sale)
+	if user.Position != "超级管理员" {
+		if operate_other_store {
+			if user.PoolName != "" {
+				if strings.Contains(user.PoolName, "-") {
+					store_slice := strings.Split(user.PoolName, "-")
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
+						From("sale").
+						LeftJoin("product").
+						On("product.id = sale.product_id").
+						LeftJoin("user").
+						On("user.id = sale.salesman_id").
+						LeftJoin("consumer").
+						On("consumer.id = sale.consumer_id").
+						InnerJoin("store").
+						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
+						OrderBy("created").Desc().
+						Limit(SaleLimit).
+						Offset(SaleLimit * offset)
+					sql := qb.String()
+					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&sale)
+				}else{
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
+						From("sale").
+						LeftJoin("product").
+						On("product.id = sale.product_id").
+						LeftJoin("user").
+						On("user.id = sale.salesman_id").
+						LeftJoin("consumer").
+						On("consumer.id = sale.consumer_id").
+						InnerJoin("store").
+						On("store.id = sale.store_id AND store.pool = ?").
+						OrderBy("created").Desc().
+						Limit(SaleLimit).
+						Offset(SaleLimit * offset)
 
-	username := c.GetSession("username").(string)
+					sql := qb.String()
+					o.Raw(sql, user.PoolName).QueryRows(&sale)
+				}
+			}
+		}
+	} else if user.Position == "超级管理员" || !operate_other_store {
+		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+			"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
+			From("sale").
+			LeftJoin("product").
+			On("product.id = sale.product_id").
+			LeftJoin("user").
+			On("user.id = sale.salesman_id").
+			LeftJoin("consumer").
+			On("consumer.id = sale.consumer_id").
+			InnerJoin("store").
+			On("store.id = sale.store_id").
+			OrderBy("created").Desc().
+			Limit(SaleLimit).
+			Offset(SaleLimit * offset)
+		sql := qb.String()
+		o.Raw(sql).QueryRows(&sale)
+	}
+
 	view_consumer := !permission.GetOneItemPermission(username, "ViewSaleConsumer")
 	view_in_price := !permission.GetOneItemPermission(username, "ViewSaleInPrice")
 	if view_consumer || view_in_price {
