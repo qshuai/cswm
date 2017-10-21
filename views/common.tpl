@@ -250,7 +250,7 @@
 </aside>
 <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
 <!--/_menu 作为公共模版分离出去-->
-
+<div id="fixbug">
 {{.LayoutContent}}
 
 <!--_footer 作为公共模版分离出去-->

@@ -1,23 +1,24 @@
-﻿<script type="text/javascript" src="/static/js/Chart.js"></script>
+﻿</div>
+<script type="text/javascript" src="/static/js/Chart.js"></script>
 <section class="Hui-article-box">
 	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
 		<span class="c-999 en">&gt;</span>
-		<span class="c-666">我的桌面</span> 
+		<span class="c-666">我的桌面</span>
 		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
-		<article class="cl pd-20 col-md-offset-1" style="width: 100%;">
-            <div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee;">
-                <span>销量统计</span>
-                <canvas id="sale_curve" width="400" height="400"></canvas>
-            </div>
-            <div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee;">
-                <span>商品分类占比</span>
-                <canvas id="product_category" width="400" height="400"></canvas>
-            </div>
-            <div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee">
-                <span>近一个月的销售情况</span>
-                <canvas id="salesman" width="400" height="400"></canvas>
-            </div>
+		<article class="cl pt-20" style="width: 100%;">
+			<div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee;">
+				<span>销量统计</span>
+				<canvas id="sale_curve" width="400" height="400"></canvas>
+			</div>
+			<div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee;">
+				<span>商品分类占比</span>
+				<canvas id="product_category" width="400" height="400"></canvas>
+			</div>
+			<div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee">
+				<span>近一个月的销售情况</span>
+				<canvas id="salesman" width="400" height="400"></canvas>
+			</div>
 		</article>
 		<footer class="footer">
 			<p>感谢jQuery、layer、laypage、Validform、UEditor、My97DatePicker、iconfont、Datatables、WebUploaded、icheck、highcharts、bootstrap-Switch<br> Copyright &copy;2015 H-ui.admin v3.0 All Rights Reserved.<br> 本后台系统由<a href="http://www.h-ui.net/" target="_blank" title="H-ui前端框架">H-ui前端框架</a>提供前端技术支持</p>
@@ -27,66 +28,63 @@
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-    var sale_curve = document.getElementById("sale_curve").getContext('2d');
-    var myChart = new Chart(sale_curve, {
-        type: 'line',
-        data: {
-            labels: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月"],
-            datasets: [{
-                label: "销量",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45, 40, 60]
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    scaleStartValue : 0
-                }]
-            }
-        }
-    });
+	var sale_curve = document.getElementById("sale_curve").getContext('2d');
+	var myChart = new Chart(sale_curve, {
+		type: 'line',
+		data: {
+			labels: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月"],
+			datasets: [{
+				label: "销量",
+				backgroundColor: 'rgb(255, 99, 132)',
+				borderColor: 'rgb(255, 99, 132)',
+				data: [0, 10, 5, 2, 20, 30, 45, 40, 60]
+			}]
+		},
+		options: {
+			scales: {
+				yAxes: [{
+					scaleStartValue : 0
+				}]
+			}
+		}
+	});
 
-    var product_category = document.getElementById("product_category").getContext('2d');
-    new Chart(product_category, {
-        type: "pie",
-        data: {
-            datasets: [{
-                backgroundColor: ["#F38630", "#E0E4CC", "#69D2E7"],
-                data : [10 ,34, 50]
-            }],
-            labels : [
-                "仪器", "试剂", "耗材"
-            ]
-        }
-    });
+	var product_category = document.getElementById("product_category").getContext('2d');
+	new Chart(product_category, {
+		type: "pie",
+		data: {
+			datasets: [{
+				backgroundColor: ["#F38630", "#E0E4CC", "#69D2E7"],
+				data : [10 ,34, 50]
+			}],
+			labels : [
+				"仪器", "试剂", "耗材"
+			]
+		}
+	});
 
-    var salesman = document.getElementById("salesman").getContext("2d");
-    new Chart(salesman, {
-        type : "bar",
-        data : {
-            datasets : [{
-                label : "销售情况",
-                backgroundColor : ["#F38630", "#E0E4CC", "#69D2E7", "#F38630", "#E0E4CC", "#69D2E7", "#F38630", "#E0E4CC", "#69D2E7", "69D2E7"],
-                data : [10 ,34, 50, 78, 89, 102, 54, 38, 49, 62]
-            }],
-            labels : [
-                "王宇", "安其拉", "北域", "台企", "微行动", "天剑器", "华泰", "刘建东", "王天琪", "甜心"
-            ],
-            options: {
-                scales: {
-                    xAxes: [{
-                        stacked: true
-                    }],
-                    yAxes: [{
-                        stacked: true
-                    }]
-                }
-            }
-        }
-    })
-
-
+	var salesman = document.getElementById("salesman").getContext("2d");
+	new Chart(salesman, {
+		type : "bar",
+		data : {
+			datasets : [{
+				label : "销售情况",
+				backgroundColor : ["#F38630", "#E0E4CC", "#69D2E7", "#F38630", "#E0E4CC", "#69D2E7", "#F38630", "#E0E4CC", "#69D2E7", "69D2E7"],
+				data : [10 ,34, 50, 78, 89, 102, 54, 38, 49, 62]
+			}],
+			labels : [
+				"王宇", "安其拉", "北域", "台企", "微行动", "天剑器", "华泰", "刘建东", "王天琪", "甜心"
+			],
+			options: {
+				scales: {
+					xAxes: [{
+						stacked: true
+					}],
+					yAxes: [{
+						stacked: true
+					}]
+				}
+			}
+		}
+	})
 </script>
-<!--/请在上方写此页面业务相关的脚本-->

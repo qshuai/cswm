@@ -15,15 +15,15 @@
                 </tr>
                 <tr class="text-c">
                     <th>商品名称</th>
-                    <th>商品货号</th>
+                    <th class="hidden-xs">商品货号</th>
                     <th>起始库房</th>
                     <th>目标库房</th>
                     <th>移库数量</th>
                     <th>请求人</th>
-                    <th>响应人</th>
+                    <th class="hidden-xs">响应人</th>
                     <th>响应状态</th>
-                    <th>创建时间</th>
-                    <th>完成时间</th>
+                    <th class="hidden-xs">创建时间</th>
+                    <th class="hidden-xs">完成时间</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -32,12 +32,12 @@
                     <tr>
                         <input type="hidden" name="mid" value="{{.Id}}">
                         <td class="text-c">{{.Title}}</td>
-                        <td class="text-c">{{.ArtNum}}</td>
+                        <td class="text-c hidden-xs">{{.ArtNum}}</td>
                         <td class="text-c">{{.Fp}}-{{.Fn}}</td>
                         <td class="text-c">{{.Tp}}-{{.Tn}}</td>
                         <td class="text-c">{{.Num}}</td>
                         <td class="text-c">{{.Request}}</td>
-                        <td class="text-c">{{.Response}}</td>
+                        <td class="text-c hidden-xs">{{.Response}}</td>
                         {{if eq .Operate "1"}}
                             <td class="text-c c-success">达成</td>
                         {{else if eq .Operate "0"}}
@@ -47,8 +47,8 @@
                         {{else}}
                             <td class="text-c c-danger">拒绝</td>
                         {{end}}
-                        <td class="text-c">{{date .Created "Y-m-d H:i:s"}}</td>
-                        <td class="text-c">{{date .Finished "Y-m-d H:i:s"}}</td>
+                        <td class="text-c hidden-xs">{{date .Created "Y-m-d H:i:s"}}</td>
+                        <td class="text-c hidden-xs">{{date .Finished "Y-m-d H:i:s"}}</td>
                         <td class="text-c">
                             <a class="btn btn-success-outline radius" href="/move_info/{{.Id}}" title="详情"><i class="Hui-iconfont Hui-iconfont-yuedu"></i></a>
                             {{if eq .Operate "1"}}

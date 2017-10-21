@@ -22,9 +22,9 @@
                     <th>职位</th>
                     <th>库房</th>
                     <th>账号状态</th>
-                    <th>最后一次登陆时间</th>
-                    <th>最后一次登陆ip</th>
-                    <th>用户创建时间</th>
+                    <th class="hidden-xs">最后一次登陆时间</th>
+                    <th class="hidden-xs">最后一次登陆ip</th>
+                    <th class="hidden-xs">用户创建时间</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,16 +44,16 @@
                         <td class="c-danger">未激活</td>
                         {{end}}
 
-                        <td>{{date .LastLogin "Y-m-d H:i:s"}}</td>
+                        <td class="hidden-xs">{{date .LastLogin "Y-m-d H:i:s"}}</td>
 
 
                         {{if eq .Ip ""}}
-                        <td class="c-danger">未登陆过</td>
+                        <td class="c-danger hidden-xs">未登陆过</td>
                         {{else}}
-                        <td>{{.Ip}}</td>
+                        <td class="hidden-xs">{{.Ip}}</td>
                         {{end}}
 
-                        <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                        <td class="hidden-xs">{{date .Created "Y-m-d H:i:s"}}</td>
                     </tr>
                 {{end}}
                 </tbody>

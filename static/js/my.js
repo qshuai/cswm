@@ -6,6 +6,12 @@ if (query_url === "/product_list" || query_url === "/sale_list" || query_url ===
 	$("body").addClass("big-page");
 }
 
+if (query_url === "/"){
+	$("#fixbug").remove();
+}
+
+$("<br/><br/>").prependTo($("article"));
+
 //如果左侧导航栏条目下无可选内容，则隐藏改条目
 var navlis = $(".nav-left-list");
 $.each(navlis, function (index) {
@@ -13,6 +19,8 @@ $.each(navlis, function (index) {
 		navlis.eq(index).addClass("hide");
 	}
 });
+
+
 
 //product_add.html
 //-----------------------------------------------------------------------------------
