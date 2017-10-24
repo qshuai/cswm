@@ -10,7 +10,7 @@ if (query_url === "/"){
 	$("#fixbug").remove();
 }
 
-$("<br/><br/>").prependTo($("article"));
+$("<div class='visible-xs'><br/><br/></div>").prependTo($("article"));
 
 //如果左侧导航栏条目下无可选内容，则隐藏改条目
 var navlis = $(".nav-left-list");

@@ -4,7 +4,6 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
-	"github.com/astaxie/beego"
 )
 
 type User struct {
@@ -117,7 +116,7 @@ type Move struct {
 
 type Consumer struct {
 	Id           int
-	Name         string    `orm:"size(10)"`                       //备注：客户姓名
+	Name         string    `orm:"size(20)"`                       //备注：客户姓名
 	Province     string    `orm:"size(10)"`                       //备注：省份
 	City         string    `orm:"size(20)"`                       //备注：城市
 	Region       string    `orm:"size(20);null"`                  //备注：区
@@ -232,13 +231,13 @@ func init() {
 	orm.Debug = true
 
 	//获取配置信息
-	username := beego.AppConfig.String("mysql::username")
-	password := beego.AppConfig.String("mysql::password")
-	host := beego.AppConfig.String("mysql::host")
-	port := beego.AppConfig.String("mysql::port")
-	database := beego.AppConfig.String("mysql::database")
-	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
-	//orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
+	//username := beego.AppConfig.String("mysql::username")
+	//password := beego.AppConfig.String("mysql::password")
+	//host := beego.AppConfig.String("mysql::host")
+	//port := beego.AppConfig.String("mysql::port")
+	//database := beego.AppConfig.String("mysql::database")
+	//orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
+	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
 

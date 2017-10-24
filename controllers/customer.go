@@ -82,6 +82,7 @@ func (c *ConsumerController) Consumer_edit() {
 	}
 	consumer := models.Consumer{}
 	consumer.Id, _ = c.GetInt("consumer_id")
+	consumer.Name = c.GetString("name")
 	consumer.Tel = c.GetString("tel")
 	consumer.Department = c.GetString("department")
 	consumer.Province = c.GetString("province")
@@ -90,7 +91,7 @@ func (c *ConsumerController) Consumer_edit() {
 	consumer.Introduction = c.GetString("introduction")
 
 	o := orm.NewOrm()
-	_, err := o.Update(&consumer, "tel", "department", "province", "city", "region", "introduction")
+	_, err := o.Update(&consumer, "name", "tel", "department", "province", "city", "region", "introduction")
 	if err != nil{
 		logs.Error("/consumer_edit: Id-", c.GetSession("uid").(int), " 更新客户Id-", consumer.Id, "失败")
 		c.Data["url"] = "/consumer_list"

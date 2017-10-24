@@ -704,7 +704,7 @@ func (c *ProductController) ProductTemplateEditPost() {
 	product_template.Suppliers = c.GetString("supplier_list")
 
 	product_template.Spec = c.GetString("spec")
-	if c.GetString("in_price") == "" {
+	if c.GetString("in_price") != "" {
 		product_template.InPrice, _ = strconv.ParseFloat(c.GetString("in_price"), 64)
 	} else {
 		product_template.InPrice = 0
