@@ -6,7 +6,7 @@
 			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-2" for="art_num"><span class="c-red">*</span>货号：</label>
 				<div class="formControls col-xs-8 col-sm-9">
-					<input required type="text" class="input-text radius" value="" placeholder="" id="art_num" name="atr_num" style="width: 21%">
+					<input required type="text" class="input-text radius awesomplete" autocomplete="on" value="" data-list="{{.art_num_string}}" placeholder="检索" id="art_num" name="atr_num">
 					<a class="btn btn-secondary-outline radius" id="art_num_search"><i class="Hui-iconfont Hui-iconfont-search1"></i></a>
 					<a class="btn btn-success radius" id="confirm_in">确定键入</a>
 					<span class="c-warning" id="result_art"></span>
@@ -53,7 +53,7 @@
                     <input required type="text" class="input-text radius spec" value="" placeholder="规格" id="spec" name="spec" style="width: 40%"  readonly>
                     <input required type="text" class="input-text radius stock" value="" placeholder="数量" id="stock" name="stock" style="width: 20%">
                     <input required type="text" class="input-text radius in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%">
-					<a onclick="DeleteSku(this)" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a>
+					<!--<a onclick="DeleteSku(this)" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a>-->
                 </div>
             </div>
 

@@ -24,12 +24,6 @@
 				</div>
 			</div>
 			<div class="row cl">
-				<label class="form-label col-xs-4 col-sm-2" for="art_num"><span class="c-red">*</span>货号：</label>
-				<div class="formControls col-xs-8 col-sm-9">
-					<input type="text" class="input-text radius" value="" placeholder="" id="art_num" name="atr_num" style="width: 21%">
-				</div>
-			</div>
-			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-2" for="three_stage">三级分类：</label>
 				<div class="formControls col-xs-8 col-sm-9">
 					<input type="text" class="input-text radius awesomplete" name="three_stage" autocomplete="on" placeholder="检索" data-list="{{.three_stage_string}}"
@@ -40,8 +34,9 @@
 			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-2">sku信息：</label>
 				<div class="formControls col-xs-8 col-sm-9">
-					<input type="text" class="input-text radius spec" value="" placeholder="规格" id="spec" name="spec" style="width: 40%">
-					<input type="text" class="input-text radius in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%">
+					<input type="text" class="input-text radius spec" value="" placeholder="货号" id="atr_num" name="atr_num" style="width: 25%">
+					<input type="text" class="input-text radius spec" value="" placeholder="规格" id="spec" name="spec" style="width: 25%">
+					<input type="text" class="input-text radius in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 25%">
 					<a class="btn btn-primary radius" id="add_spec" onclick="AddTemplateSku()">增加sku</a>
 				</div>
 			</div>

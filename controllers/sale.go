@@ -36,6 +36,7 @@ type salelist struct {
 	GetInvoice   string
 	GetMoney     bool
 	GetDate      string
+	Comment      string
 	Created      string
 }
 
@@ -59,7 +60,7 @@ func (c *SaleController) Sale_list() {
 			if user.PoolName != "" {
 				if strings.Contains(user.PoolName, "-") {
 					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
 						From("sale").
@@ -75,8 +76,8 @@ func (c *SaleController) Sale_list() {
 						Limit(SaleLimit)
 					sql := qb.String()
 					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&sale)
-				}else{
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+				} else {
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
 						From("sale").
@@ -96,7 +97,7 @@ func (c *SaleController) Sale_list() {
 			}
 		}
 	} else if user.Position == "超级管理员" || !operate_other_store {
-		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 			"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
 			From("sale").
@@ -157,7 +158,7 @@ func (c *SaleController) SaleLoadMore() {
 			if user.PoolName != "" {
 				if strings.Contains(user.PoolName, "-") {
 					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
 						From("sale").
@@ -174,8 +175,8 @@ func (c *SaleController) SaleLoadMore() {
 						Offset(SaleLimit * offset)
 					sql := qb.String()
 					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&sale)
-				}else{
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+				} else {
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 						"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
 						From("sale").
@@ -197,7 +198,7 @@ func (c *SaleController) SaleLoadMore() {
 			}
 		}
 	} else if user.Position == "超级管理员" || !operate_other_store {
-		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no",
+		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 			"product.title", "product.art_num", "product.in_price", "user.name as salesman_name", "consumer.name as consumer_name").
 			From("sale").
@@ -259,8 +260,9 @@ func (c *SaleController) Sale_edit() {
 	sale.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce"))
 	sale.GetMoney, _ = c.GetBool("get_money")
 	sale.GetDate, _ = time.Parse("2006-1-2", c.GetString("get_date"))
+	sale.Comment = c.GetString("comment")
 
-	_, err := o.Update(&sale, "salesman", "out_price", "num", "send", "has_invoice", "invoice_num", "send_invoice", "get_invoice", "get_money", "get_date")
+	_, err := o.Update(&sale, "salesman", "out_price", "num", "send", "has_invoice", "invoice_num", "send_invoice", "get_invoice", "get_money", "get_date", "comment")
 	if err == nil {
 		c.Data["url"] = "/sale_list"
 		c.Data["msg"] = "修改销售记录成功"

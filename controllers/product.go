@@ -401,6 +401,7 @@ func (c *ProductController) Add_get() {
 	user.Id, _ = c.GetSession("uid").(int)
 	o.QueryTable("user").Filter("id", user.Id).One(&user, "pool_name")
 
+	c.Data["art_num_string"] = GetArtNumList()
 	c.Data["store_string"] = GetStoreList(user.PoolName)
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
@@ -617,7 +618,6 @@ func (c *ProductController) ProductTemplateAddPost() {
 	product_template := models.ProductTemplate{}
 
 	product_template.Title = c.GetString("title")
-	product_template.ArtNum = c.GetString("atr_num")
 	product_template.Unit = c.GetString("unit")
 
 	o := orm.NewOrm()
@@ -639,9 +639,11 @@ func (c *ProductController) ProductTemplateAddPost() {
 
 	spec_slice := c.GetStrings("spec")
 	inprice_slice := c.GetStrings("in_price")
+	art_num_slice := c.GetStrings("atr_num")
 
 	for index, item := range spec_slice {
 		product_template.Spec = item
+		product_template.ArtNum = art_num_slice[index]
 		if inprice_slice[index] != "" {
 			product_template.InPrice, _ = strconv.ParseFloat(inprice_slice[index], 64)
 		} else {
@@ -906,4 +908,16 @@ func GetSupplier(name string) *models.Supplier {
 	o := orm.NewOrm()
 	o.QueryTable("supplier").Filter("name", name).One(&supplier, "id")
 	return &supplier
+}
+
+//获取商品模板中的货号列表
+func GetArtNumList() string {
+	o := orm.NewOrm()
+	art_num := []models.ProductTemplate{}
+	o.QueryTable("product_template").GroupBy("art_num").All(&art_num, "art_num")
+	var art_num_string string
+	for _, item := range art_num{
+		art_num_string += item.ArtNum + ", "
+	}
+	return art_num_string
 }

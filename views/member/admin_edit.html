@@ -31,7 +31,8 @@
                     <th>电话</th>
                     <th>职位</th>
                     <th>库房</th>
-                    <th>激活</th>
+                    <th>账号</th>
+                    <th>状态</th>
                     <th>最后一次登陆时间</th>
                     <th>最后一次登陆ip</th>
                     <th>用户创建时间</th>
@@ -50,6 +51,12 @@
                     {{ else }}
                     <td class="c-danger">未激活</td>
                     {{end}}
+
+					{{if eq .user.Stage "离职"}}
+					<td class="c-danger">{{.user.Stage}}</td>
+					{{else}}
+					<td>{{.user.Stage}}</td>
+					{{end}}
 
                     <td>{{date .user.LastLogin "Y-m-d H:i:s"}}</td>
 
@@ -73,6 +80,12 @@
                 {{ else }}
                     <a class="btn btn-success control_user radius">激活账户</a>
                 {{end}}
+
+				{{if eq .user.Stage "在职"}}
+					<a class="btn btn-danger off-position radius">离职</a>
+				{{ else }}
+					<a class="btn btn-success off-position radius">在职</a>
+				{{end}}
 
                 <a class="btn btn-primary edit_user radius">编辑此用户</a>
             </div>

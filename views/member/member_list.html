@@ -21,7 +21,8 @@
                     <th>电话</th>
                     <th>职位</th>
                     <th>库房</th>
-                    <th>账号状态</th>
+                    <th>账号</th>
+					<th>状态</th>
                     <th class="hidden-xs">最后一次登陆时间</th>
                     <th class="hidden-xs">最后一次登陆ip</th>
                     <th class="hidden-xs">用户创建时间</th>
@@ -43,6 +44,11 @@
                         {{ else }}
                         <td class="c-danger">未激活</td>
                         {{end}}
+						{{if eq .Stage "离职"}}
+						<td class="c-danger">{{.Stage}}</td>
+						{{else}}
+						<td>{{.Stage}}</td>
+						{{end}}
 
                         <td class="hidden-xs">{{date .LastLogin "Y-m-d H:i:s"}}</td>
 

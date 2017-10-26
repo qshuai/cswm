@@ -34,6 +34,7 @@ if (query_url === "/product_add") {
 
 		showDaysInNextAndPreviousMonths: true,
 		enableSelectionDaysInNextAndPreviousMonths: true
+
 	});
 
 //为datepicker初始化为当前日期
@@ -712,7 +713,7 @@ function ProductTemplatePaginator(template) {
 				tds.eq(8).text(template[i].InPrice);
 				tds.eq(9).text(template[i].Id);
 				tds.eq(10).html('<a onclick="ProductTemplateEdit(this)" class="btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>' +
-				'<a onclick="DeleteTemplateRow(this,'+template[i].Id+')" class="btn size-MINI btn-danger-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-close"></i>&nbsp;</a>');
+				' <a onclick="DeleteTemplateRow(this,'+template[i].Id+')" class="btn size-MINI btn-danger-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-close"></i>&nbsp;</a>');
 				template_node.append(row)
 			}
 		}
@@ -802,9 +803,9 @@ function SalePaginator(sale) {
 
 			for (var i = page_size * (num - 1); i < is_out; i++) {
 				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
-					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
+					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
 				var tds = row.find("td");
-				row.find("input").val(sale[i].id);
+				row.find(".sale_id").val(sale[i].Id);
 				tds.eq(0).text(sale[i].Title);
 				tds.eq(1).text(sale[i].No);
 				tds.eq(2).text(sale[i].Pool + sale[i].StoreName);
@@ -821,8 +822,9 @@ function SalePaginator(sale) {
 				tds.eq(13).text(sale[i].GetInvoice.substr(0, 10));
 				tds.eq(14).text(sale[i].GetMoney ? "是" : "否");
 				tds.eq(15).text(sale[i].GetDate.substr(0, 10));
-				tds.eq(16).text(sale[i].Created);
-				tds.eq(17).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
+				tds.eq(16).text(sale[i].Comment);
+				tds.eq(17).text(sale[i].Created);
+				tds.eq(18).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
 				sale_node.append(row)
 			}
 		}
@@ -833,7 +835,7 @@ function SalePaginator(sale) {
 //-----------------------------------------------------------------------------------
 //人员检索
 $(".member_search").click(function () {
-	var tds = $("<tr><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td></tr>").find("td");
+	var tds = $("<tr><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td><td class='text-c'></td></tr>").find("td");
 	$.ajax({
 		type: "post",
 		url: "/admin_member_edit",
@@ -859,15 +861,20 @@ $(".member_search").click(function () {
 			var login_raw = response.LastLogin;
 			var created = response.Created;
 
-			tds.eq(5).text((login_raw.substring(0, 19)).replace("T", " "));
-
-			if (response.Ip === "") {
-				tds.eq(6).text("未登陆过").addClass("c-danger");
-			} else {
-				tds.eq(6).text(response.Ip);
+			tds.eq(5).text(response.Stage);
+			if (response.Stage === "离职"){
+				tds.eq(5).addClass("c-danger")
 			}
 
-			tds.eq(7).text((created.substring(0, 19)).replace("T", " "));
+			tds.eq(6).text((login_raw.substring(0, 19)).replace("T", " "));
+
+			if (response.Ip === "") {
+				tds.eq(7).text("未登陆过").addClass("c-danger");
+			} else {
+				tds.eq(7).text(response.Ip);
+			}
+
+			tds.eq(8).text((created.substring(0, 19)).replace("T", " "));
 			$("tbody").html(tds);
 
 			var input_hidden = $("<input type='hidden' name='userId'>");
@@ -911,6 +918,32 @@ $(".control_user").click(function () {
 			}
 		})
 	}
+});
+
+//在职或离职操作
+$(".off-position").click(function () {
+	var is_off = $(this).hasClass("btn-success");
+	var tds = $("td");
+	$.ajax({
+		type: "post",
+		url: "/off_position",
+		data: {
+			"_xsrf": $("input[name=_xsrf]").val(),
+			"action": is_off ? "on" : "off",
+			"uid": $("input[name=userId]").val()
+		},
+		success: function (response, status, xhr) {
+			if (response.Code === "success") {
+				if (is_off) {
+					$(".off-position").addClass("btn-danger").removeClass("btn-success").text("离职");
+					tds.eq(5).text("在职").removeClass("c-danger")
+				} else {
+					$(".off-position").addClass("btn-success").removeClass("btn-danger").text("在职");
+					tds.eq(5).text("离职").addClass("c-danger")
+				}
+			}
+		}
+	})
 });
 
 //管理员编辑用户信息，弹窗，并为各个input初始化赋值
@@ -1020,6 +1053,8 @@ $.each(sale_item_edit, function (index) {
 		});
 
 		$("#getdate").val(tds.eq(15).text());
+
+		$("#comment").val(tds.eq(16).text());
 
 		$("input[name=sale_id]").val($(".sale_id").eq(index).val());
 	})
@@ -1269,7 +1304,10 @@ $.each(permission_member_tds, function (index) {
 //-----------------------------------------------------------------------------------
 //增加sku
 function AddTemplateSku() {
-	$("#add_spec").parent("div").append('<input type="text" class="input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 40%"> <input type="text" class="input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 20%"> <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
+	$("#add_spec").parent("div").append('<input type="text" class="input-text radius spec mt-10" value="" placeholder="货号" id="atr_num" name="atr_num" style="width: 25%">' +
+		' <input type="text" class="radius input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 25%">' +
+		' <input type="text" class="radius input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 25%">' +
+		' <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
 
 	delete_sku = $(".delete_sku");
 	spec = $(".spec");

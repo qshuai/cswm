@@ -28,6 +28,7 @@ func init() {
 		beego.Router("/disable_active_user", &controllers.MemberController{}, "post:Disable_active_member") //ajax激活或禁用账户
 		beego.Router("/admin_edit_all", &controllers.MemberController{}, "post:Admin_edit_all")             //修改全部信息
 		beego.Router("/disable_member_list", &controllers.MemberController{}, "get:Disable_member_list")    //获取禁用账户列表
+		beego.Router("/off_position", &controllers.MemberController{}, "post:OffPosition")    //获取禁用账户列表
 	}
 
 	{
@@ -140,5 +141,4 @@ func init() {
 		beego.Router("/permission_member_edit", &controllers.Permission{}, "post:PermissionMemberEditPost")
 	}
 
-	beego.Router("/test", &controllers.TestController{})
 }

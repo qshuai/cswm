@@ -46,6 +46,7 @@ func (c *MemberController) Member_add_post() {
 	u.Position = c.GetString("position")
 	u.IsFirst = true
 	u.IsActive = true
+	u.Stage = "在职"
 
 	o := orm.NewOrm()
 	_, err := o.Insert(&u)
@@ -249,7 +250,7 @@ func (c *MemberController) Admin_member_edit_post() {
 			sql := qb.String()
 			o := orm.NewOrm()
 			o.Raw(sql, search_entry, search_entry).QueryRow(&user)
-			if !judge(level, p, user.Position){
+			if !judge(level, p, user.Position) {
 				c.Abort("401")
 			}
 			c.Data["json"] = user
@@ -289,6 +290,43 @@ func (c *MemberController) Disable_active_member() {
 			c.Data["json"] = ResponseInfo{
 				Code:    "success",
 				Message: "激活用户成功",
+				Data:    "",
+			}
+			c.ServeJSON()
+		}
+	}
+}
+
+func (c *MemberController) OffPosition() {
+	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
+		c.Abort("401")
+	}
+
+	if c.IsAjax() {
+		action := c.GetString("action")
+		uid, _ := c.GetInt("uid")
+
+		user := models.User{}
+		user.Id = uid
+		o := orm.NewOrm()
+
+		if action == "off" {
+			user.Stage = "离职"
+			o.Update(&user, "stage")
+
+			c.Data["json"] = ResponseInfo{
+				Code:    "success",
+				Message: "离职成功",
+				Data:    "",
+			}
+			c.ServeJSON()
+		} else if action == "on" {
+			user.Stage = "在职"
+			o.Update(&user, "stage")
+
+			c.Data["json"] = ResponseInfo{
+				Code:    "success",
+				Message: "在职成功",
 				Data:    "",
 			}
 			c.ServeJSON()
@@ -340,7 +378,7 @@ func (c *MemberController) Disable_member_list() {
 
 //只允许添加比自己等级低的人员
 func modify(pp []string, position string) []string {
-	if position  == pp[0] {
+	if position == pp[0] {
 		return pp
 	}
 	for index, _ := range pp {

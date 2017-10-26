@@ -12,7 +12,7 @@
             <table class="table table-border table-bordered table-bg">
                 <thead>
                 <tr>
-                    <th colspan="18" scope="col">销售列表</th>
+                    <th colspan="19" scope="col">销售列表</th>
                 </tr>
                 <tr class="text-c">
                     <th>商品名称</th>
@@ -31,6 +31,7 @@
                     <th>送发票</th>
                     <th>收款</th>
                     <th>收款时间</th>
+					<th>备注</th>
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
@@ -185,8 +186,14 @@
                                 <input type="text" id="getdate" class="input-text radius" value="" name="get_date" />
                             </div>
                         </div>
-                        <br>
 
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2">备注：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<textarea id="comment" class="textarea radius" placeholder="" rows="" cols="" name="comment"></textarea>
+							</div>
+						</div>
+						<br>
                         <div class="modal-footer">
                             <button class="btn btn-primary">确定</button>
                             <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>

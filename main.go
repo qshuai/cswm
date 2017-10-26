@@ -128,5 +128,6 @@ func main() {
 	beego.AddFuncMap("stripTags", stripTags)
 	beego.AddFuncMap("boolToString", boolToString)
 	beego.AddFuncMap("stringToInt", stringToInt)
+
 	beego.Run()
 }

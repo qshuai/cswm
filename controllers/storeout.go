@@ -154,6 +154,7 @@ func (c *StoreoutController) Store_out_action_post() {
 	sale.GetDate, _ = time.Parse("2006-1-2", c.GetString("get_date"))
 	sale.InvoiceNum = c.GetString("invioce_num")
 	sale.GetMoney, _ = c.GetBool("get_money")
+	sale.Comment = c.GetString("comment")
 
 	//生成唯一订单号
 	date_string := time.Now().String()
