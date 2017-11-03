@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>食物链系统</title>
+</head>
+<style type="text/css">
+	body{
+		width: 215mm;
+		padding: 20px;
+		margin: 0 auto;
+		position: relative;
+	}
+	table{
+		width: 100%;
+	}
+	th{
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	td{
+		font-size: 14px;
+		text-align: left;
+		padding: 2px 0 2px 2px;
+	}
+	h2{
+		margin: 40px 0 0 0;
+		padding: 0;
+		font-size: 26px;
+		text-align: center;
+		font-weight: bold;
+	}
+	.content td{
+		text-align: center;
+		font-size: 12px;
+	}
+	.t-bottom td{
+		font-weight: bold;
+		font-size: 14px;
+		text-align: left;
+	}
+	td input{
+		border: 0;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+	.logo-top img{
+		position: absolute;
+		top: 25px;
+		left: 16px;
+		max-width: 100px;
+		max-height: 100px;
+	}
+	.logo{
+		position: absolute;
+		top: 20px;
+		right: 15px;
+	}
+	.logo img{
+		max-width: 100px;
+		max-height: 100px;
+		padding: 0;
+		margin: 0;
+	}
+	.service{
+		display: block;
+		position: relative;
+		top: -10px;
+		padding: 0;
+		margin: 0;
+		font-size: 14px;
+	}
+	.t-input{
+		width: 80px;
+	}
+	.hidden{
+		filter:alpha(opacity=0);
+		-moz-opacity:0;
+		-khtml-opacity: 0;
+		opacity: 0;
+		border-right: none;
+		border-left: none;
+	}
+	.hidden td{
+		border-right: none;
+		border-left: none;
+	}
+</style>
+<body>
+<h2 class="print-c">出库单</h2>
+<div class="logo-top">
+	<img src="/static/img/logo_top.jpg" alt="">
+</div>
+<div class="logo">
+	<img src="/static/img/saleout_logo.png" alt="">
+	<span class="service" style="float: left;width: 10px;top: 16px;">微信客服</span>
+</div>
+<table>
+	<tr>
+		<td>客户：{{.order.Consumer}}</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>单号：ASAP{{.order.Asap}}</td>
+	</tr>
+</table>
+<table border="1" cellspacing="0" class="content">
+	<tr>
+		<th>序号</th>
+		<th>名称</th>
+		<th>货号</th>
+		<th>品牌</th>
+		<th>规格</th>
+		<th>单位</th>
+		<th>数量</th>
+		<th>单价</th>
+		<th>金额</th>
+		<th>备注</th>
+	</tr>
+	{{range $index, $item := .print}}
+		<tr>
+			<td class="serial"></td>
+			<td class="title">{{.Title}}</td>
+			<td style="text-align: left">{{.ArtNum}}</td>
+			<td>{{.BrandName}}</td>
+			<td>{{.Spec}}</td>
+			<td>{{.Unit}}</td>
+			<td class="num" style="text-align: right">{{.Num}}</td>
+			<td class="price" style="text-align: right">{{.OutPrice}}</td>
+			<td class="subsum" style="text-align: right">1088.00</td>
+			<td class="t-input"><input type="text"></td>
+		</tr>
+		{{if eq $index 3}}
+			<tr class="hidden">
+				<td colspan="10">分割线</td>
+			</tr>
+			<tr>
+				<th>序号</th>
+				<th>名称</th>
+				<th>货号</th>
+				<th>品牌</th>
+				<th>规格</th>
+				<th>单位</th>
+				<th>数量</th>
+				<th>单价</th>
+				<th>金额</th>
+				<th>备注</th>
+			</tr>
+		{{end}}
+	{{end}}
+	<tr class="t-bottom">
+		<td style="text-align: center">合计</td>
+		<td colspan="7">（大写）<span class="uppersum"></span></td>
+		<td colspan="2" class="sum"></td>
+	</tr>
+</table>
+
+<table style="width: 89%;">
+	<tr>
+		<td>库房：{{.store}}</td>
+		<td>业务员：{{.order.Salesman}}</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>日期：{{.date}}</td>
+		<td>客户签字：</td>
+	</tr>
+</table>
+
+</body>
+<script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	var titles = $(".title");
+	var sum = $(".sum");
+	var uppersum = $(".uppersum");
+	var subsum = $(".subsum");
+	var price = $(".price");
+	var num = $(".num");
+	var len = titles.length;
+
+	var serial = $(".serial");
+	var l = 0;
+	for (var i=0;i<len;i++){
+		serial.eq(i).text(i + 1);
+		price.eq(i).text(number_format(price.eq(i).text(), 2, ".", ","));
+	    var subtotal = parseFloat(price.eq(i).text().replace(/,/g, "")) * parseInt(num.eq(i).text().replace(/,/g, ""));
+		subsum.eq(i).text(number_format(subtotal, 2, ".", ","));
+		l = strlen(titles.eq(i).text());
+		if (l < 15){
+			titles.eq(i).css("font-size", "12px").css("text-align", "left");
+		}
+		if (l >= 15 &&l < 30){
+			titles.eq(i).css("font-size", "11px").css("text-align", "left");
+		}
+		if (l >= 30 && l < 40){
+			titles.eq(i).css("font-size", "10px").css("text-align", "left");
+		}
+		if (l >= 40 && l < 50){
+			titles.eq(i).css("font-size", "9px").css("text-align", "left");
+		}
+		if (l >= 50 && l < 60){
+			titles.eq(i).css("font-size", "8px").css("text-align", "left");
+		}
+		if (l >= 60 && l < 70){
+			titles.eq(i).css("font-size", "7px").css("text-align", "left");
+		}
+		if (l >= 70 && l < 80){
+			titles.eq(i).css("font-size", "6px").css("text-align", "left");
+		}
+		if (l >= 80 && l < 90){
+			titles.eq(i).css("font-size", "5px").css("text-align", "left");
+		}
+		if (l >= 90 && l < 100){
+			titles.eq(i).css("font-size", "5px").css("text-align", "left");
+		}
+		if (l >= 100){
+			titles.eq(i).css("font-size", "4px").css("text-align", "left");
+		}
+	}
+
+	var t = number_format({{.order.Sum}}, 2, ".", ",");
+	sum.text("￥" + t);
+	uppersum.text(DX({{.order.Sum}}));
+
+	//计算字符串字节数，中文2，英文1
+	function strlen(str){
+		var len = 0;
+		for (var i=0; i<str.length; i++) {
+			var c = str.charCodeAt(i);
+			//单字节加1
+			if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+				len++;
+			}
+			else {
+				len+=2;
+			}
+		}
+		return len;
+	}
+
+
+	function DX(n) {
+		if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+			return "数据非法";
+		var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+		n += "00";
+		var p = n.indexOf('.');
+		if (p >= 0)
+			n = n.substring(0, p) + n.substr(p+1, 2);
+		unit = unit.substr(unit.length - n.length);
+		for (var i=0; i < n.length; i++)
+			str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+		return str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "元整");
+	}
+
+	function number_format(number, decimals, dec_point, thousands_sep) {
+		/*
+		 * 参数说明：
+		 * number：要格式化的数字
+		 * decimals：保留几位小数
+		 * dec_point：小数点符号
+		 * thousands_sep：千分位符号
+		 * */
+		number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+		var n = !isFinite(+number) ? 0 : +number,
+
+			prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+			sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+			dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+			s = '',
+			toFixedFix = function (n, prec) {
+				var k = Math.pow(10, prec);
+				return '' + Math.floor(n * k) / k;
+			};
+		s = (prec ? toFixedFix(n, prec) : '' + Math.floor(n)).split('.');
+		var re = /(-?\d+)(\d{3})/;
+		while (re.test(s[0])) {
+			s[0] = s[0].replace(re, "$1" + sep + "$2");
+		}
+
+		if ((s[1] || '').length < prec) {
+			s[1] = s[1] || '';
+			s[1] += new Array(prec - s[1].length + 1).join('0');
+		}
+		return s.join(dec);
+	}
+</script>
+</html>

@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
+	"github.com/astaxie/beego"
 )
 
 type User struct {
@@ -54,6 +55,9 @@ type Store struct {
 type Supplier struct {
 	Id      int
 	Name    string        `orm:"size(100);unique"`
+	Site    string
+	Admin   string
+	Tel     string
 	Created time.Time    `orm:"type(datetime);auto_now_add"`
 	Product []*Product `orm:"reverse(many)"`
 }
@@ -144,6 +148,7 @@ type Sale struct {
 	InvoiceNum  string        `orm:"size(10);null"`               //备注：发票编号
 	GetMoney    bool        `orm:"default(false)"`                //备注：是否已经接收回款
 	GetDate     time.Time    `orm:"type(datetime);null"`          //备注：接受回款日期
+	HasPrint    bool        `orm:"default(false)"`                //是否已经打印出库单
 	Created     time.Time    `orm:"type(datetime);auto_now_add"`  //备注：订单创建日期
 	Updated     time.Time    `orm:"type(datetime);auto_now"`      //备注：订单更新日期
 	Comment     string    `orm:"size(255);null"`                  //备注：备注
@@ -229,21 +234,36 @@ type DefaultPermission struct {
 	OperateOtherStore bool `orm:"default(false)"` //操作非管辖库房
 }
 
+//出库单编号
+type OrderNum struct {
+	Id       int
+	Asap     string
+	Consumer string
+	Salesman string
+	Sum      string
+	SaleList string
+	User     string
+	State    bool   `orm:"default(true)"`
+	HasPrint bool    `orm:"default(false)"`
+	Created  time.Time `orm:"auto_now_add;type(datetime)"`
+	Updated  time.Time `orm:"auto_now;type(datetime)"`
+}
+
 func init() {
 	orm.Debug = true
 
 	//获取配置信息
-	//username := beego.AppConfig.String("mysql::username")
-	//password := beego.AppConfig.String("mysql::password")
-	//host := beego.AppConfig.String("mysql::host")
-	//port := beego.AppConfig.String("mysql::port")
-	//database := beego.AppConfig.String("mysql::database")
-	//orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
-	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
+	username := beego.AppConfig.String("mysql::username")
+	password := beego.AppConfig.String("mysql::password")
+	host := beego.AppConfig.String("mysql::host")
+	port := beego.AppConfig.String("mysql::port")
+	database := beego.AppConfig.String("mysql::database")
+	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
+	//orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 
-	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate))
+	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate), new(OrderNum))
 
-	//orm.RunSyncdb("default", true, true)
+	orm.RunSyncdb("default", false, true)
 	//
 	//o := orm.NewOrm()
 	//defaultPermission := DefaultPermission{}

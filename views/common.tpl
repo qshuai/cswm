@@ -152,7 +152,8 @@
             <dd>
                 <ul>
 					{{if .authority.ViewSale}}
-                    	<li><a href="/sale_list" title="销售记录">销售记录</a></li>
+                    	<li><a href="/sale_list" title="销售记录">销售列表</a></li>
+                    	<li><a href="/order_list" title="销售记录">出库单列表</a></li>
 					{{end}}
                 </ul>
             </dd>

@@ -46,6 +46,10 @@ func (c *SupplierController) Supplier_add_post(){
 
 	supplier := models.Supplier{}
 	supplier.Name = c.GetString("name")
+	supplier.Admin = c.GetString("admin")
+	supplier.Tel = c.GetString("tel")
+	supplier.Site = c.GetString("province") + " " + c.GetString("city") + " " + c.GetString("region") + "-" + c.GetString("introduction")
+
 
 	o := orm.NewOrm()
 	exit := o.QueryTable("supplier").Filter("name", supplier.Name).Exist()

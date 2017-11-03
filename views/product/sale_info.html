@@ -1,0 +1,84 @@
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+		<span class="c-999 en">&gt;</span>
+		<a onclick="goBack()" class="maincolor">上一页</a>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">销售信息</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<table class="table table-border table-bordered table-bg table-hover">
+				<thead>
+				<tr>
+					<th colspan="21" scope="col">销售信息</th>
+				</tr>
+				<tr class="text-c">
+					<th>商品名称</th>
+					<th>订单号码</th>
+					<th>库房</th>
+					<th>货号</th>
+					<th>业务员</th>
+					<th>客户</th>
+					<th>进价</th>
+					<th>售价</th>
+					<th>品牌</th>
+					<th>规格</th>
+					<th>单位</th>
+					<th>数量</th>
+					<th>发货日期</th>
+					<th>含发票</th>
+					<th>发票号</th>
+					<th>开发票</th>
+					<th>送发票</th>
+					<th>收款</th>
+					<th>收款时间</th>
+					<th>备注</th>
+					<th>创建时间</th>
+				</tr>
+				</thead>
+				<tbody>
+					{{range .sale}}
+					<tr>
+						<td>{{.Title}}</td>
+						<td>{{.No}}</td>
+						<td>{{.Pool}}-{{.StoreName}}</td>
+						<td>{{.ArtNum}}</td>
+						<td>{{.SalesmanName}}</td>
+						<td>{{.ConsumerName}}</td>
+						<td>{{.InPrice}}</td>
+						<td>{{.OutPrice}}</td>
+						<td>{{.Brand}}</td>
+						<td>{{.Spec}}</td>
+						<td>{{.Unit}}</td>
+						<td>{{.Num}}</td>
+						<td class="slice_string">{{.Send}}</td>
+						{{if .HasInvoice}}
+							<td>是</td>
+						{{else}}
+							<td>否</td>
+						{{end}}
+						<td>{{.InvoiceNum}}</td>
+						<td class="slice_string">{{.SendInvoice}}</td>
+						<td class="slice_string">{{.GetInvoice}}</td>
+						{{if .GetMoney}}
+						<td>是</td>
+						{{else}}
+						<td>否</td>
+						{{end}}
+						<td class="slice_string">{{.GetDate}}</td>
+						<td>{{.Comment}}</td>
+						<td>{{.Created}}</td>
+					</tr>
+					{{end}}
+				</tbody>
+			</table>
+		</article>
+	</div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

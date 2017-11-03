@@ -11,10 +11,13 @@
             <table class="table table-border table-bordered table-bg">
                 <thead>
                 <tr>
-                    <th colspan="2" scope="col">供应商列表</th>
+                    <th colspan="5" scope="col">供应商列表</th>
                 </tr>
                 <tr class="text-c">
                     <th>供应商</th>
+                    <th>联系人</th>
+                    <th>电话</th>
+                    <th>地址</th>
                     <th>创建时间</th>
                 </tr>
                 </thead>
@@ -22,6 +25,9 @@
                 {{range .supplier}}
                 <tr class="text-c">
                     <td>{{.Name}}</td>
+                    <td>{{.Admin}}</td>
+                    <td>{{.Tel}}</td>
+                    <td>{{.Site}}</td>
                     <td>{{date .Created "Y-m-d H:i:s"}}</td>
                 </tr>
                 {{end}}

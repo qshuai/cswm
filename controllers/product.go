@@ -114,7 +114,7 @@ func (c *ProductController) Get() {
 				}
 			}
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store{
+	} else if user.Position == "超级管理员" || !operate_other_store {
 		qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
 			"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
 			"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
@@ -229,7 +229,7 @@ func (c *ProductController) ProductLoadMore() {
 				}
 			}
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store{
+	} else if user.Position == "超级管理员" || !operate_other_store {
 		qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
 			"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
 			"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
@@ -516,7 +516,103 @@ func (c *ProductController) SearchByCatnum() {
 }
 
 func (c *ProductController) Product_track() {
+	username := c.GetSession("username").(string)
+	if !permission.GetOneItemPermission(username, "ViewSale") {
+		c.Abort("401")
+	}
 
+	user := models.User{}
+	o := orm.NewOrm()
+	o.QueryTable("user").Filter("username", username).One(&user, "position", "pool_name")
+	operate_other_store := !permission.GetOneItemPermission(username, "OperateOtherStore")
+
+	pid, _ := c.GetInt(":pid")
+	pro := models.Product{}
+	o.QueryTable("product").Filter("id", pid).One(&pro, "art_num")
+
+	sale := []salelist{}
+	qb, _ := orm.NewQueryBuilder("mysql")
+
+	if user.Position != "超级管理员" {
+		if operate_other_store {
+			if user.PoolName != "" {
+				if strings.Contains(user.PoolName, "-") {
+					store_slice := strings.Split(user.PoolName, "-")
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
+						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+						From("sale").
+						LeftJoin("product").
+						On("product.id = sale.product_id AND product.art_num = ?").
+						InnerJoin("brand").
+						On("product.brand_id = brand.id").
+						LeftJoin("user").
+						On("user.id = sale.salesman_id").
+						LeftJoin("consumer").
+						On("consumer.id = sale.consumer_id").
+						InnerJoin("store").
+						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
+						OrderBy("created").Desc()
+					sql := qb.String()
+					o.Raw(sql, pro.ArtNum, store_slice[0], store_slice[1]).QueryRows(&sale)
+				} else {
+					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
+						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+						From("sale").
+						LeftJoin("product").
+						On("product.id = sale.product_id AND product.art_num = ?").
+						InnerJoin("brand").
+						On("product.brand_id = brand.id").
+						LeftJoin("user").
+						On("user.id = sale.salesman_id").
+						LeftJoin("consumer").
+						On("consumer.id = sale.consumer_id").
+						InnerJoin("store").
+						On("store.id = sale.store_id AND store.pool = ?").
+						OrderBy("created").Desc()
+
+					sql := qb.String()
+					o.Raw(sql, pro.ArtNum, user.PoolName, pid).QueryRows(&sale)
+				}
+			}
+		}
+	} else if user.Position == "超级管理员" || !operate_other_store {
+		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
+			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+			"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+			From("sale").
+			LeftJoin("product").
+			On("product.id = sale.product_id AND product.art_num = ?").
+			InnerJoin("brand").
+			On("product.brand_id = brand.id").
+			LeftJoin("user").
+			On("user.id = sale.salesman_id").
+			LeftJoin("consumer").
+			On("consumer.id = sale.consumer_id").
+			InnerJoin("store").
+			On("store.id = sale.store_id").
+			OrderBy("created").Desc()
+		sql := qb.String()
+		o.Raw(sql, pro.ArtNum).QueryRows(&sale)
+	}
+
+	view_consumer := !permission.GetOneItemPermission(username, "ViewSaleConsumer")
+	view_in_price := !permission.GetOneItemPermission(username, "ViewSaleInPrice")
+	if view_consumer || view_in_price {
+		length := len(sale)
+		for index := 0; index < length; index++ {
+			if view_consumer {
+				sale[index].ConsumerName = "***"
+			}
+			if view_in_price {
+				sale[index].InPrice = "***"
+			}
+		}
+	}
+	c.Data["sale"] = sale
+	c.Layout = "common.tpl"
+	c.TplName = "product/sale_info.html"
 }
 
 //管理员添加商品模板
@@ -916,7 +1012,7 @@ func GetArtNumList() string {
 	art_num := []models.ProductTemplate{}
 	o.QueryTable("product_template").GroupBy("art_num").All(&art_num, "art_num")
 	var art_num_string string
-	for _, item := range art_num{
+	for _, item := range art_num {
 		art_num_string += item.ArtNum + ", "
 	}
 	return art_num_string

@@ -1,10 +1,16 @@
 //全局js
 	//判断当前页面是否展示侧边栏
 var query_url = window.location.pathname;
-if (query_url === "/product_list" || query_url === "/sale_list" || query_url === "/product_template_list") {
+var par = new RegExp("/product_track");
+var ps = new RegExp("/product_sale_info");
+if (query_url === "/product_list" || query_url === "/sale_list" || query_url === "/product_template_list" || par.test(query_url) || ps.test(query_url)) {
 	$($(".pngfix")).addClass("open");
 	$("body").addClass("big-page");
 }
+var string_slice = $(".slice_string");
+$.each(string_slice, function (index) {
+	string_slice.eq(index).text(string_slice.eq(index).text().substring(0, 10))
+});
 
 if (query_url === "/"){
 	$("#fixbug").remove();
@@ -276,13 +282,17 @@ if (query_url === "/product_list") {
 					break;
 				case 9:
 					product.sort(function (x, y) {
-						return asc ? ((x.Stock < y.Stock) ? -1 : ((x.Stock > y.Stock) ? 1 : 0)) : ((x.Stock < y.Stock) ? 1 : ((x.Stock > y.Stock) ? -1 : 0));
+						var product_stock1 = parseInt(x.Stock);
+						var product_stock2 = parseInt(y.Stock);
+						return asc ? ((product_stock1 < product_stock2) ? -1 : ((product_stock1 > product_stock2) ? 1 : 0)) : ((product_stock1 < product_stock2) ? 1 : ((product_stock1 > product_stock2) ? -1 : 0));
 					});
 					asc = !asc;
 					break;
 				case 10:
 					product.sort(function (x, y) {
-						return asc ? ((x.InPrice < y.InPrice) ? -1 : ((x.InPrice > y.InPrice) ? 1 : 0)) : ((x.InPrice < y.InPrice) ? 1 : ((x.InPrice > y.InPrice) ? -1 : 0));
+						var product_inprice1 = parseInt(x.InPrice);
+						var product_inprice2 = parseInt(y.InPrice);
+						return asc ? ((product_inprice1 < product_inprice2) ? -1 : ((product_inprice1 > product_inprice2) ? 1 : 0)) : ((product_inprice1 < product_inprice2) ? 1 : ((product_inprice1 > product_inprice2) ? -1 : 0));
 					});
 					asc = !asc;
 					break;
@@ -509,18 +519,15 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 				var row = $("<tr product_item_no=''><td class='text-overflow' style='max-width: 250px'></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
 					"<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>" +
 					'<td class="text-c">' +
-					'<a class="product_item_edit btn size-MINI btn-secondary-outline radius" title="编辑">&nbsp;' +
-					'<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a> ' +
-					' <a class="move_btn btn size-MINI btn-danger-outline radius" href="" title="移库">&nbsp;' +
-					'<i class="Hui-iconfont Hui-iconfont-fabu">' +
-					'</i>&nbsp;</a> ' +
-					'<a class="product_item_delete btn size-MINI btn-danger-outline radius" title="删除" onclick=delete_row(this)>&nbsp;' +
-					'<i class="Hui-iconfont Hui-iconfont-close">' +
-					'</i>&nbsp;</a>' +
+					'<a class="product_item_edit btn size-MINI btn-secondary-outline radius" title="编辑">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a> ' +
+					'<a class="move_btn btn size-MINI btn-danger-outline radius" href="" title="移库">&nbsp;<i class="Hui-iconfont Hui-iconfont-fabu"></i>&nbsp;</a> ' +
+					'<a class="product-sale-info btn size-MINI btn-success-outline radius" href="" title="销售记录">&nbsp;Info&nbsp;</a> ' +
+					'<a class="product_item_delete btn size-MINI btn-danger-outline radius" title="删除" onclick=delete_row(this)>&nbsp;<i class="Hui-iconfont Hui-iconfont-close"></i>&nbsp;</a>' +
 					'</td></tr>');
 
 				//为每一行设置id属性，并赋值，便于删除和编辑
 				row.attr("product_item_no", product[i].Id);
+				row.find(".product-sale-info").attr("href", /product_sale_info/ + product[i].ArtNum);
 
 				var tds = row.find("td");
 				tds.eq(0).html('<a href="/product_track/' + product[i].Id + '">' + product[i].Title + '</a>').addClass();
@@ -542,7 +549,7 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 				tds.eq(10).text(product[i].InPrice).addClass("text-c");
 				tds.eq(11).text(product[i].HasPay ? "是" : "否").addClass("text-c");
 				tds.eq(12).text(product[i].HasInvoice ? "是" : "否").addClass("text-c");
-				tds.eq(13).text((product[i].GetInvoice).substr(0, 10)).addClass("text-c");
+				tds.eq(13).text((product[i].GetInvoice !== "0001-01-01T00:00:00Z")?(product[i].GetInvoice).substr(0, 10):"").addClass("text-c");
 				tds.eq(14).text((product[i].UserName)).addClass("text-c");
 				tds.eq(15).text((product[i].InTime).substr(0, 19).replace("T", " ")).addClass("text-c");
 
@@ -613,7 +620,7 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 
 //consumer_add.html
 //-----------------------------------------------------------------------------------
-if (query_url === "/consumer_add") {
+if (query_url === "/consumer_add" || query_url === "/supplier_add") {
 	$("#prov").ProvinceCity()
 }
 
@@ -722,7 +729,7 @@ function ProductTemplatePaginator(template) {
 
 //sale_list.html
 //-----------------------------------------------------------------------------------
-if (query_url === "/sale_list") {
+if (query_url === "/sale_list" || ps.test(query_url)) {
 	var sale = $.parseJSON(sale);
 	$.cookie("sale_offset", 0);
 	$.cookie("sale_current_page", 1);
@@ -765,6 +772,328 @@ if (query_url === "/sale_list") {
 			SalePaginator(sale);
 		})
 	});
+
+	//排序
+	var asc = true;
+	var sale_item_order = $(".sale_item_order");
+	$.each(sale_item_order, function (index) {
+		sale_item_order.eq(index).click(function () {
+			switch (index) {
+				case 0:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Title < y.Title) ? -1 : ((x.Title > y.Title) ? 1 : 0)) : ((x.Title < y.Title) ? 1 : ((x.Title > y.Title) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 1:
+					sale.sort(function (x, y) {
+						return asc ? ((x.StoreName < y.StoreName) ? -1 : ((x.StoreName > y.StoreName) ? 1 : 0)) : ((x.StoreName < y.StoreName) ? 1 : ((x.StoreName > y.StoreName) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 2:
+					sale.sort(function (x, y) {
+						return asc ? ((x.ArtNum < y.ArtNum) ? -1 : ((x.ArtNum > y.ArtNum) ? 1 : 0)) : ((x.ArtNum < y.ArtNum) ? 1 : ((x.ArtNum > y.ArtNum) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 3:
+					sale.sort(function (x, y) {
+						return asc ? ((x.SalesmanName < y.SalesmanName) ? -1 : ((x.SalesmanName > y.SalesmanName) ? 1 : 0)) : ((x.SalesmanName < y.SalesmanName) ? 1 : ((x.SalesmanName > y.SalesmanName) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 4:
+					sale.sort(function (x, y) {
+						return asc ? ((x.ConsumerName < y.ConsumerName) ? -1 : ((x.ConsumerName > y.ConsumerName) ? 1 : 0)) : ((x.ConsumerName < y.ConsumerName) ? 1 : ((x.ConsumerName > y.ConsumerName) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 5:
+					sale.sort(function (x, y) {
+						var sale_inprice1 = parseInt(x.InPrice);
+						var sale_inprice2 = parseInt(y.InPrice);
+						return asc ? ((sale_inprice1 < sale_inprice2) ? -1 : ((sale_inprice1 > sale_inprice2) ? 1 : 0)) : ((sale_inprice1 < sale_inprice2) ? 1 : ((sale_inprice1 > sale_inprice2) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 6:
+					sale.sort(function (x, y) {
+						var sale_outprice1 = parseInt(x.OutPrice);
+						var sale_outprice2 = parseInt(y.OutPrice);
+						return asc ? ((sale_outprice1 < sale_outprice2) ? -1 : ((sale_outprice1 > sale_outprice2) ? 1 : 0)) : ((sale_outprice1 < sale_outprice2) ? 1 : ((sale_outprice1 > sale_outprice2) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 7:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Brand < y.Brand) ? -1 : ((x.Brand > y.Brand) ? 1 : 0)) : ((x.Brand < y.Brand) ? 1 : ((x.Brand > y.Brand) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 8:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Spec < y.Spec) ? -1 : ((x.Spec > y.Spec) ? 1 : 0)) : ((x.Spec < y.Spec) ? 1 : ((x.Spec > y.Spec) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 9:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Unit < y.Unit) ? -1 : ((x.Unit > y.Unit) ? 1 : 0)) : ((x.Unit < y.Unit) ? 1 : ((x.Unit > y.Unit) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 10:
+					sale.sort(function (x, y) {
+						var sale_num1 = parseInt(x.Num);
+						var sale_num2 = parseInt(y.Num);
+						return asc ? ((sale_num1 < sale_num2) ? -1 : ((sale_num1 > sale_num2) ? 1 : 0)) : ((sale_num1 < sale_num2) ? 1 : ((sale_num1 > sale_num2) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 11:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Send < y.Send) ? -1 : ((x.Send > y.Send) ? 1 : 0)) : ((x.Send < y.Send) ? 1 : ((x.Send > y.Send) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 12:
+					sale.sort(function (x, y) {
+						return asc ? ((x.HasInvoice < y.HasInvoice) ? -1 : ((x.HasInvoice > y.HasInvoice) ? 1 : 0)) : ((x.HasInvoice < y.HasInvoice) ? 1 : ((x.HasInvoice > y.HasInvoice) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 13:
+					sale.sort(function (x, y) {
+						return asc ? ((x.InvoiceNum < y.InvoiceNum) ? -1 : ((x.InvoiceNum > y.InvoiceNum) ? 1 : 0)) : ((x.InvoiceNum < y.InvoiceNum) ? 1 : ((x.InvoiceNum > y.InvoiceNum) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 14:
+					sale.sort(function (x, y) {
+						return asc ? ((x.SendInvoice < y.SendInvoice) ? -1 : ((x.SendInvoice > y.SendInvoice) ? 1 : 0)) : ((x.SendInvoice < y.SendInvoice) ? 1 : ((x.SendInvoice > y.SendInvoice) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 15:
+					sale.sort(function (x, y) {
+						return asc ? ((x.GetInvoice < y.GetInvoice) ? -1 : ((x.GetInvoice > y.GetInvoice) ? 1 : 0)) : ((x.GetInvoice < y.GetInvoice) ? 1 : ((x.GetInvoice > y.GetInvoice) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 16:
+					sale.sort(function (x, y) {
+						return asc ? ((x.GetMoney < y.GetMoney) ? -1 : ((x.GetMoney > y.GetMoney) ? 1 : 0)) : ((x.GetMoney < y.GetMoney) ? 1 : ((x.GetMoney > y.GetMoney) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 17:
+					sale.sort(function (x, y) {
+						return asc ? ((x.GetDate < y.GetDate) ? -1 : ((x.GetDate > y.GetDate) ? 1 : 0)) : ((x.GetDate < y.GetDate) ? 1 : ((x.GetDate > y.GetDate) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 18:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Comment < y.Comment) ? -1 : ((x.Comment > y.Comment) ? 1 : 0)) : ((x.Comment < y.Comment) ? 1 : ((x.Comment > y.Comment) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 19:
+					sale.sort(function (x, y) {
+						return asc ? ((x.Created < y.Created) ? -1 : ((x.Created > y.Created) ? 1 : 0)) : ((x.Created < y.Created) ? 1 : ((x.Created > y.Created) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+			}
+			SalePaginator(sale);
+		})
+	});
+
+	//对sale进行筛选
+	var sale_copy = sale;
+	var filter_btn = $(".filter_btn");
+	filter_btn.click(function () {
+		var splice_array = [];
+		var title_filter = $("input[name=title_filter]").val();
+		if (title_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.Title !== title_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var art_num_filter = $("input[name=art_num_filter]").val();
+		if (art_num_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.ArtNum !== art_num_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var brand_filter = $("input[name=brand_filter]").val();
+		if (brand_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.Brand !== brand_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var consumer_filter = $("input[name=consumer_filter]").val();
+		if (consumer_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.ConsumerName !== consumer_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var salesman_filter = $("input[name=salesman_filter]").val();
+		if (salesman_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.SalesmanName !== salesman_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var store_filter = $("input[name=store_filter]").val();
+		if (store_filter !== "") {
+			var result = store_filter.split("-");
+			$.each(sale_copy, function (index, item) {
+				if (!(item.Pool === result[0] && item.StoreName === result[1])) {
+					splice_array.push(index);
+				}
+			});
+		}
+
+		var has_pay_filter = $("input[name=has_pay_filter]").val();
+		switch (has_pay_filter) {
+			case "yes":
+				has_pay_filter = true;
+				break;
+			case "no":
+				has_pay_filter = false;
+				break;
+			default:
+				has_pay_filter = "";
+		}
+		if (has_pay_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.GetMoney !== has_pay_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var has_invoice_filter = $("input[name=has_invioce_filter]").val();
+		switch (has_invoice_filter) {
+			case "yes":
+				has_invoice_filter = true;
+				break;
+			case "no":
+				has_invoice_filter = false;
+				break;
+			default:
+				has_invoice_filter = "";
+		}
+		if (has_invoice_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.HasInvoice !== has_invoice_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var has_print_filter = $("input[name=has_print_filter]").val();
+		switch (has_print_filter) {
+			case "yes":
+				has_print_filter = true;
+				break;
+			case "no":
+				has_print_filter = false;
+				break;
+			default:
+				has_print_filter = "";
+		}
+		if (has_print_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.HasPrint !== has_print_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var date_start_filter = $("input[name=date_start_filter]").val();
+		var date_stop_filter = $("input[name=date_stop_filter]").val();
+		if (date_start_filter !== "" && date_stop_filter === "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.Created < date_start_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+		if (date_start_filter === "" && date_stop_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.Created > date_stop_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+		if (date_start_filter !== "" && date_stop_filter !== "") {
+			$.each(sale_copy, function (index, item) {
+				if (item.Created > date_stop_filter || item.Created < date_start_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var splice_array_length = splice_array.length;
+		var new_splice_array = [];
+		for (var i = 0; i < splice_array_length; i++) {
+			if ($.inArray(splice_array[i], new_splice_array) === -1) {
+				new_splice_array.push(splice_array[i])
+			}
+		}
+
+		new_splice_array = new_splice_array.sort(function (x, y) {
+			return x - y;
+		});
+
+		var ab = 0;
+		$.each(new_splice_array, function (index, item) {
+			sale_copy.splice(item - ab, 1);
+			ab++
+		});
+		SalePaginator(sale_copy)
+	});
+
+	//发货日期
+	var disable = false, picker = new Pikaday({
+		field: document.getElementById('date_start_filter'),
+		firstDay: 1,
+		minDate: new Date(2000, 0, 1),
+		maxDate: new Date(),
+		yearRange: [2000, 2030],
+
+		showDaysInNextAndPreviousMonths: true,
+		enableSelectionDaysInNextAndPreviousMonths: true
+	});
+
+	//发货日期
+	var disable = false, picker = new Pikaday({
+		field: document.getElementById('date_stop_filter'),
+		firstDay: 1,
+		minDate: new Date(2000, 0, 1),
+		maxDate: new Date(),
+		yearRange: [2000, 2030],
+
+		showDaysInNextAndPreviousMonths: true,
+		enableSelectionDaysInNextAndPreviousMonths: true
+	});
 }
 
 function SalePaginator(sale) {
@@ -802,33 +1131,52 @@ function SalePaginator(sale) {
 			}
 
 			for (var i = page_size * (num - 1); i < is_out; i++) {
-				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
-					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>');
+				var row = $('<tr class="text-c"><input type="hidden" class="sale_id"><td class="text-l" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>'+
+					'<td></td><td></td>	<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="text-l" style="max-width: 150px"></td><td></td><td></td></tr>');
 				var tds = row.find("td");
 				row.find(".sale_id").val(sale[i].Id);
 				tds.eq(0).text(sale[i].Title);
-				tds.eq(1).text(sale[i].No);
-				tds.eq(2).text(sale[i].Pool + sale[i].StoreName);
+				tds.eq(1).text(sale[i].No).addClass("hidden");
+				tds.eq(2).text(sale[i].Pool + "-"+sale[i].StoreName);
 				tds.eq(3).text(sale[i].ArtNum);
 				tds.eq(4).text(sale[i].SalesmanName);
 				tds.eq(5).text(sale[i].ConsumerName);
 				tds.eq(6).text(sale[i].InPrice);
 				tds.eq(7).text(sale[i].OutPrice);
-				tds.eq(8).text(sale[i].Num);
-				tds.eq(9).text(sale[i].Send.substr(0, 10));
-				tds.eq(10).text(sale[i].HasInvoice ? "是" : "否");
-				tds.eq(11).text(sale[i].InvoiceNum);
-				tds.eq(12).text(sale[i].SendInvoice.substr(0, 10));
-				tds.eq(13).text(sale[i].GetInvoice.substr(0, 10));
-				tds.eq(14).text(sale[i].GetMoney ? "是" : "否");
-				tds.eq(15).text(sale[i].GetDate.substr(0, 10));
-				tds.eq(16).text(sale[i].Comment);
-				tds.eq(17).text(sale[i].Created);
-				tds.eq(18).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
+				tds.eq(8).text(sale[i].Brand);
+				tds.eq(9).text(sale[i].Spec);
+				tds.eq(10).text(sale[i].Unit);
+				tds.eq(11).text(sale[i].Num);
+				tds.eq(12).text(sale[i].Send.substr(0, 10));
+				tds.eq(13).text(sale[i].HasInvoice ? "是" : "否");
+				tds.eq(14).text(sale[i].InvoiceNum);
+				tds.eq(15).text(sale[i].SendInvoice.substr(0, 10));
+				tds.eq(16).text(sale[i].GetInvoice.substr(0, 10));
+				tds.eq(17).text(sale[i].GetMoney ? "是" : "否");
+				tds.eq(18).text(sale[i].GetDate.substr(0, 10));
+				tds.eq(19).text(sale[i].Comment);
+				tds.eq(20).text(sale[i].Created);
+				tds.eq(21).html('<a class="sale_item_edit btn size-MINI btn-secondary-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>');
+				if (!sale[i].HasPrint){
+					tds.eq(21).append(' <a onclick="AddPrint(this)" class="btn size-MINI btn-warning-outline radius">&nbsp;单&nbsp;</a>');
+				}
 				sale_node.append(row)
 			}
 		}
 	});
+}
+
+function AddPrint(obj) {
+	var o = $(obj);
+	var sid = o.parent().parent().find(".sale_id").val();
+	var v = $.cookie("print_sale_list");
+	if (v === undefined || v === ""){
+		$.cookie("print_sale_list", sid);
+	}else{
+		$.cookie("print_sale_list", v + "," + sid);
+	}
+
+	o.remove();
 }
 
 //admin_member_edit.html
@@ -1025,10 +1373,10 @@ $.each(sale_item_edit, function (index) {
 		$("#consumer").val(tds.eq(5).text());
 		$("#inprice").val(tds.eq(6).text());
 		$("#outprice").val(tds.eq(7).text());
-		$("#num").val(tds.eq(8).text());
-		$("#send").val(tds.eq(9).text());
+		$("#num").val(tds.eq(11).text());
+		$("#send").val(tds.eq(12).text());
 
-		var hasinvoice = tds.eq(10).text();
+		var hasinvoice = tds.eq(13).text();
 		var options = $("select[name=hasinvoice]").find("option");
 		$.each(options, function (index) {
 			if (options.eq(index).text() === hasinvoice) {
@@ -1038,11 +1386,11 @@ $.each(sale_item_edit, function (index) {
 			}
 		});
 
-		$("#invioce_num").val(tds.eq(11).text());
-		$("#sendinvioce").val(tds.eq(12).text());
-		$("#getInvoice").val(tds.eq(13).text());
+		$("#invioce_num").val(tds.eq(14).text());
+		$("#sendinvioce").val(tds.eq(15).text());
+		$("#getInvoice").val(tds.eq(16).text());
 
-		var get_money = tds.eq(14).text();
+		var get_money = tds.eq(17).text();
 		var option = $("select[name=get_money]").find("option");
 		$.each(option, function (index) {
 			if (option.eq(index).text() === get_money) {
@@ -1052,9 +1400,9 @@ $.each(sale_item_edit, function (index) {
 			}
 		});
 
-		$("#getdate").val(tds.eq(15).text());
+		$("#getdate").val(tds.eq(18).text());
 
-		$("#comment").val(tds.eq(16).text());
+		$("#comment").val(tds.eq(19).text());
 
 		$("input[name=sale_id]").val($(".sale_id").eq(index).val());
 	})

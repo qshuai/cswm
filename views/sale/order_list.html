@@ -1,0 +1,64 @@
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+		<span class="c-999 en">&gt;</span>
+		<a onclick="goBack()" class="maincolor">上一页</a>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">出库单列表</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<table class="table table-border table-bordered table-bg table-hover">
+				<thead>
+				<tr>
+					<th colspan="10" scope="col">出库单列表</th>
+				</tr>
+				<tr class="text-c">
+					<th>ASAP</th>
+					<th>客户</th>
+					<th>业务员</th>
+					<th>金额</th>
+					<th>操作人</th>
+					<th>状态</th>
+					<th>创建时间</th>
+					<th>更新时间</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				{{range .order}}
+				<tr class="text-c">
+					<td>{{.Asap}}</td>
+					<td>{{.Consumer}}</td>
+					<td>{{.Salesman}}</td>
+					<td>{{.Sum}}</td>
+					<td>{{.User}}</td>
+					{{if .State}}
+						<td>正常</td>
+					{{else}}
+						<td class="c-danger">废弃</td>
+					{{end}}
+					<td>{{date .Created "Y-m-d H:i:s"}}</td>
+					<td>{{date .Updated "Y-m-d H:i:s"}}</td>
+					{{if .State}}
+						<td>
+						{{if eq .HasPrint false}}
+							<a href="/print_action/{{.SaleList}}/{{.Id}}" class="btn btn-success-outline radius"><i class="Hui-iconfont Hui-iconfont-dayinji"></i></a>
+						{{end}}
+						<a href="/order_close/{{.Id}}" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a></td>
+					{{else}}
+						<td></td>
+					{{end}}
+				</tr>
+				{{end}}
+				</tbody>
+			</table>
+		</article>
+	</div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->

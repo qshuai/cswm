@@ -11,7 +11,7 @@
             <table class="table table-border table-bordered table-bg table-hover">
                 <thead>
                 <tr>
-                    <th colspan="9" scope="col">人员列表</th>
+                    <th colspan="10" scope="col">人员列表</th>
                 </tr>
                 <tr class="text-c">
                     <th>姓名</th>
@@ -50,7 +50,11 @@
 						<td>{{.Stage}}</td>
 						{{end}}
 
-                        <td class="hidden-xs">{{date .LastLogin "Y-m-d H:i:s"}}</td>
+						{{if eq (date .LastLogin "Y-m-d H:i:s") "0001-01-01 00:00:00"}}
+                        <td class="hidden-xs"></td>
+						{{else}}
+						<td class="hidden-xs">{{date .LastLogin "Y-m-d H:i:s"}}</td>
+						{{end}}
 
 
                         {{if eq .Ip ""}}

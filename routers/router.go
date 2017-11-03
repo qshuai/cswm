@@ -46,7 +46,7 @@ func init() {
 		//编辑单条商品信息
 		beego.Router("/product_item_edit", &controllers.ProductController{}, "post:Product_item_edit")
 		//商品跟踪
-		beego.Router("/product_track", &controllers.ProductController{}, "get:Product_track")
+		beego.Router("/product_track/:pid:int", &controllers.ProductController{}, "get:Product_track")
 
 		beego.Router("/product_template_list", &controllers.ProductController{}, "get:ProductTemplateList")
 		beego.Router("/product_template_add", &controllers.ProductController{}, "get:ProductTemplateAdd")
@@ -116,6 +116,12 @@ func init() {
 		beego.Router("/sale_list", &controllers.SaleController{}, "get:Sale_list") //销售记录列表
 		beego.Router("/sale_edit", &controllers.SaleController{}, "post:Sale_edit")
 		beego.Router("/sale_load_more", &controllers.SaleController{}, "post:SaleLoadMore")
+		beego.Router("/print_action/:list/:id", &controllers.SaleController{}, "get:Print")
+		beego.Router("/order_list", &controllers.SaleController{}, "get:OrderList")
+		beego.Router("/order_close/:oid:int", &controllers.SaleController{}, "get:OrderClose")
+
+		beego.Router("/product_sale_info/:art_num", &controllers.SaleController{}, "get:ProductSalInfo")
+		beego.Router("/order_list/add", &controllers.SaleController{}, "get:OrderAdd")
 
 		//移库
 		beego.Router("/move_request/:pid:int", &controllers.MoveController{}, "get:Move_request")  //移库请求页面

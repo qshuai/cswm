@@ -9,30 +9,50 @@
            href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
     <div class="Hui-article">
         <article class="cl pd-20">
+
+			<div style="width: 80%; margin: 0 auto 10px auto;">
+				<div class="row cl"><input type="text" class="input-text mt-5" name="title_filter" autocomplete="off" placeholder="商品名称" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="art_num_filter" autocomplete="off" placeholder="货号" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="brand_filter" autocomplete="off" placeholder="品牌" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="consumer_filter" autocomplete="off" placeholder="客户" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="salesman_filter" autocomplete="off" placeholder="业务员" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="store_filter" autocomplete="off" placeholder="库房" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="has_pay_filter" autocomplete="off" placeholder="是否收款(填yes或no)" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="has_invioce_filter" autocomplete="off" placeholder="是否开发票(填yes或no)" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="has_print_filter" autocomplete="off" placeholder="是否已打印出库单(填yes或no)" style="width: 15%">
+					<input type="text" class="input-text mt-5" name="date_start_filter" autocomplete="off" placeholder="日期起点" style="width: 15%" id="date_start_filter">
+					<input type="text" class="input-text mt-5" name="date_stop_filter" autocomplete="off" placeholder="日期终点" style="width: 15%" id="date_stop_filter">
+					<a class="btn btn-primary radius mt-5 size-S filter_btn"> 检 索 </a>
+					<span class="c-warning">不需要筛选的字段不要填写~</span>
+				</div>
+			</div>
+
             <table class="table table-border table-bordered table-bg">
                 <thead>
                 <tr>
-                    <th colspan="19" scope="col">销售列表</th>
+                    <th colspan="22" scope="col">销售列表</th>
                 </tr>
                 <tr class="text-c">
-                    <th>商品名称</th>
-					<th>订单号码</th>
-					<th>库房</th>
-                    <th>货号</th>
-                    <th>业务员</th>
-                    <th>客户</th>
-                    <th>进价</th>
-                    <th>售价</th>
-                    <th>数量</th>
-                    <th>发货日期</th>
-                    <th>含发票</th>
-                    <th>发票号</th>
-                    <th>开发票</th>
-                    <th>送发票</th>
-                    <th>收款</th>
-                    <th>收款时间</th>
-					<th>备注</th>
-                    <th>创建时间</th>
+                    <th>商品名称 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+					<th>库房 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>货号 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>业务员 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>客户 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>进价 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>售价 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>品牌 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>规格 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>单位 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>数量 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>发货日期 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>含发票 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>发票号 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>开发票 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>送发票 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>收款 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>收款时间 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+					<th>备注 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>创建时间 <a class="sale_item_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -57,6 +77,7 @@
             </span>
 			<ul class="pagination" id="sale_pagination"></ul>
 			<a class="btn btn-primary radius load-more-template" style="position: relative; top: -35px">加载更多</a>
+			<a class="btn btn-warning radius" href="/order_list/add" style="position: relative; top: -35px">出库单</a>
 		</div>
 
     </div>
@@ -122,7 +143,7 @@
                         <div class="row cl">
                             <label class="form-label col-xs-4 col-sm-2" for="num"><span class="c-red">*</span>数量：</label>
                             <div class="formControls col-xs-8 col-sm-9">
-                                <input type="text" class="input-text radius" id="num" name="num" readonly>
+                                <input type="text" class="input-text radius" id="num" name="num">
                             </div>
                         </div>
 
