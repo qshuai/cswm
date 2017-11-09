@@ -28,7 +28,11 @@
 				<tbody>
 				{{range .order}}
 				<tr class="text-c">
-					<td>{{.Asap}}</td>
+					<td
+						{{if .IsFake}}
+						class="c-warning"
+						{{end}}
+					>{{.Asap}}</td>
 					<td>{{.Consumer}}</td>
 					<td>{{.Salesman}}</td>
 					<td>{{.Sum}}</td>

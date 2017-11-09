@@ -2,6 +2,7 @@ package routers
 
 import (
 	"ERP/controllers"
+
 	"github.com/astaxie/beego"
 )
 
@@ -28,7 +29,7 @@ func init() {
 		beego.Router("/disable_active_user", &controllers.MemberController{}, "post:Disable_active_member") //ajax激活或禁用账户
 		beego.Router("/admin_edit_all", &controllers.MemberController{}, "post:Admin_edit_all")             //修改全部信息
 		beego.Router("/disable_member_list", &controllers.MemberController{}, "get:Disable_member_list")    //获取禁用账户列表
-		beego.Router("/off_position", &controllers.MemberController{}, "post:OffPosition")    //获取禁用账户列表
+		beego.Router("/off_position", &controllers.MemberController{}, "post:OffPosition")                  //获取禁用账户列表
 	}
 
 	{
@@ -110,7 +111,7 @@ func init() {
 
 		//出库
 		beego.Router("/store_output_action/?:pid:int", &controllers.StoreoutController{}, "get:Store_out_action") //商品出库录入
-		beego.Router("/store_output_action", &controllers.StoreoutController{}, "post:Store_out_action_post") //商品出库录入
+		beego.Router("/store_output_action", &controllers.StoreoutController{}, "post:Store_out_action_post")     //商品出库录入
 
 		//销售
 		beego.Router("/sale_list", &controllers.SaleController{}, "get:Sale_list") //销售记录列表
@@ -122,20 +123,22 @@ func init() {
 
 		beego.Router("/product_sale_info/:art_num", &controllers.SaleController{}, "get:ProductSalInfo")
 		beego.Router("/order_list/add", &controllers.SaleController{}, "get:OrderAdd")
+		beego.Router("/order_edit", &controllers.SaleController{}, "get:OrderEdit")
+		beego.Router("/order_edit_post", &controllers.SaleController{}, "get:OrderEditPost")
 
 		//移库
-		beego.Router("/move_request/:pid:int", &controllers.MoveController{}, "get:Move_request")  //移库请求页面
-		beego.Router("/move_request", &controllers.MoveController{}, "post:Move_request_post") //移库请求post
-		beego.Router("/move_list", &controllers.MoveController{}, "get:Move_list")             //移库列表
-		beego.Router("/move_accept", &controllers.MoveController{}, "post:Move_accept")        //移库接受
-		beego.Router("/move_deny", &controllers.MoveController{}, "post:Move_deny")            //移库拒绝
-		beego.Router("/move_finish", &controllers.MoveController{}, "post:Move_finish")        //移库完成
-		beego.Router("/move_info/:mid:int", &controllers.MoveController{}, "get:Move_info")        //移库详情
+		beego.Router("/move_request/:pid:int", &controllers.MoveController{}, "get:Move_request") //移库请求页面
+		beego.Router("/move_request", &controllers.MoveController{}, "post:Move_request_post")    //移库请求post
+		beego.Router("/move_list", &controllers.MoveController{}, "get:Move_list")                //移库列表
+		beego.Router("/move_accept", &controllers.MoveController{}, "post:Move_accept")           //移库接受
+		beego.Router("/move_deny", &controllers.MoveController{}, "post:Move_deny")               //移库拒绝
+		beego.Router("/move_finish", &controllers.MoveController{}, "post:Move_finish")           //移库完成
+		beego.Router("/move_info/:mid:int", &controllers.MoveController{}, "get:Move_info")       //移库详情
 
 		//消息
-		beego.Router("/message_list", &controllers.MessageController{}, "get:Message_list")      //获取消息列表
-		beego.Router("/message_add", &controllers.MessageController{}, "get:Message_add")        //新建消息页面
-		beego.Router("/message_add", &controllers.MessageController{}, "post:Message_add_post")  //提交新建消息
+		beego.Router("/message_list", &controllers.MessageController{}, "get:Message_list")          //获取消息列表
+		beego.Router("/message_add", &controllers.MessageController{}, "get:Message_add")            //新建消息页面
+		beego.Router("/message_add", &controllers.MessageController{}, "post:Message_add_post")      //提交新建消息
 		beego.Router("/message_info/:mid:int", &controllers.MessageController{}, "get:Message_info") //消息详情页面
 
 		//权限管理

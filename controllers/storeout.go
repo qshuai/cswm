@@ -128,6 +128,7 @@ func (c *StoreoutController) Store_out_action_post() {
 
 	//判断当前销售数量时候多于库存
 	sale.Num, _ = c.GetUint32("num")
+	sale.NumFake = sale.Num
 	if sale.Num > product.Stock {
 		c.Data["url"] = "/store_output_action/" + strconv.Itoa(pid)
 		c.Data["msg"] = "对不起，您输入的销售数量多于当前库存数量~"
@@ -148,6 +149,7 @@ func (c *StoreoutController) Store_out_action_post() {
 	sale.Send, _ = time.Parse("2006-1-2", c.GetString("send"))
 
 	sale.OutPrice, _ = c.GetFloat("outprice")
+	sale.OutPriceFake = sale.OutPrice
 	sale.HasInvoice, _ = c.GetBool("hasinvoice")
 	sale.SendInvoice, _ = time.Parse("2006-1-2", c.GetString("send_invioce"))
 	sale.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce"))

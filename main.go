@@ -1,6 +1,9 @@
 package main
 
 import (
+	"regexp"
+	"strconv"
+
 	"ERP/controllers"
 	_ "ERP/models"
 	_ "ERP/modules/redis"
@@ -8,12 +11,11 @@ import (
 	"ERP/plugins/permission"
 	"ERP/plugins/position"
 	_ "ERP/routers"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"regexp"
-	"strconv"
 )
 
 func init() {

@@ -322,28 +322,51 @@ func (c *SaleController) Print() {
 		Pool         string
 		StoreName    string
 	}
-	qb, _ := orm.NewQueryBuilder("mysql")
-	qb.Select("sale.num", "sale.out_price", "consumer.name as consumer_name",
-		"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
-		"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
-		From("sale").
-		InnerJoin("product").
-		On("product.id = sale.product_id").
-		InnerJoin("user").
-		On("user.id = sale.salesman_id").
-		InnerJoin("store").
-		On("store.id = sale.store_id").
-		InnerJoin("brand").
-		On("brand.id = product.brand_id").
-		InnerJoin("consumer").
-		On("consumer.id = sale.consumer_id").
-		Where("sale.id in " + str)
-	sql := qb.String()
-	ps := []printsale{}
+
 	o := orm.NewOrm()
 	order := models.OrderNum{}
 	order.Id = print_id
 	o.Read(&order)
+
+	//判断是否为fake
+	qb, _ := orm.NewQueryBuilder("mysql")
+	if order.IsFake {
+		qb.Select("sale.num_fake as num", "sale.out_price_fake as out_price", "consumer.name as consumer_name",
+			"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
+			"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
+			From("sale").
+			InnerJoin("product").
+			On("product.id = sale.product_id").
+			InnerJoin("user").
+			On("user.id = sale.salesman_id").
+			InnerJoin("store").
+			On("store.id = sale.store_id").
+			InnerJoin("brand").
+			On("brand.id = product.brand_id").
+			InnerJoin("consumer").
+			On("consumer.id = sale.consumer_id").
+			Where("sale.id in " + str)
+	} else {
+		qb.Select("sale.num", "sale.out_price", "consumer.name as consumer_name",
+			"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
+			"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
+			From("sale").
+			InnerJoin("product").
+			On("product.id = sale.product_id").
+			InnerJoin("user").
+			On("user.id = sale.salesman_id").
+			InnerJoin("store").
+			On("store.id = sale.store_id").
+			InnerJoin("brand").
+			On("brand.id = product.brand_id").
+			InnerJoin("consumer").
+			On("consumer.id = sale.consumer_id").
+			Where("sale.id in " + str)
+	}
+
+	sql := qb.String()
+	ps := []printsale{}
+
 	o.Raw(sql).QueryRows(&ps)
 	c.Data["order"] = order
 	c.Data["print"] = ps
@@ -489,7 +512,8 @@ func (c *SaleController) ProductSalInfo() {
 	c.TplName = "sale/sale_list.html"
 }
 
-func (c *SaleController) OrderAdd() {
+//编辑出库单（伪造）
+func (c *SaleController) OrderEdit() {
 	print_list := c.Ctx.GetCookie("print_sale_list")
 	if print_list == "" {
 		c.Data["url"] = "/sale_list"
@@ -511,16 +535,128 @@ func (c *SaleController) OrderAdd() {
 		}
 	}
 	new_slice = append(new_slice, print_slice[0])
+	str := "(" + strings.Join(new_slice, ",") + ")"
 
+	//sale := []models.Sale{}
+	//o := orm.NewOrm()
+	//o.QueryTable("sale").Filter("id__in", new_slice).All(&sale, "id", "title", "out_price_fake", "num_fake")
+
+	type sale_edit struct {
+		Id           string
+		Title        string
+		OutPriceFake string
+		NumFake      string
+	}
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("sale.id", "sale.out_price_fake", "sale.num_fake", "product.title").
+		From("sale").
+		InnerJoin("product").
+		On("product.id = sale.product_id").
+		Where("sale.id in " + str)
+	sql := qb.String()
 	o := orm.NewOrm()
-	for _, item := range new_slice {
-		o.Raw("UPDATE sale SET has_print = true WHERE id = ?", item).Exec()
+	sale := []sale_edit{}
+	o.Raw(sql).QueryRows(&sale)
+
+	c.Data["sale"] = sale
+	c.Layout = "common.tpl"
+	c.TplName = "sale/order_edit.html"
+}
+
+//编辑出库单（伪造）
+func (c *SaleController) OrderEditPost() {
+	ids := c.GetStrings("sid")
+	outs := c.GetStrings("out_price")
+	nums := c.GetStrings("num")
+
+	//和上面代码一样
+	print_list := c.Ctx.GetCookie("print_sale_list")
+	if print_list == "" {
+		c.Data["url"] = "/sale_list"
+		c.Data["msg"] = "没有指定出库单"
+		c.TplName = "jump/error.html"
+		return
+	}
+	print_slice := strings.Split(print_list, "%2C")
+	new_slice := make([]string, 0)
+	length := len(print_slice)
+	for i := 0; i < length; i++ {
+		for j := 0; j < i; j++ {
+			if print_slice[i] == print_slice[j] {
+				break
+			}
+			if j == i-1 {
+				new_slice = append(new_slice, print_slice[i])
+			}
+		}
+	}
+	new_slice = append(new_slice, print_slice[0])
+	str := "(" + strings.Join(new_slice, ",") + ")"
+
+	//sale := []models.Sale{}
+	//o := orm.NewOrm()
+	//o.QueryTable("sale").Filter("id__in", new_slice).All(&sale, "id", "title", "out_price_fake", "num_fake")
+
+	type sale_edit struct {
+		Id           string
+		Title        string
+		OutPriceFake string
+		NumFake      string
+	}
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("sale.id", "sale.out_price_fake", "sale.num_fake", "product.title").
+		From("sale").
+		InnerJoin("product").
+		On("product.id = sale.product_id").
+		Where("sale.id in " + str)
+	sql := qb.String()
+	o := orm.NewOrm()
+	sale := []sale_edit{}
+	o.Raw(sql).QueryRows(&sale)
+	//------
+
+	isfake := false
+	for index, id := range ids {
+		for _, item := range sale {
+			if id == item.Id {
+				if outs[index] != item.OutPriceFake || nums[index] != item.NumFake {
+					isfake = true
+				}
+				o.Raw("UPDATE sale SET out_price_fake = ?, num_fake = ?, has_print = ? where id = ?", outs[index], nums[index], true, id).Exec()
+			}
+		}
 	}
 
+	username := c.GetSession("username").(string)
+	if isfake {
+		InsertOrder(new_slice, username)
+		InsertFakeOrder(new_slice, username)
+	} else {
+		InsertOrder(new_slice, username)
+	}
+
+	//清空cookie
+	c.Ctx.SetCookie("print_sale_list", "")
+
+	c.Redirect("/order_list", 302)
+}
+
+//显示出库单列表
+func (c *SaleController) OrderAdd() {
+	o := orm.NewOrm()
+	order_list := []models.OrderNum{}
+	o.QueryTable("order_num").OrderBy("-id").All(&order_list)
+
+	c.Data["order"] = order_list
+	c.Layout = "common.tpl"
+	c.TplName = "sale/order_list.html"
+}
+
+func InsertOrder(new_slice []string, username string) {
 	//更新order_num表
 	order := models.OrderNum{}
 	//o.QueryTable("order_num").OrderBy("-id").One(&order, "id")
-	order.User = c.GetSession("username").(string)
+	order.User = username
 	order.State = true
 	order.SaleList = strings.Join(new_slice, ",")
 	str := "(" + strings.Join(new_slice, ",") + ")"
@@ -556,14 +692,15 @@ func (c *SaleController) OrderAdd() {
 		Where("sale.id in " + str)
 	sql := qb.String()
 	ps := []printsale{}
+	o := orm.NewOrm()
 	o.Raw(sql).QueryRows(&ps)
 	order.Consumer = ps[0].ConsumerName
 	order.Salesman = ps[0].SalesmanName
 
 	//计算总额
 	var total float64
-	for _, item := range ps  {
-		total = total + item.OutPrice * float64(item.Num)
+	for _, item := range ps {
+		total = total + item.OutPrice*float64(item.Num)
 	}
 	order.Sum = fmt.Sprintf("%0.2f", total)
 
@@ -594,25 +731,84 @@ func (c *SaleController) OrderAdd() {
 	var old int
 	if len(order_list) == 0 {
 		old = 0
-	}else {
-		old, _ = strconv.Atoi(order_list[0].Asap[4:])
+	} else {
+		length := len(order_list[0].Asap)
+		old, _ = strconv.Atoi(order_list[0].Asap[4:length -1])
 	}
 	v := old + 1
 	var new_string string
 	if v < 10 {
 		new_string = "00" + strconv.Itoa(v)
-	}else{
+	} else {
 		new_string = "0" + strconv.Itoa(v)
 	}
-	order.Asap = year + month + new_string
+
+	order.IsFake = false
+	order.Asap = year + month + new_string + "1"
 	o.Insert(&order)
-	order_list = append(order_list, order)
+}
 
-	//清空cookie
-	c.Ctx.SetCookie("print_sale_list", "")
+func InsertFakeOrder(new_slice []string, username string) {
+	//更新order_num表
+	order := models.OrderNum{}
+	//o.QueryTable("order_num").OrderBy("-id").One(&order, "id")
+	order.User = username
+	order.State = true
+	order.SaleList = strings.Join(new_slice, ",")
+	str := "(" + strings.Join(new_slice, ",") + ")"
 
+	type printsale struct {
+		Num          int
+		OutPrice     float64
+		ConsumerName string
+		SalesmanName string
+		Title        string
+		ArtNum       string
+		Spec         string
+		Unit         string
+		BrandName    string
+		Pool         string
+		StoreName    string
+	}
+	qb, _ := orm.NewQueryBuilder("mysql")
+	qb.Select("sale.num_fake as num", "sale.out_price_fake as out_price", "consumer.name as consumer_name",
+		"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
+		"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
+		From("sale").
+		InnerJoin("product").
+		On("product.id = sale.product_id").
+		InnerJoin("user").
+		On("user.id = sale.salesman_id").
+		InnerJoin("store").
+		On("store.id = sale.store_id").
+		InnerJoin("brand").
+		On("brand.id = product.brand_id").
+		InnerJoin("consumer").
+		On("consumer.id = sale.consumer_id").
+		Where("sale.id in " + str)
+	sql := qb.String()
+	ps := []printsale{}
+	o := orm.NewOrm()
+	o.Raw(sql).QueryRows(&ps)
+	order.Consumer = ps[0].ConsumerName
+	order.Salesman = ps[0].SalesmanName
 
-	c.Data["order"] = order_list
-	c.Layout = "common.tpl"
-	c.TplName = "sale/order_list.html"
+	//计算总额
+	var total float64
+	for _, item := range ps {
+		total = total + item.OutPrice*float64(item.Num)
+	}
+	order.Sum = fmt.Sprintf("%0.2f", total)
+
+	//ASAP拼凑字符串
+	//首先获取order数据库数据，便于取出最新的ASAP单号
+	order_list := []models.OrderNum{}
+	o.QueryTable("order_num").OrderBy("-id").All(&order_list)
+
+	length := len(order_list[0].Asap)
+	new_string := order_list[0].Asap[:length -1] + "0"
+
+	order.IsFake = true
+	order.Asap = new_string
+	o.Insert(&order)
 }

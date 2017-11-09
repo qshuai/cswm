@@ -1097,6 +1097,10 @@ if (query_url === "/sale_list" || ps.test(query_url)) {
 }
 
 function SalePaginator(sale) {
+	var sale_node = $("#sale");
+	if (sale.length < 1) {
+		sale_node.html("");
+	}
 	//计算page_num
 	var page_num;
 	var total_item = sale.length;
@@ -1123,7 +1127,6 @@ function SalePaginator(sale) {
 		currentPage: current_page,
 		onPageChange: function (num, type) {
 			$.cookie("sale_current_page", num);
-			var sale_node = $("#sale");
 			sale_node.html("");
 			var is_out = num * page_size;
 			if (is_out > total_item) {
@@ -1178,6 +1181,11 @@ function AddPrint(obj) {
 
 	o.remove();
 }
+
+//出库单提交
+$(".sale_edit_btn").click(function () {
+	$(".sale_edit_form").submit();
+});
 
 //admin_member_edit.html
 //-----------------------------------------------------------------------------------

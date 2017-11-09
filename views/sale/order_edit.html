@@ -1,0 +1,46 @@
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
+		<span class="c-999 en">&gt;</span>
+		<a onclick="goBack()" class="maincolor">上一页</a>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">出库单编辑</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
+		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<table class="table table-border table-bordered table-bg table-hover">
+				<thead>
+				<tr>
+					<th colspan="10" scope="col">出库单编辑</th>
+				</tr>
+				<tr class="text-c">
+					<th>商品名称</th>
+					<th>售价</th>
+					<th>数量</th>
+				</tr>
+				</thead>
+				<tbody>
+				<form action="/order_edit_post" type="post" class="sale_edit_form">
+					{{range .sale}}
+						<input type="hidden" name="sid" value="{{.Id}}">
+						<tr class="text-c">
+							<td>{{.Title}}</td>
+							<td><input type="text" class="input-text radius" name="out_price" value="{{.OutPriceFake}}"></td>
+							<td><input type="text" class="input-text radius" name="num" value="{{.NumFake}}"></td>
+						</tr>
+					{{end}}
+				</form>
+				</tbody>
+			</table>
+			<div class="text-c pt-20">
+				<a class="btn btn-success radius sale_edit_btn">提交出库单</a>
+			</div>
+		</article>
+	</div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
