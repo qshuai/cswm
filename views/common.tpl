@@ -148,7 +148,7 @@
             </dd>
         </dl>
         <dl id="menu-picture" class="nav-left-list">
-            <dt><i class="Hui-iconfont">&#xe61e;</i> 销售相关<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe61e;</i> 销售管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
 					{{if .authority.ViewSale}}
@@ -159,7 +159,7 @@
             </dd>
         </dl>
         <dl id="menu-picture" class="nav-left-list">
-            <dt><i class="Hui-iconfont">&#xe60d;</i> 供应商<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe60d;</i> 供应商管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
 					{{if .authority.ViewSupplier}}
@@ -172,7 +172,7 @@
             </dd>
         </dl>
         <dl id="menu-picture" class="nav-left-list">
-            <dt><i class="Hui-iconfont">&#xe62c;</i> 经销商<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe62c;</i> 经销商管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
 					{{if .authority.ViewDealer}}
@@ -189,10 +189,10 @@
             <dd>
                 <ul>
 					{{if .authority.ViewConsumer}}
-                    	<li><a href="/consumer_list" title="图片管理">客户列表</a></li>
+                    	<li><a href="/consumer_list" title="客户列表">客户列表</a></li>
 					{{end}}
 					{{if .authority.AddConsumer}}
-                    	<li><a href="/consumer_add" title="图片管理">添加客户</a></li>
+                    	<li><a href="/consumer_add" title="添加客户">添加客户</a></li>
 					{{end}}
                 </ul>
             </dd>
@@ -209,20 +209,17 @@
             </dd>
         </dl>
         <dl id="menu-member" class="nav-left-list">
-            <dt><i class="Hui-iconfont">&#xe602;</i> 人员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont">&#xe602;</i> 员工管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/member_list" title="会员列表">会员列表</a></li>
+                    <li><a href="/member_list" title="员工列表">员工列表</a></li>
 					{{if .authority.AddMember}}
-                    	<li><a href="/member_add" title="添加会员">添加会员</a></li>
+                    	<li><a href="/member_add" title="添加员工">添加员工</a></li>
 					{{end}}
 					{{if .authority.ActivieMember}}
                     	<li><a href="/disable_member_list" title="禁用账号">禁用账号</a></li>
 					{{end}}
-                    	<li><a href="/member_edit" title="等级管理">自我修改</a></li>
-					{{if .authority.EditMember}}
-                    	<li><a href="/admin_member_edit" title="等级管理">管理人员</a></li>
-					{{end}}
+                    	<li><a href="/member_edit" title="自我修改">自我修改</a></li>
                 </ul>
             </dd>
         </dl>
@@ -230,8 +227,8 @@
             <dt><i class="Hui-iconfont">&#xe622;</i> 消息管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/message_list" title="评论列表">消息列表</a></li>
-                    <li><a href="/message_add" title="评论列表">新建消息</a></li>
+                    <li><a href="/message_list" title="消息列表">消息列表</a></li>
+                    <li><a href="/message_add" title="新建消息">新建消息</a></li>
                 </ul>
             </dd>
         </dl>
@@ -241,8 +238,8 @@
             <dt><i class="Hui-iconfont">&#xe61d;</i> 权限管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a href="/default_permission" title="评论列表">默认权限</a></li>
-					<li><a href="/permission_member_list" title="会员列表">会员列表</a></li>
+                    <li><a href="/default_permission" title="默认权限">默认权限</a></li>
+					<li><a href="/permission_member_list" title="员工列表">员工列表</a></li>
                 </ul>
             </dd>
         </dl>

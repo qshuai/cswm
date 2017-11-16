@@ -6,9 +6,9 @@ import (
 	"github.com/astaxie/beego/logs"
 	"strconv"
 	"github.com/xuri/excelize"
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/orm"
-	"ERP/plugins/permission"
+	"erp/plugins/permission"
 )
 
 type CategoryController struct {

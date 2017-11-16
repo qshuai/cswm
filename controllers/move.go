@@ -3,14 +3,14 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
+	"erp/models"
 	"html/template"
 	"strconv"
 	"strings"
 	"time"
 	"github.com/astaxie/beego/logs"
-	"ERP/plugins/permission"
-	"ERP/plugins/message"
+	"erp/plugins/permission"
+	"erp/plugins/message"
 )
 
 type MoveController struct {

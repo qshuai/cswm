@@ -3,14 +3,15 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
+	"erp/models"
 	"html/template"
 	"time"
-	"ERP/plugins/permission"
+	"erp/plugins/permission"
 	"encoding/json"
 	"strings"
 	"fmt"
 	"strconv"
+	"erp/plugins/position"
 )
 
 type SaleController struct {
@@ -61,52 +62,28 @@ func (c *SaleController) Sale_list() {
 	sale := []salelist{}
 	qb, _ := orm.NewQueryBuilder("mysql")
 
-	if user.Position != "超级管理员" {
-		if operate_other_store {
-			if user.PoolName != "" {
-				if strings.Contains(user.PoolName, "-") {
-					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
-						OrderBy("created").Desc().
-						Limit(SaleLimit)
-					sql := qb.String()
-					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&sale)
-				} else {
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ?").
-						OrderBy("created").Desc().
-						Limit(SaleLimit)
-					sql := qb.String()
-					o.Raw(sql, user.PoolName).QueryRows(&sale)
-				}
-			}
+	if user.Position != "超级管理员" || operate_other_store {
+		if user.PoolName != "" {
+			qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
+				"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+				"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+				From("sale").
+				LeftJoin("product").
+				On("product.id = sale.product_id").
+				InnerJoin("brand").
+				On("product.brand_id = brand.id").
+				LeftJoin("user").
+				On("user.id = sale.salesman_id").
+				LeftJoin("consumer").
+				On("consumer.id = sale.consumer_id").
+				InnerJoin("store").
+				On("store.id = sale.store_id AND store.name = ?").
+				OrderBy("created").Desc().
+				Limit(SaleLimit)
+			sql := qb.String()
+			o.Raw(sql, user.PoolName).QueryRows(&sale)
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store {
+	} else {
 		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
 			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 			"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
@@ -165,55 +142,31 @@ func (c *SaleController) SaleLoadMore() {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	offset, _ := c.GetInt("offset")
 
-	if user.Position != "超级管理员" {
-		if operate_other_store {
-			if user.PoolName != "" {
-				if strings.Contains(user.PoolName, "-") {
-					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
-						OrderBy("created").Desc().
-						Limit(SaleLimit).
-						Offset(SaleLimit * offset)
-					sql := qb.String()
-					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&sale)
-				} else {
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ?").
-						OrderBy("created").Desc().
-						Limit(SaleLimit).
-						Offset(SaleLimit * offset)
+	if user.Position != "超级管理员" || operate_other_store {
+		if user.PoolName != "" {
+			qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
+				"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+				"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+				From("sale").
+				LeftJoin("product").
+				On("product.id = sale.product_id").
+				InnerJoin("brand").
+				On("product.brand_id = brand.id").
+				LeftJoin("user").
+				On("user.id = sale.salesman_id").
+				LeftJoin("consumer").
+				On("consumer.id = sale.consumer_id").
+				InnerJoin("store").
+				On("store.id = sale.store_id AND store.name = ?").
+				OrderBy("created").Desc().
+				Limit(SaleLimit).
+				Offset(SaleLimit * offset)
 
-					sql := qb.String()
-					o.Raw(sql, user.PoolName).QueryRows(&sale)
-				}
-			}
+			sql := qb.String()
+			o.Raw(sql, user.PoolName).QueryRows(&sale)
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store {
+	} else {
+
 		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
 			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 			"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
@@ -279,8 +232,9 @@ func (c *SaleController) Sale_edit() {
 	sale.GetMoney, _ = c.GetBool("get_money")
 	sale.GetDate, _ = time.Parse("2006-1-2", c.GetString("get_date"))
 	sale.Comment = c.GetString("comment")
+	sale.Store = GetStore(c.GetString("store"))
 
-	_, err := o.Update(&sale, "salesman", "out_price", "num", "send", "has_invoice", "invoice_num", "send_invoice", "get_invoice", "get_money", "get_date", "comment")
+	_, err := o.Update(&sale, "salesman", "out_price", "num", "send", "has_invoice", "invoice_num", "send_invoice", "get_invoice", "get_money", "get_date", "store_id", "comment")
 	if err == nil {
 		c.Data["url"] = "/sale_list"
 		c.Data["msg"] = "修改销售记录成功"
@@ -310,17 +264,18 @@ func (c *SaleController) Print() {
 	str := "(" + strings.Join(new_slice, ",") + ")"
 
 	type printsale struct {
-		Num          string
-		OutPrice     string
-		ConsumerName string
-		SalesmanName string
-		Title        string
-		ArtNum       string
-		Spec         string
-		Unit         string
-		BrandName    string
-		Pool         string
-		StoreName    string
+		Num                string
+		OutPrice           string
+		ConsumerName       string
+		ConsumerDepartment string
+		SalesmanName       string
+		Title              string
+		ArtNum             string
+		Spec               string
+		Unit               string
+		BrandName          string
+		Pool               string
+		StoreName          string
 	}
 
 	o := orm.NewOrm()
@@ -332,6 +287,7 @@ func (c *SaleController) Print() {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	if order.IsFake {
 		qb.Select("sale.num_fake as num", "sale.out_price_fake as out_price", "consumer.name as consumer_name",
+			"consumer.department as consumer_department",
 			"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
 			"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
 			From("sale").
@@ -348,6 +304,7 @@ func (c *SaleController) Print() {
 			Where("sale.id in " + str)
 	} else {
 		qb.Select("sale.num", "sale.out_price", "consumer.name as consumer_name",
+			"consumer.department as consumer_department",
 			"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
 			"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
 			From("sale").
@@ -366,6 +323,19 @@ func (c *SaleController) Print() {
 
 	sql := qb.String()
 	ps := []printsale{}
+
+	//fake的order只能超级管理员打印，正常的order可以有超级管理员、总库管理员或分库管理员打印
+	p := position.GetOnePosition(c.GetSession("username").(string))
+	lastLetter := order.Asap[len(order.Asap)-1:]
+	if lastLetter == "0" {
+		if p != "超级管理员" {
+			c.Abort("401")
+		}
+	}else{
+		if !(p == "超级管理员" || p == "分库管理员" || p == "总库管理员") {
+			c.Abort("401")
+		}
+	}
 
 	o.Raw(sql).QueryRows(&ps)
 	c.Data["order"] = order
@@ -425,52 +395,28 @@ func (c *SaleController) ProductSalInfo() {
 	sale := []salelist{}
 	qb, _ := orm.NewQueryBuilder("mysql")
 
-	if user.Position != "超级管理员" {
-		if operate_other_store {
-			if user.PoolName != "" {
-				if strings.Contains(user.PoolName, "-") {
-					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id AND product.art_num = ?").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
-						Where("product.art_num = ?").
-						OrderBy("created").Desc()
-					sql := qb.String()
-					o.Raw(sql, art_num, store_slice[0], store_slice[1]).QueryRows(&sale)
-				} else {
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id AND product.art_num = ?").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ?").
-						Where("product.art_num = ?").
-						OrderBy("created").Desc()
-					sql := qb.String()
-					o.Raw(sql, art_num, user.PoolName, art_num).QueryRows(&sale)
-				}
-			}
+	if user.Position != "超级管理员" || operate_other_store {
+		if user.PoolName != "" {
+			qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
+				"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+				"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+				From("sale").
+				LeftJoin("product").
+				On("product.id = sale.product_id AND product.art_num = ?").
+				InnerJoin("brand").
+				On("product.brand_id = brand.id").
+				LeftJoin("user").
+				On("user.id = sale.salesman_id").
+				LeftJoin("consumer").
+				On("consumer.id = sale.consumer_id").
+				InnerJoin("store").
+				On("store.id = sale.store_id AND store.name = ?").
+				Where("product.art_num = ?").
+				OrderBy("created").Desc()
+			sql := qb.String()
+			o.Raw(sql, art_num, user.PoolName, art_num).QueryRows(&sale)
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store {
+	} else {
 		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment", "sale.has_print",
 			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 			"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
@@ -647,7 +593,9 @@ func (c *SaleController) OrderAdd() {
 	order_list := []models.OrderNum{}
 	o.QueryTable("order_num").OrderBy("-id").All(&order_list)
 
-	c.Data["order"] = order_list
+	order_byte, _ := json.Marshal(order_list)
+	c.Data["order"] = string(order_byte)
+
 	c.Layout = "common.tpl"
 	c.TplName = "sale/order_list.html"
 }
@@ -662,20 +610,22 @@ func InsertOrder(new_slice []string, username string) {
 	str := "(" + strings.Join(new_slice, ",") + ")"
 
 	type printsale struct {
-		Num          int
-		OutPrice     float64
-		ConsumerName string
-		SalesmanName string
-		Title        string
-		ArtNum       string
-		Spec         string
-		Unit         string
-		BrandName    string
-		Pool         string
-		StoreName    string
+		Num                int
+		OutPrice           float64
+		ConsumerName       string
+		ConsumerDepartment string
+		SalesmanName       string
+		Title              string
+		ArtNum             string
+		Spec               string
+		Unit               string
+		BrandName          string
+		Pool               string
+		StoreName          string
 	}
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("sale.num", "sale.out_price", "consumer.name as consumer_name",
+		"consumer.department as consumer_department",
 		"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
 		"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
 		From("sale").
@@ -695,6 +645,7 @@ func InsertOrder(new_slice []string, username string) {
 	o := orm.NewOrm()
 	o.Raw(sql).QueryRows(&ps)
 	order.Consumer = ps[0].ConsumerName
+	order.Department = ps[0].ConsumerDepartment
 	order.Salesman = ps[0].SalesmanName
 
 	//计算总额
@@ -733,7 +684,7 @@ func InsertOrder(new_slice []string, username string) {
 		old = 0
 	} else {
 		length := len(order_list[0].Asap)
-		old, _ = strconv.Atoi(order_list[0].Asap[4:length -1])
+		old, _ = strconv.Atoi(order_list[0].Asap[4:length-1])
 	}
 	v := old + 1
 	var new_string string
@@ -758,20 +709,22 @@ func InsertFakeOrder(new_slice []string, username string) {
 	str := "(" + strings.Join(new_slice, ",") + ")"
 
 	type printsale struct {
-		Num          int
-		OutPrice     float64
-		ConsumerName string
-		SalesmanName string
-		Title        string
-		ArtNum       string
-		Spec         string
-		Unit         string
-		BrandName    string
-		Pool         string
-		StoreName    string
+		Num                int
+		OutPrice           float64
+		ConsumerName       string
+		ConsumerDepartment string
+		SalesmanName       string
+		Title              string
+		ArtNum             string
+		Spec               string
+		Unit               string
+		BrandName          string
+		Pool               string
+		StoreName          string
 	}
 	qb, _ := orm.NewQueryBuilder("mysql")
 	qb.Select("sale.num_fake as num", "sale.out_price_fake as out_price", "consumer.name as consumer_name",
+		"consumer.department as consumer_department",
 		"user.name as salesman_name", "product.title", "product.art_num", "product.spec",
 		"product.unit", "brand.name as brand_name", "store.pool", "store.name as store_name").
 		From("sale").
@@ -791,6 +744,7 @@ func InsertFakeOrder(new_slice []string, username string) {
 	o := orm.NewOrm()
 	o.Raw(sql).QueryRows(&ps)
 	order.Consumer = ps[0].ConsumerName
+	order.Department = ps[0].ConsumerDepartment
 	order.Salesman = ps[0].SalesmanName
 
 	//计算总额
@@ -806,7 +760,7 @@ func InsertFakeOrder(new_slice []string, username string) {
 	o.QueryTable("order_num").OrderBy("-id").All(&order_list)
 
 	length := len(order_list[0].Asap)
-	new_string := order_list[0].Asap[:length -1] + "0"
+	new_string := order_list[0].Asap[:length-1] + "0"
 
 	order.IsFake = true
 	order.Asap = new_string

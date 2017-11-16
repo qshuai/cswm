@@ -3,12 +3,12 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
+	"erp/models"
 	"html/template"
 	"strconv"
 	"github.com/astaxie/beego/logs"
-	"ERP/plugins/position"
-	permission2 "ERP/plugins/permission"
+	"erp/plugins/position"
+	permission2 "erp/plugins/permission"
 )
 
 type Permission struct {

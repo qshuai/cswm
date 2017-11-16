@@ -4,10 +4,10 @@ import (
 	"html/template"
 
 	"github.com/astaxie/beego"
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/logs"
-	"ERP/plugins/permission"
+	"erp/plugins/permission"
 )
 
 type ConsumerController struct {

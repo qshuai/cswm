@@ -1,6 +1,6 @@
 package redis_orm
 
-import "ERP/models"
+import "erp/models"
 
 type RedisInterface interface {
 	//权限操作

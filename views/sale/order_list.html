@@ -1,3 +1,7 @@
+<!--jquery bootstrap css-->
+<link rel="stylesheet" href="/static/css/paginator.css">
+<!--jquery bootstrap css-->
+
 <section class="Hui-article-box">
 	<nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
 		<span class="c-999 en">&gt;</span>
@@ -8,15 +12,31 @@
 		   href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
 		<article class="cl pd-20">
+
+			<div style="width: 80%; margin: 0 auto 10px auto;">
+				<div class="row cl">
+					<input type="text" class="input-text mt-5 radius" name="consumer_filter" autocomplete="off" placeholder="客户" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="department_filter" autocomplete="off" placeholder="客户单位" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="salesman_filter" autocomplete="off" placeholder="业务员" style="width: 15%">
+					<a class="btn btn-primary radius mt-5 size-S order_filter_btn"> 检 索 </a>
+					<span class="c-warning">不需要筛选的字段不要填写~</span>
+				</div>
+			</div>
+
 			<table class="table table-border table-bordered table-bg table-hover">
 				<thead>
 				<tr>
-					<th colspan="10" scope="col">出库单列表</th>
+					<th colspan="10" scope="col">出库单列表
+						<a class="btn btn-primary radius size-MINI order-all">全部</a>
+						<a class="btn btn-primary radius size-MINI order-state-on">正常</a>
+						<a class="btn btn-primary radius size-MINI order-state-off">废弃</a>
+					</th>
 				</tr>
 				<tr class="text-c">
 					<th>ASAP</th>
-					<th>客户</th>
-					<th>业务员</th>
+					<th>客户 <a class="order_list_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+					<th>客户单位 <a class="order_list_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+					<th>业务员 <a class="order_list_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
 					<th>金额</th>
 					<th>操作人</th>
 					<th>状态</th>
@@ -25,44 +45,33 @@
 					<th>操作</th>
 				</tr>
 				</thead>
-				<tbody>
-				{{range .order}}
-				<tr class="text-c">
-					<td
-						{{if .IsFake}}
-						class="c-warning"
-						{{end}}
-					>{{.Asap}}</td>
-					<td>{{.Consumer}}</td>
-					<td>{{.Salesman}}</td>
-					<td>{{.Sum}}</td>
-					<td>{{.User}}</td>
-					{{if .State}}
-						<td>正常</td>
-					{{else}}
-						<td class="c-danger">废弃</td>
-					{{end}}
-					<td>{{date .Created "Y-m-d H:i:s"}}</td>
-					<td>{{date .Updated "Y-m-d H:i:s"}}</td>
-					{{if .State}}
-						<td>
-						{{if eq .HasPrint false}}
-							<a href="/print_action/{{.SaleList}}/{{.Id}}" class="btn btn-success-outline radius"><i class="Hui-iconfont Hui-iconfont-dayinji"></i></a>
-						{{end}}
-						<a href="/order_close/{{.Id}}" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a></td>
-					{{else}}
-						<td></td>
-					{{end}}
-				</tr>
-				{{end}}
+				<tbody id="order-list-btn">
+
 				</tbody>
 			</table>
 		</article>
+
+		<div class="text-c">
+			<!--<input type="hidden" id="total_page" value="{{.total_page}}">-->
+			<span class="dropDown page_size_btn" style="position: relative; top: -33px">
+                <a class="dropDown_A btn btn-default radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >每页显示</a>
+                <ul class="dropDown-menu menu radius box-shadow">
+                    <li><a class="page_size" data="5">5条</a></li>
+                    <li><a class="page_size" data="10">10条</a></li>
+                    <li><a class="page_size" data="20">20条</a></li>
+                    <li><a class="page_size" data="30">30条</a></li>
+                    <li><a class="page_size" data="50">50条</a></li>
+                    <li><a class="page_size" data="100">100条</a></li>
+                </ul>
+            </span>
+			<ul class="pagination" id="order_pagination"></ul>
+		</div>
+
 	</div>
 </section>
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-
+	var order = {{.order}}
 </script>
 <!--/请在上方写此页面业务相关的脚本-->

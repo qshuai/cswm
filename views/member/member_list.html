@@ -1,26 +1,40 @@
+<!--jquery bootstrap css-->
+<link rel="stylesheet" href="/static/css/paginator.css">
+<!--jquery bootstrap css-->
+
 <section class="Hui-article-box">
     <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a href="/" class="maincolor">首页</a>
         <span class="c-999 en">&gt;</span>
         <a onclick="goBack()" class="maincolor">上一页</a>
         <span class="c-999 en">&gt;</span>
-        <span class="c-666">会员列表</span>
+        <span class="c-666">员工列表</span>
         <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"
            href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a></nav>
     <div class="Hui-article">
         <article class="cl pd-20">
+
+			<div style="width: 80%; margin: 0 auto 10px auto;">
+				<div class="row cl">
+					<input type="text" class="input-text mt-5 radius" name="position_filter" autocomplete="off" placeholder="职位" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="poolname_filter" autocomplete="off" placeholder="库房" style="width: 15%">
+					<a class="btn btn-primary radius mt-5 size-S member_filter_btn"> 检 索 </a>
+					<span class="c-warning">不需要筛选的字段不要填写~</span>
+				</div>
+			</div>
+
             <table class="table table-border table-bordered table-bg table-hover">
                 <thead>
                 <tr>
-                    <th colspan="10" scope="col">人员列表</th>
+                    <th colspan="10" scope="col">员工列表
+						<a class="btn btn-primary radius size-MINI stage-on">在职/离职</a>
+					</th>
                 </tr>
                 <tr class="text-c">
                     <th>姓名</th>
-					{{if eq .grade "超级管理员"}}
-						<th>用户名</th>
-					{{end}}
+					<th class="{{if ne .grade "超级管理员"}}hide{{end}}">用户名</th>
                     <th>电话</th>
-                    <th>职位</th>
-                    <th>库房</th>
+                    <th>职位 <a class="member_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
+                    <th>库房 <a class="member_order btn size-MINI btn-success-outline radius" style="border: none;">&nbsp;<i class="Hui-iconfont Hui-iconfont-paixu"></i>&nbsp;</a></th>
                     <th>账号</th>
 					<th>状态</th>
                     <th class="hidden-xs">最后一次登陆时间</th>
@@ -28,52 +42,72 @@
                     <th class="hidden-xs">用户创建时间</th>
                 </tr>
                 </thead>
-                <tbody>
-                {{range .user}}
-                    <tr class="text-c">
-                        <td><a href="/admin_member_edit/{{.Id}}" class="c-primary">{{.Name}} <i class="Hui-iconfont Hui-iconfont-edit"></i></a></td>
-						{{if eq $.grade "超级管理员"}}
-							<td>{{.Username}}</td>
-						{{end}}
-                        <td>{{.Tel}}</td>
-                        <td>{{.Position}}</td>
-                        <td>{{.PoolName}}</td>
+                <tbody id="member-list">
 
-                        {{ if .IsActive }}
-                        <td>正常</td>
-                        {{ else }}
-                        <td class="c-danger">未激活</td>
-                        {{end}}
-						{{if eq .Stage "离职"}}
-						<td class="c-danger">{{.Stage}}</td>
-						{{else}}
-						<td>{{.Stage}}</td>
-						{{end}}
-
-						{{if eq (date .LastLogin "Y-m-d H:i:s") "0001-01-01 00:00:00"}}
-                        <td class="hidden-xs"></td>
-						{{else}}
-						<td class="hidden-xs">{{date .LastLogin "Y-m-d H:i:s"}}</td>
-						{{end}}
-
-
-                        {{if eq .Ip ""}}
-                        <td class="c-danger hidden-xs">未登陆过</td>
-                        {{else}}
-                        <td class="hidden-xs">{{.Ip}}</td>
-                        {{end}}
-
-                        <td class="hidden-xs">{{date .Created "Y-m-d H:i:s"}}</td>
-                    </tr>
-                {{end}}
                 </tbody>
             </table>
         </article>
+
+		<div class="text-c">
+			<!--<input type="hidden" id="total_page" value="{{.total_page}}">-->
+			<span class="dropDown page_size_btn" style="position: relative; top: -33px">
+                <a class="dropDown_A btn btn-default radius" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" >每页显示</a>
+                <ul class="dropDown-menu menu radius box-shadow">
+                    <li><a class="page_size" data="5">5条</a></li>
+                    <li><a class="page_size" data="10">10条</a></li>
+                    <li><a class="page_size" data="20">20条</a></li>
+                    <li><a class="page_size" data="30">30条</a></li>
+                    <li><a class="page_size" data="50">50条</a></li>
+                    <li><a class="page_size" data="100">100条</a></li>
+                </ul>
+            </span>
+			<ul class="pagination" id="member_pagination"></ul>
+		</div>
+
     </div>
 </section>
 
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-
+	var member = {{.member}}
+	var grade = {{$.grade}}
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
+
+{{range .user}}
+<tr class="text-c {{if eq .Stage "离职"}}hide{{end}}">
+<td><a href="/admin_member_edit/{{.Id}}" class="c-primary">{{.Name}} <i class="Hui-iconfont Hui-iconfont-edit"></i></a></td>
+{{if eq $.grade "超级管理员"}}
+<td>{{.Username}}</td>
+{{end}}
+<td>{{.Tel}}</td>
+<td>{{.Position}}</td>
+<td>{{.PoolName}}</td>
+
+{{ if .IsActive }}
+<td>正常</td>
+{{ else }}
+<td class="c-danger">未激活</td>
+{{end}}
+{{if eq .Stage "离职"}}
+<td class="c-danger">{{.Stage}}</td>
+{{else}}
+<td>{{.Stage}}</td>
+{{end}}
+
+{{if eq (date .LastLogin "Y-m-d H:i:s") "0001-01-01 00:00:00"}}
+<td class="hidden-xs"></td>
+{{else}}
+<td class="hidden-xs">{{date .LastLogin "Y-m-d H:i:s"}}</td>
+{{end}}
+
+
+{{if eq .Ip ""}}
+<td class="c-danger hidden-xs">未登陆过</td>
+{{else}}
+<td class="hidden-xs">{{.Ip}}</td>
+{{end}}
+
+<td class="hidden-xs">{{date .Created "Y-m-d H:i:s"}}</td>
+</tr>
+{{end}}

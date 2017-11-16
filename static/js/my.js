@@ -672,6 +672,8 @@ if (query_url === "/product_template_list") {
 	});
 }
 
+
+//商品模板分页函数
 function ProductTemplatePaginator(template) {
 	//计算page_num
 	var page_num;
@@ -1383,6 +1385,7 @@ $.each(sale_item_edit, function (index) {
 		$("#outprice").val(tds.eq(7).text());
 		$("#num").val(tds.eq(11).text());
 		$("#send").val(tds.eq(12).text());
+		$("#store").val(tds.eq(2).text());
 
 		var hasinvoice = tds.eq(13).text();
 		var options = $("select[name=hasinvoice]").find("option");
@@ -1789,10 +1792,7 @@ $().ready(function () {
 				forbid : true
 			},
 			tel : {
-				required : true,
-				minlength : 6,
-				maxlength : 11,
-				test : /^\d+$/
+				required : true
 			},
 			name : {
 				required : true,
@@ -1908,3 +1908,395 @@ $().ready(function () {
 		return true
 	},"密码最少6个字符");
 });
+
+//order_list.html
+//-----------------------------------------------------------------------------------
+if (query_url === "/order_list") {
+	$.cookie("order_offset", 0);
+	$.cookie("order_current_page", 1);
+
+	orderPaginator(order);
+
+	//用户选择每页显示的条目数，也就是page_size
+	var page_size_btn = $(".page_size");
+	$.each(page_size_btn, function (index) {
+		page_size_btn.eq(index).click(function () {
+
+			//通过hui-ui.js的cookie()方法直接在浏览器设置cookie减少http请求（替代以上ajax请求）
+			$.cookie('order_page_size', $(this).attr("data"), {expires: 366});
+
+			//指示为第一页
+			var num = 1;
+
+			var page_size_temp = $.cookie("order_page_size");
+			if (page_size_temp !== null) {
+				page_size = page_size_temp
+			}
+
+			orderPaginator(order);
+		})
+	});
+
+	//排序
+	var asc = true;
+	var order_item_order = $(".order_list_order");
+	$.each(order_item_order, function (index) {
+		order_item_order.eq(index).click(function () {
+			switch (index) {
+				case 0:
+					order.sort(function (x, y) {
+						return asc ? ((x.Consumer < y.Consumer) ? -1 : ((x.Consumer > y.Consumer) ? 1 : 0)) : ((x.Consumer < y.Consumer) ? 1 : ((x.Consumer > y.Consumer) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 1:
+					order.sort(function (x, y) {
+						return asc ? ((x.Department < y.Department) ? -1 : ((x.Department > y.Department) ? 1 : 0)) : ((x.Department < y.Department) ? 1 : ((x.Department > y.Department) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 2:
+					order.sort(function (x, y) {
+						return asc ? ((x.Salesman < y.Salesman) ? -1 : ((x.Salesman > y.Salesman) ? 1 : 0)) : ((x.Salesman < y.Salesman) ? 1 : ((x.Salesman > y.Salesman) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+			}
+			orderPaginator(order);
+		})
+	});
+
+	//对order进行筛选
+	var order_copy = order;
+	var filter_btn = $(".order_filter_btn");
+	filter_btn.click(function () {
+		var splice_array = [];
+		var consumer_filter = $("input[name=consumer_filter]").val();
+		if (consumer_filter !== "") {
+			$.each(order_copy, function (index, item) {
+				if (item.Consumer !== consumer_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var department_filter = $("input[name=department_filter]").val();
+		if (department_filter !== "") {
+			$.each(order_copy, function (index, item) {
+				if (item.Department !== department_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var salesman_filter = $("input[name=salesman_filter]").val();
+		if (salesman_filter !== "") {
+			$.each(order_copy, function (index, item) {
+				if (item.Salesman !== salesman_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var splice_array_length = splice_array.length;
+		var new_splice_array = [];
+		for (var i = 0; i < splice_array_length; i++) {
+			if ($.inArray(splice_array[i], new_splice_array) === -1) {
+				new_splice_array.push(splice_array[i])
+			}
+		}
+
+		new_splice_array = new_splice_array.sort(function (x, y) {
+			return x - y;
+		});
+
+		var ab = 0;
+		$.each(new_splice_array, function (index, item) {
+			order_copy.splice(item - ab, 1);
+			ab++
+		});
+		orderPaginator(order_copy)
+	});
+
+	var order_all = $(".order-all");
+	var order_state_on = $(".order-state-on");
+	var order_state_off = $(".order-state-off");
+	var order_list_btn = $("#order-list-btn").find("tr");
+	order_state_on.click(function () {
+		$.each(order_list_btn, function (index) {
+			if ($(this).find("td").eq(6).text() === "正常") {
+				$(this).removeClass("hide")
+			} else {
+				$(this).addClass("hide")
+			}
+		});
+	});
+
+	order_state_off.click(function () {
+		$.each(order_list_btn, function (index) {
+			if ($(this).find("td").eq(6).text() !== "正常") {
+				$(this).removeClass("hide")
+			} else {
+				$(this).addClass("hide")
+			}
+		});
+	});
+
+	order_all.click(function () {
+		order_list_btn.removeClass("hide");
+	});
+}
+
+function orderPaginator(order) {
+	var order_node = $("#order-list-btn");
+
+	if (order.length === 0) {
+		order_node.html("");
+	}
+	//计算page_num
+	var page_num;
+	var total_item = order.length;
+
+	var page_size = $.cookie("order_page_size");
+	if (page_size === undefined) {
+		page_size = 10
+	}else{
+		page_size = parseInt(page_size)
+	}
+	if (total_item % page_size === 0) {
+		page_num = total_item / page_size
+	} else {
+		page_num = Math.ceil(total_item / page_size)
+	}
+
+	var current_page = parseInt($.cookie("order_current_page"));
+	if (current_page > page_num){
+		current_page = page_num
+	}
+	$.jqPaginator("#order_pagination", {
+		totalPages: page_num,
+		visiblePages: 10,
+		currentPage: current_page,
+		onPageChange: function (num, type) {
+			$.cookie("order_current_page", num);
+			order_node.html("");
+			var is_out = num * page_size;
+			if (is_out > total_item) {
+				is_out = total_item
+			}
+
+			for (var i = page_size * (num - 1); i < is_out; i++) {
+				var row = $('<tr class="text-c tds-list"><td  class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>');
+				var tds = row.find("td");
+				tds.eq(0).text(order[i].Asap);
+				tds.eq(1).text(order[i].Consumer);
+				tds.eq(2).text(order[i].Department);
+				tds.eq(3).text(order[i].Salesman);
+				tds.eq(4).text(order[i].Sum);
+				tds.eq(5).text(order[i].User);
+				order[i].State?tds.eq(6).text("正常"):tds.eq(6).text("废弃");
+				tds.eq(7).text(order[i].Created.substr(0, 10));
+				tds.eq(8).text(order[i].Updated.substr(0, 10));
+				tds.eq(9).html('<a onclick="ProductorderEdit(this)" class="btn size-MINI btn-success-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-edit"></i>&nbsp;</a>' +
+					' <a onclick="DeleteorderRow(this,'+order[i].Id+')" class="btn size-MINI btn-danger-outline radius">&nbsp;<i class="Hui-iconfont Hui-iconfont-close"></i>&nbsp;</a>');
+
+				if (order[i].State){
+					if (order[i].HasPrint){
+						tds.eq(9).html('<a href="/order_close/' + order[i].Id +'" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a>');
+					}else{
+						tds.eq(9).html('<a href="/print_action/' + order[i].SaleList + "/" + order[i].Id +'" class="btn btn-success-outline radius"><i class="Hui-iconfont Hui-iconfont-dayinji"></i></a> ' +
+							'<a href="/order_close/' + order[i].Id +'" class="btn btn-danger-outline radius"><i class="Hui-iconfont Hui-iconfont-close"></i></a>');
+					}
+				}else{
+					tds.eq(9).html('')
+				}
+
+				if (order[i].IsFake) {
+					tds.eq(0).addClass("c-warning");
+				}
+
+				if (!order[i].State) {
+					row.addClass("hide");
+					tds.eq(6).addClass("c-danger");
+				}
+
+				order_node.append(row);
+			}
+		}
+	});
+}
+
+
+//order_list.html
+//-----------------------------------------------------------------------------------
+if (query_url === "/member_list") {
+	member = $.parseJSON(member);
+	$.cookie("member_offset", 0);
+	$.cookie("member_current_page", 1);
+
+	memberPaginator(member);
+
+	//用户选择每页显示的条目数，也就是page_size
+	var page_size_btn = $(".page_size");
+	$.each(page_size_btn, function (index) {
+		page_size_btn.eq(index).click(function () {
+
+			//通过hui-ui.js的cookie()方法直接在浏览器设置cookie减少http请求（替代以上ajax请求）
+			$.cookie('member_page_size', $(this).attr("data"), {expires: 366});
+
+			//指示为第一页
+			var num = 1;
+
+			var page_size_temp = $.cookie("member_page_size");
+			if (page_size_temp !== null) {
+				page_size = page_size_temp
+			}
+
+			memberPaginator(member);
+		})
+	});
+
+	//排序
+	var asc = true;
+	var member_order = $(".member_order");
+	$.each(member_order, function (index) {
+		member_order.eq(index).click(function () {
+			switch (index) {
+				case 0:
+					member.sort(function (x, y) {
+						return asc ? ((x.Position < y.Position) ? -1 : ((x.Position > y.Position) ? 1 : 0)) : ((x.Position < y.Position) ? 1 : ((x.Position > y.Position) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+				case 1:
+					member.sort(function (x, y) {
+						return asc ? ((x.PoolName < y.PoolName) ? -1 : ((x.PoolName > y.PoolName) ? 1 : 0)) : ((x.PoolName < y.PoolName) ? 1 : ((x.PoolName > y.PoolName) ? -1 : 0));
+					});
+					asc = !asc;
+					break;
+			}
+			memberPaginator(member);
+		})
+	});
+
+	//对member进行筛选
+	var member_copy = member;
+	var filter_btn = $(".member_filter_btn");
+	filter_btn.click(function () {
+		var splice_array = [];
+		var position_filter = $("input[name=position_filter]").val();
+		if (position_filter !== "") {
+			$.each(member_copy, function (index, item) {
+				if (item.Position !== position_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var poolname_filter = $("input[name=poolname_filter]").val();
+		if (poolname_filter !== "") {
+			$.each(member_copy, function (index, item) {
+				if (item.PoolName !== poolname_filter) {
+					splice_array.push(index);
+				}
+			})
+		}
+
+		var splice_array_length = splice_array.length;
+		var new_splice_array = [];
+		for (var i = 0; i < splice_array_length; i++) {
+			if ($.inArray(splice_array[i], new_splice_array) === -1) {
+				new_splice_array.push(splice_array[i])
+			}
+		}
+
+		new_splice_array = new_splice_array.sort(function (x, y) {
+			return x - y;
+		});
+
+		var ab = 0;
+		$.each(new_splice_array, function (index, item) {
+			member_copy.splice(item - ab, 1);
+			ab++
+		});
+		memberPaginator(member_copy)
+	});
+
+	var stage_on = $(".stage-on");
+	var member_list = $("#member-list").find("tr");
+	stage_on.click(function () {
+		$.each(member_list, function (index) {
+			if ($(this).hasClass("hide")) {
+				$(this).removeClass("hide")
+			} else {
+				$(this).addClass("hide")
+			}
+		});
+	});
+}
+
+function memberPaginator(member) {
+	var member_node = $("#member-list");
+
+	if (member.length === 0) {
+		member_node.html("");
+	}
+	//计算page_num
+	var page_num;
+	var total_item = member.length;
+
+	var page_size = $.cookie("member_page_size");
+	if (page_size === undefined) {
+		page_size = 10
+	}else{
+		page_size = parseInt(page_size)
+	}
+	if (total_item % page_size === 0) {
+		page_num = total_item / page_size
+	} else {
+		page_num = Math.ceil(total_item / page_size)
+	}
+
+	var current_page = parseInt($.cookie("member_current_page"));
+	if (current_page > page_num){
+		current_page = page_num
+	}
+	$.jqPaginator("#member_pagination", {
+		totalPages: page_num,
+		visiblePages: 10,
+		currentPage: current_page,
+		onPageChange: function (num, type) {
+			$.cookie("member_current_page", num);
+			member_node.html("");
+			var is_out = num * page_size;
+			if (is_out > total_item) {
+				is_out = total_item
+			}
+
+			for (var i = page_size * (num - 1); i < is_out; i++) {
+				var row = $('<tr class="text-c tds-list"><td  class="text-l text-overflow" style="max-width: 150px"></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>');
+				var tds = row.find("td");
+				tds.eq(0).html('<a href="/admin_member_edit/'+ member[i].Id +'" class="c-primary">'+ member[i].Name +' <i class="Hui-iconfont Hui-iconfont-edit"></i></a>');
+				tds.eq(1).text(member[i].Username);
+				tds.eq(2).text(member[i].Tel);
+				tds.eq(3).text(member[i].Position);
+				tds.eq(4).text(member[i].PoolName);
+				tds.eq(5).text(member[i].IsActive ? "正常" : "未激活");
+				tds.eq(6).text(member[i].Stage);
+				tds.eq(7).text(member[i].LastLogin.substr(0, 10) !== "0001-01-01" ?member[i].LastLogin.substr(0, 10):"");
+				tds.eq(8).text(member[i].Ip);
+				tds.eq(9).text(member[i].Created.substr(0, 10));
+
+				if (grade !== "超级管理员"){
+					tds.eq(1).addClass("hide");
+				}
+
+				if (member[i].Stage == "离职") {
+					tds.eq(6).addClass("c-danger");
+					row.addClass("hide");
+				}
+				member_node.append(row);
+			}
+		}
+	});
+}

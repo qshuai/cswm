@@ -6,6 +6,10 @@ input:read-only{
     left: -100%;
 }
 
+#permission td{
+	height: 21px!important;
+}
+
 #permission tr td, #permission tr th{
 	text-align: center;
 	font-size: 18px;

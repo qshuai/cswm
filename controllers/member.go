@@ -5,13 +5,14 @@ import (
 	"html/template"
 	"log"
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
+	"erp/models"
 	"crypto/md5"
 	"fmt"
 	"strconv"
-	"ERP/plugins/permission"
-	"ERP/plugins/position"
-	"ERP/modules/redis"
+	"erp/plugins/permission"
+	"erp/plugins/position"
+	"erp/modules/redis"
+	"encoding/json"
 )
 
 type MemberController struct {
@@ -51,7 +52,7 @@ func (c *MemberController) Member_add_post() {
 	o := orm.NewOrm()
 	_, err := o.Insert(&u)
 	if err != nil {
-		log.Fatal("add member", u.Name, " failure: ", err)
+		log.Fatal("add member ", u.Name, " failure: ", err)
 	}
 
 	//初始化人员权限
@@ -111,6 +112,14 @@ func (c *MemberController) UserInfo_post() {
 	u := models.User{}
 	u.Id, _ = c.GetSession("uid").(int)
 	u.Username = c.GetString("username")
+	o := orm.NewOrm()
+
+	exist := o.QueryTable("user").Filter("username", u.Username).Exist()
+	if exist {
+		c.Data["url"] = "/userinfo"
+		c.Data["msg"] = "此用户名已经存在~"
+		c.TplName = "jump/error.html"
+	}
 
 	//同步当前用户的permission数据到redis
 	permission.AsyncMysql2RedisOne(u.Username)
@@ -119,7 +128,6 @@ func (c *MemberController) UserInfo_post() {
 	passwordMD5 := md5.Sum(password)
 	u.Password = fmt.Sprintf("%x", passwordMD5)
 	u.IsFirst = false
-	o := orm.NewOrm()
 	_, err := o.Update(&u, "username", "password", "is_first", "updated")
 	if err != nil {
 		log.Fatal("完善用户信息错误：", err)
@@ -142,7 +150,8 @@ func (c *MemberController) Member_list() {
 	u := []models.User{}
 	o := orm.NewOrm()
 	o.QueryTable("user").All(&u)
-	c.Data["user"] = u
+	user_byte, _ := json.Marshal(u)
+	c.Data["member"] = string(user_byte)
 	c.Layout = "common.tpl"
 	c.TplName = "member/member_list.html"
 }

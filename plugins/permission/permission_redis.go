@@ -2,8 +2,8 @@ package permission
 
 import (
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
-	"ERP/modules/redis"
+	"erp/models"
+	"erp/modules/redis"
 )
 
 /*

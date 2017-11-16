@@ -3,10 +3,10 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"html/template"
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/logs"
-	"ERP/plugins/message"
+	"erp/plugins/message"
 )
 
 type MessageController struct {

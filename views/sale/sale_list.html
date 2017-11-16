@@ -11,17 +11,17 @@
         <article class="cl pd-20">
 
 			<div style="width: 80%; margin: 0 auto 10px auto;">
-				<div class="row cl"><input type="text" class="input-text mt-5" name="title_filter" autocomplete="off" placeholder="商品名称" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="art_num_filter" autocomplete="off" placeholder="货号" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="brand_filter" autocomplete="off" placeholder="品牌" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="consumer_filter" autocomplete="off" placeholder="客户" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="salesman_filter" autocomplete="off" placeholder="业务员" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="store_filter" autocomplete="off" placeholder="库房" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="has_pay_filter" autocomplete="off" placeholder="是否收款(填yes或no)" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="has_invioce_filter" autocomplete="off" placeholder="是否开发票(填yes或no)" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="has_print_filter" autocomplete="off" placeholder="是否已打印出库单(填yes或no)" style="width: 15%">
-					<input type="text" class="input-text mt-5" name="date_start_filter" autocomplete="off" placeholder="日期起点" style="width: 15%" id="date_start_filter">
-					<input type="text" class="input-text mt-5" name="date_stop_filter" autocomplete="off" placeholder="日期终点" style="width: 15%" id="date_stop_filter">
+				<div class="row cl"><input type="text" class="input-text mt-5 radius" name="title_filter" autocomplete="off" placeholder="商品名称" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="art_num_filter" autocomplete="off" placeholder="货号" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="brand_filter" autocomplete="off" placeholder="品牌" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="consumer_filter" autocomplete="off" placeholder="客户" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="salesman_filter" autocomplete="off" placeholder="业务员" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="store_filter" autocomplete="off" placeholder="库房" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="has_pay_filter" autocomplete="off" placeholder="是否收款(填yes或no)" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="has_invioce_filter" autocomplete="off" placeholder="是否开发票(填yes或no)" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="has_print_filter" autocomplete="off" placeholder="是否已打印出库单(填yes或no)" style="width: 15%">
+					<input type="text" class="input-text mt-5 radius" name="date_start_filter" autocomplete="off" placeholder="日期起点" style="width: 15%" id="date_start_filter">
+					<input type="text" class="input-text mt-5 radius" name="date_stop_filter" autocomplete="off" placeholder="日期终点" style="width: 15%" id="date_stop_filter">
 					<a class="btn btn-primary radius mt-5 size-S filter_btn"> 检 索 </a>
 					<span class="c-warning">不需要筛选的字段不要填写~</span>
 				</div>
@@ -125,7 +125,6 @@
                             </div>
                         </div>
 
-
                         <div class="row cl">
                             <label class="form-label col-xs-4 col-sm-2" for="inprice"><span class="c-red">*</span>进价：</label>
                             <div class="formControls col-xs-8 col-sm-9">
@@ -207,6 +206,13 @@
                                 <input type="text" id="getdate" class="input-text radius" value="" name="get_date" />
                             </div>
                         </div>
+
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2" for="store"><span class="c-red">*</span>库房：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input type="text" class="input-text radius" id="store" name="store">
+							</div>
+						</div>
 
 						<div class="row cl">
 							<label class="form-label col-xs-4 col-sm-2">备注：</label>

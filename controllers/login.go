@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"crypto/md5"
 	"fmt"
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/orm"
 	"time"
 )

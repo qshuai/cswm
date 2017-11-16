@@ -5,9 +5,9 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/logs"
-	"ERP/plugins/permission"
+	"erp/plugins/permission"
 )
 
 type DealerController struct {

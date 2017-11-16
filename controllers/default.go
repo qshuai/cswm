@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/orm"
 )
 

@@ -1,7 +1,7 @@
 package redis_orm
 
 import (
-	"ERP/models"
+	"erp/models"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego"
 	"github.com/garyburd/redigo/redis"

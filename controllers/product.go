@@ -4,14 +4,14 @@ import (
 	"github.com/astaxie/beego"
 	"html/template"
 	"github.com/astaxie/beego/orm"
-	"ERP/models"
+	"erp/models"
 	"strings"
 	"time"
 	"strconv"
 	"encoding/json"
 	"fmt"
-	"ERP/plugins/permission"
-	"ERP/plugins/position"
+	"erp/plugins/permission"
+	"erp/plugins/position"
 )
 
 type ProductController struct {
@@ -67,54 +67,29 @@ func (c *ProductController) Get() {
 
 	qb, _ := orm.NewQueryBuilder("mysql")
 	p := []product{}
-	if user.Position != "超级管理员" {
-		if operate_other_store {
-			if user.PoolName != "" {
-				if strings.Contains(user.PoolName, "-") {
-					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
-						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
-						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
-						"store.pool", "store.name as store_name").
-						From("product").
-						LeftJoin("brand").
-						On("brand.id = product.brand_id").
-						LeftJoin("supplier").
-						On("supplier.id = product.supplier_id").
-						LeftJoin("category").
-						On("category.id = product.cat_num_id").
-						LeftJoin("user").
-						On("user.id = product.user_id").
-						InnerJoin("store").
-						On("store.id = product.store_id AND store.pool = ? AND store.name = ?").
-						OrderBy("in_time").Desc().
-						Limit(ProductLimit)
-					sql := qb.String()
-					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&p)
-				} else {
-					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
-						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
-						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
-						"store.pool", "store.name as store_name").
-						From("product").
-						LeftJoin("brand").
-						On("brand.id = product.brand_id").
-						LeftJoin("supplier").
-						On("supplier.id = product.supplier_id").
-						LeftJoin("category").
-						On("category.id = product.cat_num_id").
-						LeftJoin("user").
-						On("user.id = product.user_id").
-						InnerJoin("store").
-						On("store.id = product.store_id AND store.pool = ?").
-						OrderBy("in_time").Desc().
-						Limit(ProductLimit)
-					sql := qb.String()
-					o.Raw(sql, user.PoolName).QueryRows(&p)
-				}
-			}
+	if user.Position != "超级管理员" || operate_other_store {
+		if user.PoolName != "" {
+			qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+				"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+				"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+				"store.pool", "store.name as store_name").
+				From("product").
+				LeftJoin("brand").
+				On("brand.id = product.brand_id").
+				LeftJoin("supplier").
+				On("supplier.id = product.supplier_id").
+				LeftJoin("category").
+				On("category.id = product.cat_num_id").
+				LeftJoin("user").
+				On("user.id = product.user_id").
+				InnerJoin("store").
+				On("store.id = product.store_id AND store.name = ?").
+				OrderBy("in_time").Desc().
+				Limit(ProductLimit)
+			sql := qb.String()
+			o.Raw(sql, user.PoolName).QueryRows(&p)
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store {
+	} else {
 		qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
 			"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
 			"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
@@ -180,56 +155,30 @@ func (c *ProductController) ProductLoadMore() {
 	offset, _ := c.GetInt("offset")
 	qb, _ := orm.NewQueryBuilder("mysql")
 	p := []product{}
-	if user.Position != "超级管理员" {
-		if operate_other_store {
-			if user.PoolName != "" {
-				if strings.Contains(user.PoolName, "-") {
-					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
-						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
-						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
-						"store.pool", "store.name as store_name").
-						From("product").
-						LeftJoin("brand").
-						On("brand.id = product.brand_id").
-						LeftJoin("supplier").
-						On("supplier.id = product.supplier_id").
-						LeftJoin("category").
-						On("category.id = product.cat_num_id").
-						LeftJoin("user").
-						On("user.id = product.user_id").
-						InnerJoin("store").
-						On("store.id = product.store_id AND store.pool = ? AND store.name = ?").
-						OrderBy("in_time").Desc().
-						Limit(ProductLimit).
-						Offset(offset * ProductLimit)
-					sql := qb.String()
-					o.Raw(sql, store_slice[0], store_slice[1]).QueryRows(&p)
-				} else {
-					qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
-						"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
-						"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
-						"store.pool", "store.name as store_name").
-						From("product").
-						LeftJoin("brand").
-						On("brand.id = product.brand_id").
-						LeftJoin("supplier").
-						On("supplier.id = product.supplier_id").
-						LeftJoin("category").
-						On("category.id = product.cat_num_id").
-						LeftJoin("user").
-						On("user.id = product.user_id").
-						InnerJoin("store").
-						On("store.id = product.store_id AND store.pool = ?").
-						OrderBy("in_time").Desc().
-						Limit(ProductLimit).
-						Offset(offset * ProductLimit)
-					sql := qb.String()
-					o.Raw(sql, user.PoolName).QueryRows(&p)
-				}
-			}
+	if user.Position != "超级管理员" || operate_other_store {
+		if user.PoolName != "" {
+			qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
+				"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
+				"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
+				"store.pool", "store.name as store_name").
+				From("product").
+				LeftJoin("brand").
+				On("brand.id = product.brand_id").
+				LeftJoin("supplier").
+				On("supplier.id = product.supplier_id").
+				LeftJoin("category").
+				On("category.id = product.cat_num_id").
+				LeftJoin("user").
+				On("user.id = product.user_id").
+				InnerJoin("store").
+				On("store.id = product.store_id AND store.name = ?").
+				OrderBy("in_time").Desc().
+				Limit(ProductLimit).
+				Offset(offset * ProductLimit)
+			sql := qb.String()
+			o.Raw(sql, user.PoolName).QueryRows(&p)
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store {
+	} else {
 		qb.Select("product.id", "product.title", "product.art_num", "product.lot_num", "product.spec", "product.stock", "product.unit",
 			"product.in_time", "product.in_price", "product.has_pay", "product.has_invoice", "product.get_invoice",
 			"brand.name as brand_name", "supplier.name as supplier_name", "category.three_stage", "user.name as user_name",
@@ -340,7 +289,7 @@ func (c *ProductController) Product_item_edit() {
 			user := models.User{}
 			o := orm.NewOrm()
 			o.QueryTable("user").Filter("username", un).One(&user, "pool_name")
-			if !JudgeIsStore(user.PoolName, c.GetString("store")) {
+			if user.PoolName != c.GetString("store") {
 				c.Abort("401")
 			}
 		}
@@ -402,7 +351,7 @@ func (c *ProductController) Add_get() {
 	o.QueryTable("user").Filter("id", user.Id).One(&user, "pool_name")
 
 	c.Data["art_num_string"] = GetArtNumList()
-	c.Data["store_string"] = GetStoreList(user.PoolName)
+	c.Data["store_string"] = user.PoolName + ","
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.TplName = "product/product_add.html"
@@ -421,7 +370,7 @@ func (c *ProductController) Add_post() {
 			user := models.User{}
 			o := orm.NewOrm()
 			o.QueryTable("user").Filter("username", un).One(&user, "pool_name")
-			if !JudgeIsStore(user.PoolName, c.GetString("store")) {
+			if user.PoolName != c.GetString("store") {
 				c.Abort("401")
 			}
 		}
@@ -445,9 +394,9 @@ func (c *ProductController) Add_post() {
 
 	product.Supplier = GetSupplier(c.GetString("supplier"))
 
-	store_string := strings.Split(c.GetString("store"), "-")
+	store_string := c.GetString("store")
 	store := models.Store{}
-	o.QueryTable("store").Filter("pool", store_string[0]).Filter("name", store_string[1]).One(&store, "id")
+	o.QueryTable("store").Filter("pool", beego.AppConfig.String("defaultstore")).Filter("name", store_string).One(&store, "id")
 	product.Store = &store
 
 	spec_slice := c.GetStrings("spec")
@@ -533,51 +482,28 @@ func (c *ProductController) Product_track() {
 	sale := []salelist{}
 	qb, _ := orm.NewQueryBuilder("mysql")
 
-	if user.Position != "超级管理员" {
-		if operate_other_store {
-			if user.PoolName != "" {
-				if strings.Contains(user.PoolName, "-") {
-					store_slice := strings.Split(user.PoolName, "-")
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id AND product.art_num = ?").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ? AND store.name = ?").
-						OrderBy("created").Desc()
-					sql := qb.String()
-					o.Raw(sql, pro.ArtNum, store_slice[0], store_slice[1]).QueryRows(&sale)
-				} else {
-					qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
-						"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
-						"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
-						From("sale").
-						LeftJoin("product").
-						On("product.id = sale.product_id AND product.art_num = ?").
-						InnerJoin("brand").
-						On("product.brand_id = brand.id").
-						LeftJoin("user").
-						On("user.id = sale.salesman_id").
-						LeftJoin("consumer").
-						On("consumer.id = sale.consumer_id").
-						InnerJoin("store").
-						On("store.id = sale.store_id AND store.pool = ?").
-						OrderBy("created").Desc()
+	if user.Position != "超级管理员" || operate_other_store {
+		if user.PoolName != "" {
+			qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
+				"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
+				"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
+				From("sale").
+				LeftJoin("product").
+				On("product.id = sale.product_id AND product.art_num = ?").
+				InnerJoin("brand").
+				On("product.brand_id = brand.id").
+				LeftJoin("user").
+				On("user.id = sale.salesman_id").
+				LeftJoin("consumer").
+				On("consumer.id = sale.consumer_id").
+				InnerJoin("store").
+				On("store.id = sale.store_id AND store.name = ?").
+				OrderBy("created").Desc()
 
-					sql := qb.String()
-					o.Raw(sql, pro.ArtNum, user.PoolName, pid).QueryRows(&sale)
-				}
-			}
+			sql := qb.String()
+			o.Raw(sql, pro.ArtNum, user.PoolName, pid).QueryRows(&sale)
 		}
-	} else if user.Position == "超级管理员" || !operate_other_store {
+	} else {
 		qb.Select("sale.id", "sale.out_price", "sale.num", "sale.send", "sale.has_invoice", "sale.invoice_num", "sale.no", "sale.comment",
 			"sale.send_invoice", "sale.get_invoice", "sale.get_money", "sale.get_date", "sale.created", "store.pool", "store.name as store_name",
 			"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
@@ -959,7 +885,6 @@ func JudgeIsStore(pool_name, input string) bool {
 		}
 	}
 	return false
-
 }
 
 //获取三级分类列表
@@ -1004,6 +929,15 @@ func GetSupplier(name string) *models.Supplier {
 	o := orm.NewOrm()
 	o.QueryTable("supplier").Filter("name", name).One(&supplier, "id")
 	return &supplier
+}
+
+//根据库房字符串获取库房信息
+func GetStore(name string) *models.Store{
+	store := models.Store{}
+	o := orm.NewOrm()
+	store_slice := strings.Split(name, "-")
+	o.QueryTable("store").Filter("pool", store_slice[0]).Filter("name", store_slice[1]).One(&store, "id")
+	return &store
 }
 
 //获取商品模板中的货号列表
