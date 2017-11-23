@@ -1,9 +1,10 @@
 package redis_orm
 
 import (
-	"github.com/garyburd/redigo/redis"
-	"time"
 	"fmt"
+	"time"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 type Redis struct {

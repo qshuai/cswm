@@ -5,19 +5,18 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/astaxie/beego"
 )
 
 type User struct {
 	Id         int
-	Username   string      `orm:"size(20);default();"`         //备注：用户名
-	Password   string      `orm:"size(50)"`                    //备注：密码
-	Name       string      `orm:"size(20);unique"`             //备注：姓名
-	Tel        string      `orm:"size(45)"`                    //备注：电话
-	Position   string      `orm:"size(10)"`                    //职位名称
-	LastLogin  time.Time   `orm:"type(datetime);null"`         //备注：最后一次登录时间
-	Ip         string      `orm:"size(15);null"`               //备注：最后一次登录IP
-	IsFirst    bool                                            //是否为第一次登陆，第一次登陆可以使用手机号码登陆，在次登陆则不能
+	Username   string      `orm:"size(20);default();"` //备注：用户名
+	Password   string      `orm:"size(50)"`            //备注：密码
+	Name       string      `orm:"size(20);unique"`     //备注：姓名
+	Tel        string      `orm:"size(45)"`            //备注：电话
+	Position   string      `orm:"size(10)"`            //职位名称
+	LastLogin  time.Time   `orm:"type(datetime);null"` //备注：最后一次登录时间
+	Ip         string      `orm:"size(15);null"`       //备注：最后一次登录IP
+	IsFirst    bool        //是否为第一次登陆，第一次登陆可以使用手机号码登陆，在次登陆则不能
 	IsActive   bool        `orm:"default(true)"`               //用于用户删除或禁用等操作，不用删除用户信息
 	Stage      string      `orm:"size(2);default(在职)"`         //状态：在职，离职
 	PoolName   string      `orm:"size(10);null"`               //所管理库房的名称
@@ -41,7 +40,7 @@ type Category struct {
 	Primary         string             `orm:"size(10)"`            //一级分类；字典：01-试剂， 02-耗材， 03-仪器
 	TwoStage        string             `orm:"size(20);null"`       //二级分类
 	ThreeStage      string             `orm:"size(50);null;index"` //三级分类
-	Is_hidden       bool                                           //是否隐藏
+	Is_hidden       bool               //是否隐藏
 	ProductTemplate []*ProductTemplate `orm:"reverse(many)"`
 }
 
@@ -55,7 +54,7 @@ type Store struct {
 
 type Supplier struct {
 	Id      int
-	Name    string     `orm:"size(100);unique"`
+	Name    string `orm:"size(100);unique"`
 	Site    string
 	Admin   string
 	Tel     string
@@ -80,7 +79,7 @@ type Product struct {
 	LotNum     string    `orm:"size(20);null"`                 //备注：批号
 	CatNum     *Category `orm:"rel(fk);on_delete(do_nothing)"` //备注：分类号
 	Spec       string    `orm:"size(100)"`                     //备注：规格
-	Stock      uint32                                          //备注：库存数量
+	Stock      uint32    //备注：库存数量
 	Unit       string    `orm:"size(5)"`                       //单位
 	Store      *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：库房信息
 	InTime     time.Time `orm:"type(datetime);auto_now_add"`   //备注：入库时间
@@ -100,24 +99,24 @@ type ProductTemplate struct {
 	CatNum    *Category `orm:"rel(fk);on_delete(do_nothing)"` //备注：分类号
 	Spec      string    `orm:"size(100)"`                     //备注：规格
 	Unit      string    `orm:"size(5)"`                       //单位
-	Suppliers string                                          //备注：供应商列表(以逗号分隔)
-	Dealer    *Dealer   `orm:"rel(fk);null"`                  //经销商
-	InPrice   float64   `orm:"digits(10);decimals(2);null"`   //备注：进库价格
+	Suppliers string    //备注：供应商列表(以逗号分隔)
+	Dealer    *Dealer   `orm:"rel(fk);null"`                //经销商
+	InPrice   float64   `orm:"digits(10);decimals(2);null"` //备注：进库价格
 }
 
 type Move struct {
 	Id           int
 	Origin       *Product  `orm:"rel(fk);on_delete(do_nothing)"`      //备注：来源产品Id
 	Destination  *Product  `orm:"rel(fk);on_delete(do_nothing);null"` //备注：去处产品Id
-	Num          uint32                                               //备注：移库数量
-	From         *Store    `orm:"rel(fk);on_delete(do_nothing)"`      //备注：移出库房
-	To           *Store    `orm:"rel(fk);on_delete(do_nothing)"`      //备注：移入库房
-	Request      *User     `orm:"rel(fk);on_delete(do_nothing)"`      //备注：发起人
-	Response     *User     `orm:"rel(fk);on_delete(do_nothing)"`      //备注：响应人
-	Operate      string    `orm:"size(2)"`                            //备注：响应人是否同意		字典：0-未操作，1-同意，-1为拒绝，2-完成移库
-	OperatedTime time.Time `orm:"type(datetime);null"`                //备注：响应人是否同意
-	Created      time.Time `orm:"auto_now_add;type(datetime)"`        //备注：创建时间
-	Finished     time.Time `orm:"type(datetime);null"`                //备注：完成时间
+	Num          uint32    //备注：移库数量
+	From         *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：移出库房
+	To           *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：移入库房
+	Request      *User     `orm:"rel(fk);on_delete(do_nothing)"` //备注：发起人
+	Response     *User     `orm:"rel(fk);on_delete(do_nothing)"` //备注：响应人
+	Operate      string    `orm:"size(2)"`                       //备注：响应人是否同意		字典：0-未操作，1-同意，-1为拒绝，2-完成移库
+	OperatedTime time.Time `orm:"type(datetime);null"`           //备注：响应人是否同意
+	Created      time.Time `orm:"auto_now_add;type(datetime)"`   //备注：创建时间
+	Finished     time.Time `orm:"type(datetime);null"`           //备注：完成时间
 }
 
 type Consumer struct {
@@ -141,20 +140,20 @@ type Sale struct {
 	Send         time.Time `orm:"type(datetime)"`                //备注：发货时间
 	Consumer     *Consumer `orm:"rel(fk);on_delete(do_nothing)"` //备注：客户Id
 	Salesman     *User     `orm:"rel(fk);on_delete(do_nothing)"` //备注：销售Id
-	Num          uint32                                          //备注：销售数量
-	NumFake      uint32                                          //备注：伪造销售数量
-	OutPrice     float64   `orm:"digits(10);decimals(2)"`        //备注：售出价格
-	OutPriceFake float64   `orm:"digits(10);decimals(2)"`        //备注：伪造售出价格
-	HasInvoice   bool      `orm:"default(false)"`                //备注：是否已开发票
-	SendInvoice  time.Time `orm:"type(datetime);null"`           //备注：开具发票日期
-	GetInvoice   time.Time `orm:"type(datetime);null"`           //备注：递交发票日期
-	InvoiceNum   string    `orm:"size(10);null"`                 //备注：发票编号
-	GetMoney     bool      `orm:"default(false)"`                //备注：是否已经接收回款
-	GetDate      time.Time `orm:"type(datetime);null"`           //备注：接受回款日期
-	HasPrint     bool      `orm:"default(false)"`                //是否已经打印出库单
-	Created      time.Time `orm:"type(datetime);auto_now_add"`   //备注：订单创建日期
-	Updated      time.Time `orm:"type(datetime);auto_now"`       //备注：订单更新日期
-	Comment      string    `orm:"size(255);null"`                //备注：备注
+	Num          uint32    //备注：销售数量
+	NumFake      uint32    //备注：伪造销售数量
+	OutPrice     float64   `orm:"digits(10);decimals(2)"`      //备注：售出价格
+	OutPriceFake float64   `orm:"digits(10);decimals(2)"`      //备注：伪造售出价格
+	HasInvoice   bool      `orm:"default(false)"`              //备注：是否已开发票
+	SendInvoice  time.Time `orm:"type(datetime);null"`         //备注：开具发票日期
+	GetInvoice   time.Time `orm:"type(datetime);null"`         //备注：递交发票日期
+	InvoiceNum   string    `orm:"size(10);null"`               //备注：发票编号
+	GetMoney     bool      `orm:"default(false)"`              //备注：是否已经接收回款
+	GetDate      time.Time `orm:"type(datetime);null"`         //备注：接受回款日期
+	HasPrint     bool      `orm:"default(false)"`              //是否已经打印出库单
+	Created      time.Time `orm:"type(datetime);auto_now_add"` //备注：订单创建日期
+	Updated      time.Time `orm:"type(datetime);auto_now"`     //备注：订单更新日期
+	Comment      string    `orm:"size(255);null"`              //备注：备注
 }
 
 type Message struct {
@@ -258,13 +257,13 @@ func init() {
 	orm.Debug = true
 
 	//获取配置信息
-	username := beego.AppConfig.String("mysql::username")
-	password := beego.AppConfig.String("mysql::password")
-	host := beego.AppConfig.String("mysql::host")
-	port := beego.AppConfig.String("mysql::port")
-	database := beego.AppConfig.String("mysql::database")
-	orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
-	//orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
+	//username := beego.AppConfig.String("mysql::username")
+	//password := beego.AppConfig.String("mysql::password")
+	//host := beego.AppConfig.String("mysql::host")
+	//port := beego.AppConfig.String("mysql::port")
+	//database := beego.AppConfig.String("mysql::database")
+	//orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
+	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate), new(OrderNum))
 

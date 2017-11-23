@@ -1,17 +1,19 @@
 package controllers
 
 import (
+	"encoding/json"
+	"fmt"
+	"html/template"
+	"strconv"
+	"strings"
+	"time"
+
+	"erp/models"
+	"erp/plugins/permission"
+	"erp/plugins/position"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"erp/models"
-	"html/template"
-	"time"
-	"erp/plugins/permission"
-	"encoding/json"
-	"strings"
-	"fmt"
-	"strconv"
-	"erp/plugins/position"
 )
 
 type SaleController struct {
@@ -331,7 +333,7 @@ func (c *SaleController) Print() {
 		if p != "超级管理员" {
 			c.Abort("401")
 		}
-	}else{
+	} else {
 		if !(p == "超级管理员" || p == "分库管理员" || p == "总库管理员") {
 			c.Abort("401")
 		}
@@ -684,7 +686,7 @@ func InsertOrder(new_slice []string, username string) {
 		old = 0
 	} else {
 		length := len(order_list[0].Asap)
-		old, _ = strconv.Atoi(order_list[0].Asap[4:length-1])
+		old, _ = strconv.Atoi(order_list[0].Asap[4 : length-1])
 	}
 	v := old + 1
 	var new_string string

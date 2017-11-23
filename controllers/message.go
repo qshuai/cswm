@@ -1,12 +1,14 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
 	"html/template"
+
 	"erp/models"
-	"github.com/astaxie/beego/orm"
-	"github.com/astaxie/beego/logs"
 	"erp/plugins/message"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
 type MessageController struct {
@@ -68,7 +70,7 @@ func (c *MessageController) Message_add() {
 	o.QueryTable("user").Exclude("id", current_user_id).All(&user, "id", "name")
 
 	var user_string string
-	for _, item := range user  {
+	for _, item := range user {
 		user_string += item.Name + ", "
 	}
 

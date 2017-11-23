@@ -3,18 +3,19 @@ package controllers
 import (
 	"html/template"
 
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
 	"erp/models"
-	"github.com/astaxie/beego/logs"
 	"erp/plugins/permission"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
 type DealerController struct {
 	beego.Controller
 }
 
-func (c *DealerController) Get(){
+func (c *DealerController) Get() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewDealer") {
 		c.Abort("401")
 	}
@@ -28,7 +29,7 @@ func (c *DealerController) Get(){
 }
 
 //添加经销商页面
-func (c *DealerController) Dealer_add(){
+func (c *DealerController) Dealer_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddDealer") {
 		c.Abort("401")
 	}
@@ -38,7 +39,7 @@ func (c *DealerController) Dealer_add(){
 }
 
 //添加经销商 post提交
-func (c *DealerController) Dealer_add_post(){
+func (c *DealerController) Dealer_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddDealer") {
 		c.Abort("401")
 	}

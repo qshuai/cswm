@@ -2300,3 +2300,29 @@ function memberPaginator(member) {
 		}
 	});
 }
+
+//修改供应商信息-弹窗
+$(".supplier-edit").click(function () {
+	$("#supplier_edit_modal").modal("show");
+	var item = $(this).parent().parent();
+	var tds = item.find("td");
+	$("input[name=supplier_id]").val(item.find("input").val());
+	$("input[name=name]").val(tds.eq(0).text());
+	$("input[name=admin]").val(tds.eq(1).text());
+	$("input[name=tel]").val(tds.eq(2).text());
+	$("input[name=site]").val(tds.eq(3).text());
+	// $.ajax({
+	// 	url: "/supplier_edit",
+	// 	type: "post",
+	// 	data: {
+	// 		"_xsrf": $("input[name=_xsrf]").val(),
+	// 		"name": $("input[name=name]").val(),
+	// 		"admin": $("input[name=admin]").val(),
+	// 		"tel": $("input[name=tel]").val(),
+	// 		"site": $("input[name=site]").val(),
+	// 	},
+	// 	success: function (response) {
+	//
+	// 	}
+	// })
+});

@@ -1,21 +1,23 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"html/template"
 	"crypto/md5"
 	"fmt"
-	"erp/models"
-	"github.com/astaxie/beego/orm"
+	"html/template"
 	"time"
+
+	"erp/models"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
-type LoginController struct{
+type LoginController struct {
 	beego.Controller
 }
 
 //登陆页面
-func (c *LoginController) Get(){
+func (c *LoginController) Get() {
 	if _, ok := c.GetSession("uid").(int); ok {
 		c.Abort("401")
 	}
@@ -26,7 +28,7 @@ func (c *LoginController) Get(){
 }
 
 //登陆提交验证
-func (c *LoginController) Post(){
+func (c *LoginController) Post() {
 	username := c.GetString("username")
 	p := []byte(c.GetString("password"))
 	pMD5 := md5.Sum(p)
@@ -67,7 +69,7 @@ func (c *LoginController) Post(){
 }
 
 //退出登录
-func (c *LoginController) Logout(){
+func (c *LoginController) Logout() {
 	c.DelSession("uid")
 	c.DelSession("username")
 

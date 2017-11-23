@@ -1,12 +1,14 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"erp/models"
-	"github.com/astaxie/beego/orm"
 	"html/template"
-	"github.com/astaxie/beego/logs"
+
+	"erp/models"
 	"erp/plugins/permission"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
 type StoreController struct {
@@ -14,7 +16,7 @@ type StoreController struct {
 }
 
 //获取库房列表
-func (c *StoreController) Get(){
+func (c *StoreController) Get() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewStore") {
 		c.Abort("401")
 	}
@@ -25,7 +27,7 @@ func (c *StoreController) Get(){
 	//计算S库和J库数量
 	var s, j int
 	for _, item := range store {
-		switch item.Pool{
+		switch item.Pool {
 		case "S库":
 			s++
 		case "J库":
@@ -71,6 +73,6 @@ func (c *StoreController) Store_add_post() {
 		return
 	}
 	c.Data["url"] = "/store_list"
-	c.Data["msg"] = "添加库房 "+ store.Name +" 成功~"
+	c.Data["msg"] = "添加库房 " + store.Name + " 成功~"
 	c.TplName = "jump/error.html"
 }

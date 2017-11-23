@@ -1,16 +1,18 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"erp/models"
-	"github.com/astaxie/beego/orm"
+	"fmt"
 	"html/template"
+	"strconv"
 	"strings"
 	"time"
-	"github.com/astaxie/beego/logs"
-	"strconv"
-	"fmt"
+
+	"erp/models"
 	"erp/plugins/permission"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
 type StoreoutController struct {

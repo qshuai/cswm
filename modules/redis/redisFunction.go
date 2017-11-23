@@ -1,11 +1,13 @@
 package redis_orm
 
 import (
-	"erp/models"
-	"github.com/astaxie/beego/logs"
-	"github.com/astaxie/beego"
-	"github.com/garyburd/redigo/redis"
 	"strconv"
+
+	"erp/models"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/garyburd/redigo/redis"
 )
 
 //同步mysql数据表permission中的所有数据到redis
@@ -219,7 +221,7 @@ func (r *RedisStorage) StoreAllMessage2Redis(message []M) error {
 	ri := r.pool.Get()
 	defer ri.Close()
 
-	for _, item := range message{
+	for _, item := range message {
 		ri.Do("HSET", userdata_prefix+item.Username, "message", item.Num)
 	}
 	return nil

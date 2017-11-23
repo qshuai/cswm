@@ -11,7 +11,7 @@
             <table class="table table-border table-bordered table-bg">
                 <thead>
                 <tr>
-                    <th colspan="5" scope="col">供应商列表</th>
+                    <th colspan="6" scope="col">供应商列表</th>
                 </tr>
                 <tr class="text-c">
                     <th>供应商</th>
@@ -19,22 +19,81 @@
                     <th>电话</th>
                     <th>地址</th>
                     <th>创建时间</th>
+					<th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{range .supplier}}
                 <tr class="text-c">
+					<input type="hidden" value="{{.Id}}">
                     <td>{{.Name}}</td>
                     <td>{{.Admin}}</td>
                     <td>{{.Tel}}</td>
                     <td>{{.Site}}</td>
                     <td>{{date .Created "Y-m-d H:i:s"}}</td>
+                    <td><a class="supplier-edit btn btn-primary-outline radius"><i class="Hui-iconfont Hui-iconfont-edit"></i></a></td>
                 </tr>
                 {{end}}
                 </tbody>
             </table>
         </article>
     </div>
+
+
+	<!--修改供应商信息弹窗-->
+	<div id="supplier_edit_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+		<div class="modal-dialog" style="width: 60%">
+			<input type="hidden" name="sale_id">
+			<div class="modal-content radius">
+				<div class="modal-header">
+					<h3 class="modal-title">修改供应商信息</h3>
+					<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+				</div>
+				<div class="modal-body">
+					<form action="/supplier_edit" method="post" class="form form-horizontal formvalidte" id="form-article-add">
+						{{.xsrfdata}}
+						<input type="hidden" name="supplier_id" value="">
+
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2" for="name"><span class="c-red">*</span>供应商：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input type="text" class="input-text radius" id="name" name="name">
+							</div>
+						</div>
+
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2" for="admin"><span class="c-red">*</span>联系人：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input type="text" class="input-text radius" id="admin" name="admin">
+							</div>
+						</div>
+
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2" for="tel"><span class="c-red">*</span>电话：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input type="text" class="input-text radius" id="tel" name="tel">
+							</div>
+						</div>
+
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2" for="site"><span class="c-red">*</span>地址：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input type="text" class="input-text radius" id="site" name="site">
+							</div>
+						</div>
+
+						<br>
+						<div class="modal-footer">
+							<button class="btn btn-primary">确定</button>
+							<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </section>
 
 <!--请在下方写此页面业务相关的脚本-->

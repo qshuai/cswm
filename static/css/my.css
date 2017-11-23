@@ -1,3 +1,13 @@
+th{
+	padding: 2px 0 !important;
+}
+
+td{
+	padding: 5px 0 !important;
+	text-align: center !important;
+}
+
+
 input:read-only{
     color: #f37b1d;
 }

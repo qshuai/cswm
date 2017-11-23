@@ -3,18 +3,19 @@ package controllers
 import (
 	"html/template"
 
-	"github.com/astaxie/beego"
 	"erp/models"
-	"github.com/astaxie/beego/orm"
-	"github.com/astaxie/beego/logs"
 	"erp/plugins/permission"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
-type SupplierController struct{
+type SupplierController struct {
 	beego.Controller
 }
 
-func (c *SupplierController) Get(){
+func (c *SupplierController) Get() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSupplier") {
 		c.Abort("401")
 	}
@@ -23,12 +24,13 @@ func (c *SupplierController) Get(){
 	o.QueryTable("supplier").All(&supplier)
 
 	c.Data["supplier"] = supplier
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "supplier/supplier_list.html"
 }
 
 //添加供应商页面
-func (c *SupplierController) Supplier_add(){
+func (c *SupplierController) Supplier_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddSupplier") {
 		c.Abort("401")
 	}
@@ -39,7 +41,7 @@ func (c *SupplierController) Supplier_add(){
 }
 
 //添加供应商 post提交
-func (c *SupplierController) Supplier_add_post(){
+func (c *SupplierController) Supplier_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddSupplier") {
 		c.Abort("401")
 	}
@@ -49,7 +51,6 @@ func (c *SupplierController) Supplier_add_post(){
 	supplier.Admin = c.GetString("admin")
 	supplier.Tel = c.GetString("tel")
 	supplier.Site = c.GetString("province") + " " + c.GetString("city") + " " + c.GetString("region") + "-" + c.GetString("introduction")
-
 
 	o := orm.NewOrm()
 	exit := o.QueryTable("supplier").Filter("name", supplier.Name).Exist()
@@ -73,4 +74,25 @@ func (c *SupplierController) Supplier_add_post(){
 			return
 		}
 	}
+}
+
+//编辑供应商信息 ajax
+func (c *SupplierController) Supplier_edit_post() {
+	sup := models.Supplier{}
+	sup.Id, _ = c.GetInt("supplier_id")
+	sup.Name = c.GetString("name")
+	sup.Admin = c.GetString("admin")
+	sup.Tel = c.GetString("tel")
+	sup.Site = c.GetString("site")
+	o := orm.NewOrm()
+	_, err := o.Update(&sup, "name", "site", "tel", "admin")
+	if err != nil {
+		c.Data["msg"] = "修改供应商失败"
+		c.Data["url"] = "/supplier_list"
+		c.TplName = "jump/error.html"
+		return
+	}
+	c.Data["msg"] = "修改供应商成功~"
+	c.Data["url"] = "/supplier_list"
+	c.TplName = "jump/success.html"
 }

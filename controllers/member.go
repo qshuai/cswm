@@ -1,18 +1,20 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
+	"crypto/md5"
+	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
-	"github.com/astaxie/beego/orm"
-	"erp/models"
-	"crypto/md5"
-	"fmt"
 	"strconv"
+
+	"erp/models"
+	"erp/modules/redis"
 	"erp/plugins/permission"
 	"erp/plugins/position"
-	"erp/modules/redis"
-	"encoding/json"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 type MemberController struct {
@@ -245,7 +247,7 @@ func (c *MemberController) Admin_member_edit_post() {
 		c.Abort("401")
 	}
 
-	if (c.IsAjax()) {
+	if c.IsAjax() {
 		level := beego.AppConfig.Strings("level")
 		p := redis_orm.RedisPool.GetOnePosition(c.GetSession("username").(string))
 

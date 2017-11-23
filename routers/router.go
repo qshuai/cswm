@@ -79,6 +79,7 @@ func init() {
 		beego.Router("/supplier_list", &controllers.SupplierController{})
 		beego.Router("/supplier_add", &controllers.SupplierController{}, "get:Supplier_add")
 		beego.Router("/supplier_add", &controllers.SupplierController{}, "post:Supplier_add_post")
+		beego.Router("/supplier_edit", &controllers.SupplierController{}, "post:Supplier_edit_post")
 	}
 
 	{

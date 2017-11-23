@@ -3,11 +3,12 @@ package controllers
 import (
 	"html/template"
 
-	"github.com/astaxie/beego"
 	"erp/models"
-	"github.com/astaxie/beego/orm"
-	"github.com/astaxie/beego/logs"
 	"erp/plugins/permission"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
 )
 
 type ConsumerController struct {
@@ -15,7 +16,7 @@ type ConsumerController struct {
 }
 
 //获取客户列表
-func (c *ConsumerController) Get(){
+func (c *ConsumerController) Get() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewConsumer") {
 		c.Abort("401")
 	}
@@ -29,7 +30,7 @@ func (c *ConsumerController) Get(){
 	c.TplName = "consumer/consumer_list.html"
 }
 
-func (c *ConsumerController) Consumer_add(){
+func (c *ConsumerController) Consumer_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddConsumer") {
 		c.Abort("401")
 	}
@@ -38,7 +39,7 @@ func (c *ConsumerController) Consumer_add(){
 	c.TplName = "consumer/consumer_add.html"
 }
 
-func (c *ConsumerController) Consumer_add_post(){
+func (c *ConsumerController) Consumer_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddConsumer") {
 		c.Abort("401")
 	}
@@ -92,12 +93,12 @@ func (c *ConsumerController) Consumer_edit() {
 
 	o := orm.NewOrm()
 	_, err := o.Update(&consumer, "name", "tel", "department", "province", "city", "region", "introduction")
-	if err != nil{
+	if err != nil {
 		logs.Error("/consumer_edit: Id-", c.GetSession("uid").(int), " 更新客户Id-", consumer.Id, "失败")
 		c.Data["url"] = "/consumer_list"
 		c.Data["msg"] = "更新客户信息十八里~"
 		c.TplName = "jump/error.html"
-	} else{
+	} else {
 		c.Data["url"] = "/consumer_list"
 		c.Data["msg"] = "更新客户信息成功~"
 		c.TplName = "jump/success.html"

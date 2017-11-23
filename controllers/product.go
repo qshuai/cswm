@@ -1,17 +1,19 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
-	"html/template"
-	"github.com/astaxie/beego/orm"
-	"erp/models"
-	"strings"
-	"time"
-	"strconv"
 	"encoding/json"
 	"fmt"
+	"html/template"
+	"strconv"
+	"strings"
+	"time"
+
+	"erp/models"
 	"erp/plugins/permission"
 	"erp/plugins/position"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 type ProductController struct {
@@ -932,7 +934,7 @@ func GetSupplier(name string) *models.Supplier {
 }
 
 //根据库房字符串获取库房信息
-func GetStore(name string) *models.Store{
+func GetStore(name string) *models.Store {
 	store := models.Store{}
 	o := orm.NewOrm()
 	store_slice := strings.Split(name, "-")

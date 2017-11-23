@@ -1,14 +1,16 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
 	"html/template"
-	"github.com/astaxie/beego/logs"
 	"strconv"
-	"github.com/xuri/excelize"
+
 	"erp/models"
-	"github.com/astaxie/beego/orm"
 	"erp/plugins/permission"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego/orm"
+	"github.com/xuri/excelize"
 )
 
 type CategoryController struct {
@@ -288,7 +290,7 @@ func (c *CategoryController) Category_search() {
 }
 
 //分类编辑post
-func ( c *CategoryController) Category_edit_post() {
+func (c *CategoryController) Category_edit_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")
 	}

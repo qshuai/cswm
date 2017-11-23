@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
 	"erp/models"
+
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
 
