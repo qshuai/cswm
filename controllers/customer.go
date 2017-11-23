@@ -96,7 +96,7 @@ func (c *ConsumerController) Consumer_edit() {
 	if err != nil {
 		logs.Error("/consumer_edit: Id-", c.GetSession("uid").(int), " 更新客户Id-", consumer.Id, "失败")
 		c.Data["url"] = "/consumer_list"
-		c.Data["msg"] = "更新客户信息十八里~"
+		c.Data["msg"] = "更新客户信息失败~"
 		c.TplName = "jump/error.html"
 	} else {
 		c.Data["url"] = "/consumer_list"
