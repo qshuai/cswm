@@ -478,6 +478,33 @@ if (query_url === "/product_list") {
 	})
 }
 
+
+//商品编辑
+var disable = false, picker = new Pikaday({
+	field: document.getElementById('date_product_in'),
+	firstDay: 1,
+	minDate: new Date(2000, 0, 1),
+	maxDate: new Date(),
+	yearRange: [2000, 2030],
+
+	showDaysInNextAndPreviousMonths: true,
+	enableSelectionDaysInNextAndPreviousMonths: true
+
+});
+
+var disable = false, picker = new Pikaday({
+	field: document.getElementById('get_invioce_edit'),
+	firstDay: 1,
+	minDate: new Date(2000, 0, 1),
+	maxDate: new Date(),
+	yearRange: [2000, 2030],
+
+	showDaysInNextAndPreviousMonths: true,
+	enableSelectionDaysInNextAndPreviousMonths: true
+
+});
+
+
 //分页函数（抽象）
 function product_paginator(product, paginator_node, page_size, total_item, content_node_obj, hidden_index) {
 	//判断数据是否为空
@@ -1666,7 +1693,7 @@ function AddTemplateSku() {
 	$("#add_spec").parent("div").append('<input type="text" class="input-text radius spec mt-10" value="" placeholder="货号" id="atr_num" name="atr_num" style="width: 25%">' +
 		' <input type="text" class="radius input-text mt-10 spec" value="" placeholder="规格" name="spec" style="width: 25%">' +
 		' <input type="text" class="radius input-text mt-10 in_price" value="" placeholder="价格" id="in_price" name="in_price" style="width: 25%">' +
-		' <a class="btn btn-danger-outline radius delete_sku mt-10"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
+		' <a class="btn btn-danger-outline radius mt-10" onclick="DeleteSku(this)"><i class="Hui-iconfont Hui-iconfont-close"></i></a>')
 
 	delete_sku = $(".delete_sku");
 	spec = $(".spec");
@@ -1682,6 +1709,13 @@ function AddTemplateSku() {
 			$(this).remove();
 		})
 	});
+}
+
+function DeleteSku(obj) {
+	$(obj).prev().prev().prev().remove();
+	$(obj).prev().prev().remove();
+	$(obj).prev().remove();
+	$(obj).remove();
 }
 
 function AppendSupplier() {
