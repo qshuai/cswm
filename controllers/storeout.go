@@ -75,7 +75,8 @@ func (c *StoreoutController) Store_out_action_post() {
 	qb, _ := orm.NewQueryBuilder("mysql")
 	if user.Position != "超级管理员" {
 		type productcheck struct {
-			Id int
+			Id    int
+			Stock int
 		}
 		product_check := productcheck{}
 		if user.PoolName != "" {
@@ -92,7 +93,7 @@ func (c *StoreoutController) Store_out_action_post() {
 				sql := qb.String()
 				o.Raw(sql, store_slice[0], store_slice[1], product.ArtNum, product.Spec).QueryRow(&product_check)
 			} else {
-				qb.Select("product.id").
+				qb.Select("product.id", "product.stock").
 					From("product").
 					InnerJoin("store").
 					On("store.id = product.store_id AND store.pool = ?").
@@ -106,7 +107,7 @@ func (c *StoreoutController) Store_out_action_post() {
 		}
 		fmt.Println(product_check)
 		//检查是否有先录入的商品
-		if product_check.Id != product.Id {
+		if product_check.Id != product.Id && product_check.Stock != 0{
 			c.Data["url"] = "/store_output_action/" + strconv.Itoa(product_check.Id)
 			c.Data["msg"] = "对不起，此规格的商品存在更早录入的，系统已为您自动跳转~"
 			c.TplName = "jump/error.html"
@@ -117,7 +118,7 @@ func (c *StoreoutController) Store_out_action_post() {
 		o.QueryTable("product").Filter("art_num", product.ArtNum).Filter("spec", product.Spec).OrderBy("in_time").One(&product_check)
 		fmt.Println(product_check)
 		//检查是否有先录入的商品
-		if product_check.Id != product.Id {
+		if product_check.Id != product.Id && product_check.Stock != 0{
 			c.Data["url"] = "/store_output_action/" + strconv.Itoa(product_check.Id)
 			c.Data["msg"] = "对不起，此规格的商品存在更早录入的，系统已为您自动跳转~"
 			c.TplName = "jump/error.html"
