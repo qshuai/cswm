@@ -603,7 +603,6 @@ func (c *SaleController) OrderAdd() {
 }
 
 func (c *SaleController) OrderPriceEdit() {
-	fmt.Println("sfafaf")
 	sum := c.GetString("sum")
 	asap := c.GetString("order_id")
 

@@ -112,7 +112,7 @@ type Move struct {
 	From         *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：移出库房
 	To           *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：移入库房
 	Request      *User     `orm:"rel(fk);on_delete(do_nothing)"` //备注：发起人
-	Response     *User     `orm:"rel(fk);on_delete(do_nothing)"` //备注：响应人
+	Response     *User     `orm:"rel(fk);on_delete(do_nothing);null"` //备注：响应人
 	Operate      string    `orm:"size(2)"`                       //备注：响应人是否同意		字典：0-未操作，1-同意，-1为拒绝，2-完成移库
 	OperatedTime time.Time `orm:"type(datetime);null"`           //备注：响应人是否同意
 	Created      time.Time `orm:"auto_now_add;type(datetime)"`   //备注：创建时间
@@ -266,5 +266,5 @@ func init() {
 	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate), new(OrderNum))
-	//orm.RunSyncdb("default", false, true)
+	orm.RunSyncdb("default", false, true)
 }
