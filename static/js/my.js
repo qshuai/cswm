@@ -1192,7 +1192,55 @@ function SalePaginator(sale) {
 				if (!sale[i].HasPrint){
 					tds.eq(21).append(' <a onclick="AddPrint(this)" class="btn size-MINI btn-warning-outline radius">&nbsp;单&nbsp;</a>');
 				}
-				sale_node.append(row)
+				sale_node.append(row);
+
+				//标记单条销售信息，弹窗，赋值
+				var sale_item_edit = $(".sale_item_edit");
+				$.each(sale_item_edit, function (index) {
+					sale_item_edit.eq(index).click(function () {
+						$("#sale_edit_modal").modal("show");
+						var tds = $(this).parent().parent().find("td");
+						$("#title").val(tds.eq(0).text());
+						$("#artnum").val(tds.eq(3).text());
+						$("#salesman").val(tds.eq(4).text());
+						$("#consumer").val(tds.eq(5).text());
+						$("#inprice").val(tds.eq(6).text());
+						$("#outprice").val(tds.eq(7).text());
+						$("#num").val(tds.eq(11).text());
+						$("#send").val(tds.eq(12).text());
+						$("#store").val(tds.eq(2).text());
+
+						var hasinvoice = tds.eq(13).text();
+						var options = $("select[name=hasinvoice]").find("option");
+						$.each(options, function (index) {
+							if (options.eq(index).text() === hasinvoice) {
+								$(this).attr("selected", true);
+							} else {
+								$(this).attr("selected", false);
+							}
+						});
+
+						$("#invioce_num").val(tds.eq(14).text());
+						$("#sendinvioce").val(tds.eq(15).text());
+						$("#getInvoice").val(tds.eq(16).text());
+
+						var get_money = tds.eq(17).text();
+						var option = $("select[name=get_money]").find("option");
+						$.each(option, function (index) {
+							if (option.eq(index).text() === get_money) {
+								option.eq(index).attr("selected", true);
+							} else {
+								option.eq(index).attr("selected", false);
+							}
+						});
+
+						$("#getdate").val(tds.eq(18).text());
+
+						$("#comment").val(tds.eq(19).text());
+
+						$("input[name=sale_id]").val($(".sale_id").eq(index).val());
+					})
+				});
 			}
 		}
 	});
@@ -1396,54 +1444,6 @@ var disable = false, picker = new Pikaday({
 
 	showDaysInNextAndPreviousMonths: true,
 	enableSelectionDaysInNextAndPreviousMonths: true
-});
-
-//标记单条销售信息，弹窗，赋值
-var sale_item_edit = $(".sale_item_edit");
-$.each(sale_item_edit, function (index) {
-	sale_item_edit.eq(index).click(function () {
-		$("#sale_edit_modal").modal("show");
-		var tds = $(this).parent().parent().find("td");
-		$("#title").val(tds.eq(0).text());
-		$("#artnum").val(tds.eq(3).text());
-		$("#salesman").val(tds.eq(4).text());
-		$("#consumer").val(tds.eq(5).text());
-		$("#inprice").val(tds.eq(6).text());
-		$("#outprice").val(tds.eq(7).text());
-		$("#num").val(tds.eq(11).text());
-		$("#send").val(tds.eq(12).text());
-		$("#store").val(tds.eq(2).text());
-
-		var hasinvoice = tds.eq(13).text();
-		var options = $("select[name=hasinvoice]").find("option");
-		$.each(options, function (index) {
-			if (options.eq(index).text() === hasinvoice) {
-				$(this).attr("selected", true);
-			} else {
-				$(this).attr("selected", false);
-			}
-		});
-
-		$("#invioce_num").val(tds.eq(14).text());
-		$("#sendinvioce").val(tds.eq(15).text());
-		$("#getInvoice").val(tds.eq(16).text());
-
-		var get_money = tds.eq(17).text();
-		var option = $("select[name=get_money]").find("option");
-		$.each(option, function (index) {
-			if (option.eq(index).text() === get_money) {
-				option.eq(index).attr("selected", true);
-			} else {
-				option.eq(index).attr("selected", false);
-			}
-		});
-
-		$("#getdate").val(tds.eq(18).text());
-
-		$("#comment").val(tds.eq(19).text());
-
-		$("input[name=sale_id]").val($(".sale_id").eq(index).val());
-	})
 });
 
 //common functions

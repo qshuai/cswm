@@ -10,7 +10,6 @@ import (
 
 	"erp/models"
 	"erp/plugins/permission"
-	"erp/plugins/position"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -327,17 +326,17 @@ func (c *SaleController) Print() {
 	ps := []printsale{}
 
 	//fake的order只能超级管理员打印，正常的order可以有超级管理员、总库管理员或分库管理员打印
-	p := position.GetOnePosition(c.GetSession("username").(string))
-	lastLetter := order.Asap[len(order.Asap)-1:]
-	if lastLetter == "0" {
-		if p != "超级管理员" {
-			c.Abort("401")
-		}
-	} else {
-		if !(p == "超级管理员" || p == "分库管理员" || p == "总库管理员") {
-			c.Abort("401")
-		}
-	}
+	//p := position.GetOnePosition(c.GetSession("username").(string))
+	//lastLetter := order.Asap[len(order.Asap)-1:]
+	//if lastLetter == "0" {
+	//	if p != "超级管理员" {
+	//		c.Abort("401")
+	//	}
+	//} else {
+	//	if !(p == "超级管理员" || p == "分库管理员" || p == "总库管理员") {
+	//		c.Abort("401")
+	//	}
+	//}
 
 	o.Raw(sql).QueryRows(&ps)
 	c.Data["order"] = order

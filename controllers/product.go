@@ -324,13 +324,20 @@ func (c *ProductController) Product_item_edit() {
 
 	product.HasPay, _ = c.GetBool("has_pay_edit")
 	product.HasInvoice, _ = c.GetBool("has_invioce_edit")
-
 	product.GetInvoice, _ = time.Parse("2006-1-2", c.GetString("get_invioce_edit"))
-	product.InTime, _ = time.Parse("2006-1-2", c.GetString("in_time_edit"))
-	d, _ := time.ParseDuration("-8h")
-	product.InTime = product.InTime.Add(d)
 
-	num, err := o.Update(&product, "title", "brand_id", "art_num", "lot_num", "cat_num_id", "spec", "stock", "unit", "store_id", "supplier_id", "in_price", "has_pay", "has_invoice", "get_invoice", "in_time")
+	var num int64
+	var err error
+	if c.GetString("in_time_edit") != "" {
+		product.InTime, _ = time.Parse("2006-1-2", c.GetString("in_time_edit"))
+		d, _ := time.ParseDuration("-8h")
+		product.InTime = product.InTime.Add(d)
+
+		num, err = o.Update(&product, "title", "brand_id", "art_num", "lot_num", "cat_num_id", "spec", "stock", "unit", "store_id", "supplier_id", "in_price", "has_pay", "has_invoice", "get_invoice", "in_time")
+	}else{
+		num, err = o.Update(&product, "title", "brand_id", "art_num", "lot_num", "cat_num_id", "spec", "stock", "unit", "store_id", "supplier_id", "in_price", "has_pay", "has_invoice", "get_invoice")
+	}
+
 	if num == 1 && err == nil {
 		c.Data["url"] = "/product_list"
 		c.Data["msg"] = "商品信息修改成功"
