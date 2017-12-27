@@ -2127,6 +2127,7 @@ function orderPaginator(order) {
 				tds.eq(2).text(order[i].Department);
 				tds.eq(3).text(order[i].Salesman);
 				tds.eq(4).text(order[i].Sum);
+				tds.eq(4).append(' <a class="btn btn-success size-S radius order_price_edit"><i class="Hui-iconfont Hui-iconfont-edit"></i></a>');
 				tds.eq(5).text(order[i].User);
 				order[i].State?tds.eq(6).text("正常"):tds.eq(6).text("废弃");
 				tds.eq(7).text(order[i].Created.substr(0, 10));
@@ -2155,6 +2156,17 @@ function orderPaginator(order) {
 				}
 
 				order_node.append(row);
+
+				var order_price_edit = $(".order_price_edit");
+				$.each(order_price_edit,function (index) {
+					order_price_edit.eq(index).click(function () {
+						$("#order_price_edit").modal("show");
+						$("input[name=order_id]").val($(this).parent().parent().find("td").eq(0).text());
+						$("#send").click(function () {
+							$("#send-form").submit();
+						})
+					})
+				})
 			}
 		}
 	});

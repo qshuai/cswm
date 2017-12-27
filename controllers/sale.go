@@ -353,6 +353,7 @@ func (c *SaleController) OrderList() {
 	o := orm.NewOrm()
 	o.QueryTable("order_num").OrderBy("-id").All(&order)
 	c.Data["order"] = order
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "sale/order_list.html"
 }
@@ -596,9 +597,20 @@ func (c *SaleController) OrderAdd() {
 
 	order_byte, _ := json.Marshal(order_list)
 	c.Data["order"] = string(order_byte)
-
+	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.Layout = "common.tpl"
 	c.TplName = "sale/order_list.html"
+}
+
+func (c *SaleController) OrderPriceEdit() {
+	fmt.Println("sfafaf")
+	sum := c.GetString("sum")
+	asap := c.GetString("order_id")
+
+	o := orm.NewOrm()
+	o.Raw("update order_num set sum = ? where asap = ?", sum, asap).Exec()
+
+	c.Redirect("order_list", 302)
 }
 
 func InsertOrder(new_slice []string, username string) {

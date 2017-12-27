@@ -68,6 +68,39 @@
 		</div>
 
 	</div>
+
+	<!--修改销售记录弹窗-->
+	<div id="order_price_edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="top: 70px;">
+		<div class="modal-dialog" style="width: 60%">
+			<input type="hidden" name="sale_id">
+			<div class="modal-content radius">
+				<div class="modal-header">
+					<h3 class="modal-title">修改总价</h3>
+					<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+				</div>
+				<div class="modal-body">
+					<form action="/order_price_edit" method="post" id="send-form">
+						{{.xsrfdata}}
+						<input type="hidden" name="order_id" value="">
+
+						<div class="row cl">
+							<label class="form-label col-xs-4 col-sm-2" for="sum"><span class="c-red">*</span>价格：</label>
+							<div class="formControls col-xs-8 col-sm-9">
+								<input type="text" class="input-text radius" id="sum" name="sum">
+							</div>
+						</div>
+					</form>
+					<br>
+					<div class="modal-footer">
+						<button class="btn btn-primary" id="send">确定</button>
+						<button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </section>
 
 <!--请在下方写此页面业务相关的脚本-->

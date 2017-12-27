@@ -121,6 +121,7 @@ func init() {
 		beego.Router("/print_action/:list/:id", &controllers.SaleController{}, "get:Print")
 		beego.Router("/order_list", &controllers.SaleController{}, "get:OrderList")
 		beego.Router("/order_close/:oid:int", &controllers.SaleController{}, "get:OrderClose")
+		beego.Router("/order_price_edit", &controllers.SaleController{}, "post:OrderPriceEdit")
 
 		beego.Router("/product_sale_info/:art_num", &controllers.SaleController{}, "get:ProductSalInfo")
 		beego.Router("/order_list/add", &controllers.SaleController{}, "get:OrderAdd")
