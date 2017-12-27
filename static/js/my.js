@@ -554,7 +554,7 @@ function product_paginator(product, paginator_node, page_size, total_item, conte
 
 				//为每一行设置id属性，并赋值，便于删除和编辑
 				row.attr("product_item_no", product[i].Id);
-				row.find(".product-sale-info").attr("href", /product_sale_info/ + product[i].ArtNum);
+				row.find(".product-sale-info").attr("href", /product_sale_info/ + product[i].Id);
 
 				var tds = row.find("td");
 				tds.eq(0).html('<a href="/product_track/' + product[i].Id + '">' + product[i].Title + '</a>').addClass();

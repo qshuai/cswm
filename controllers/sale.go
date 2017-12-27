@@ -403,7 +403,7 @@ func (c *SaleController) ProductSalInfo() {
 				"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
 				From("sale").
 				LeftJoin("product").
-				On("product.id = sale.product_id AND product.art_num = ?").
+				On("product.id = sale.product_id AND product.id = ?").
 				InnerJoin("brand").
 				On("product.brand_id = brand.id").
 				LeftJoin("user").
@@ -423,7 +423,7 @@ func (c *SaleController) ProductSalInfo() {
 			"product.title", "product.art_num", "product.in_price", "brand.name as brand", "product.unit", "product.spec", "user.name as salesman_name", "consumer.name as consumer_name").
 			From("sale").
 			LeftJoin("product").
-			On("product.id = sale.product_id AND product.art_num = ?").
+			On("product.id = sale.product_id AND product.id = ?").
 			InnerJoin("brand").
 			On("product.brand_id = brand.id").
 			LeftJoin("user").
