@@ -26,7 +26,8 @@ func (c *MemberController) Member_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddMember") {
 		c.Abort("401")
 	}
-	c.Data["level"] = modify(beego.AppConfig.Strings("level"), redis_orm.RedisPool.GetOnePosition(c.GetSession("username").(string)))
+	c.Data["level"] = modify(beego.AppConfig.Strings("level"), redis_orm.
+		RedisPool.GetOnePosition(c.GetSession("username").(string)))
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.TplName = "member/member_add.html"

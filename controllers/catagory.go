@@ -189,14 +189,16 @@ func (c *CategoryController) Category_add_post() {
 
 	o := orm.NewOrm()
 	primary_query := models.Category{}
-	o.QueryTable("category").Filter("primary", primary).One(&primary_query, "id", "is_hidden")
+	o.QueryTable("category").Filter("primary", primary).
+		One(&primary_query, "id", "is_hidden")
 	//如果查询不到将会返回对应类型的零值
 	if primary_query.Id != 0 {
 		category.Primary = strconv.Itoa(primary_query.Id)
 	}
 
 	two_stage_query := models.Category{}
-	o.QueryTable("category").Filter("two_stage", two_stage).One(&two_stage_query, "id", "is_hidden")
+	o.QueryTable("category").Filter("two_stage", two_stage).
+		One(&two_stage_query, "id", "is_hidden")
 	//如果查询不到将会返回对应类型的零值
 	if two_stage_query.Id != 0 {
 		category.TwoStage = strconv.Itoa(two_stage_query.Id)
@@ -311,17 +313,20 @@ func (c *CategoryController) Category_edit_post() {
 	o := orm.NewOrm()
 	if category.TwoStage != "-" && category.ThreeStage == "-" {
 		category_primary := models.Category{}
-		o.QueryTable("category").Filter("primary", category.Primary).Filter("two_stage", "-").One(&category_primary, "id")
+		o.QueryTable("category").Filter("primary", category.Primary).
+			Filter("two_stage", "-").One(&category_primary, "id")
 		category.Primary = strconv.Itoa(category_primary.Id)
 	}
 
 	if category.ThreeStage != "-" {
 		category_primary := models.Category{}
-		o.QueryTable("category").Filter("primary", category.Primary).Filter("two_stage", "-").One(&category_primary, "id")
+		o.QueryTable("category").Filter("primary", category.Primary).
+			Filter("two_stage", "-").One(&category_primary, "id")
 		category.Primary = strconv.Itoa(category_primary.Id)
 
 		category_two_stage := models.Category{}
-		o.QueryTable("category").Filter("two_stage", category.TwoStage).Filter("three_stage", "-").One(&category_two_stage, "id")
+		o.QueryTable("category").Filter("two_stage", category.TwoStage).
+			Filter("three_stage", "-").One(&category_two_stage, "id")
 		category.TwoStage = strconv.Itoa(category_two_stage.Id)
 	}
 

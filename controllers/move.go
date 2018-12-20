@@ -99,7 +99,8 @@ func (c *MoveController) Move_request_post() {
 	//目标库房
 	store_to := models.Store{}
 	store_slice := strings.Split(c.GetString("move_to"), "-")
-	o.QueryTable("store").Filter("pool", store_slice[0]).Filter("name", store_slice[1]).One(&store_to)
+	o.QueryTable("store").Filter("pool", store_slice[0]).
+		Filter("name", store_slice[1]).One(&store_to)
 	move.To = &store_to
 
 	//发起人
@@ -111,7 +112,8 @@ func (c *MoveController) Move_request_post() {
 	//响应人
 	pool_user := []models.User{}
 	conf := orm.NewCondition()
-	con := conf.Or("pool_name", "S库").Or("pool_name", "J库").Or("pool_name", c.GetString("move_to")).Or("pool_name", c.GetString("store_from"))
+	con := conf.Or("pool_name", "S库").Or("pool_name", "J库").
+		Or("pool_name", c.GetString("move_to")).Or("pool_name", c.GetString("store_from"))
 	o.QueryTable("user").SetCond(con).All(&pool_user)
 	//区分总库和分库管理员
 	for _, item := range pool_user {
@@ -133,9 +135,12 @@ func (c *MoveController) Move_request_post() {
 			if item.PoolName != user.PoolName {
 				message.From = &user
 				message.To = &item
-				message.Content = "<span class='c-warning'>" + user.Name + "</span> 将商品： <a href='/product_track/" + strconv.Itoa(product.Id) + "' class='c-primary'>" + product.Title + "</a> 从 <span class='c-danger'>" + store_from.Pool + "-" + store_from.Name +
-					"</span> 移库到 <span class='c-danger'>" + c.GetString("move_to") + "</span><br />具体请查看：<a href='" + c.Ctx.Input.Site() + ":" + strconv.Itoa(c.Ctx.Input.Port()) +
-					"/move_info/" + strconv.FormatInt(mid, 10) + "' target='blank'><u>移库详情</u></a>"
+				message.Content = "<span class='c-warning'>" + user.Name + "</span> 将商品： <a href='/product_track/" +
+					strconv.Itoa(product.Id) + "' class='c-primary'>" + product.Title + "</a> 从 <span class='c-danger'>" +
+					store_from.Pool + "-" + store_from.Name + "</span> 移库到 <span class='c-danger'>" +
+					c.GetString("move_to") + "</span><br />具体请查看：<a href='" + c.Ctx.Input.Site() +
+					":" + strconv.Itoa(c.Ctx.Input.Port()) + "/move_info/" + strconv.FormatInt(mid, 10) +
+					"' target='blank'><u>移库详情</u></a>"
 				o.Insert(&message)
 				msg.IncrOneMessage(item.Username)
 			}

@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
 	"erp/models"
+	"erp/plugins/permission"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"html/template"
-	"github.com/astaxie/beego/logs"
-	"erp/plugins/permission"
 )
 
 type BrandController struct {
@@ -14,7 +14,7 @@ type BrandController struct {
 }
 
 //商标列表页面
-func (c *BrandController) Get(){
+func (c *BrandController) Get() {
 	brand := []models.Brand{}
 	o := orm.NewOrm()
 	o.QueryTable("brand").All(&brand)
@@ -25,7 +25,7 @@ func (c *BrandController) Get(){
 }
 
 //添加商标页面
-func (c *BrandController) Brand_add(){
+func (c *BrandController) Brand_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddBrand") {
 		c.Abort("401")
 	}
@@ -35,7 +35,7 @@ func (c *BrandController) Brand_add(){
 }
 
 //添加商标 post提交
-func (c *BrandController) Brand_add_post(){
+func (c *BrandController) Brand_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddBrand") {
 		c.Abort("401")
 	}

@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -109,14 +110,14 @@ type Move struct {
 	Origin       *Product  `orm:"rel(fk);on_delete(do_nothing)"`      //备注：来源产品Id
 	Destination  *Product  `orm:"rel(fk);on_delete(do_nothing);null"` //备注：去处产品Id
 	Num          uint32    //备注：移库数量
-	From         *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：移出库房
-	To           *Store    `orm:"rel(fk);on_delete(do_nothing)"` //备注：移入库房
-	Request      *User     `orm:"rel(fk);on_delete(do_nothing)"` //备注：发起人
+	From         *Store    `orm:"rel(fk);on_delete(do_nothing)"`      //备注：移出库房
+	To           *Store    `orm:"rel(fk);on_delete(do_nothing)"`      //备注：移入库房
+	Request      *User     `orm:"rel(fk);on_delete(do_nothing)"`      //备注：发起人
 	Response     *User     `orm:"rel(fk);on_delete(do_nothing);null"` //备注：响应人
-	Operate      string    `orm:"size(2)"`                       //备注：响应人是否同意		字典：0-未操作，1-同意，-1为拒绝，2-完成移库
-	OperatedTime time.Time `orm:"type(datetime);null"`           //备注：响应人是否同意
-	Created      time.Time `orm:"auto_now_add;type(datetime)"`   //备注：创建时间
-	Finished     time.Time `orm:"type(datetime);null"`           //备注：完成时间
+	Operate      string    `orm:"size(2)"`                            //备注：响应人是否同意 字典：0-未操作，1-同意，-1为拒绝，2-完成移库
+	OperatedTime time.Time `orm:"type(datetime);null"`                //备注：响应人是否同意
+	Created      time.Time `orm:"auto_now_add;type(datetime)"`        //备注：创建时间
+	Finished     time.Time `orm:"type(datetime);null"`                //备注：完成时间
 }
 
 type Consumer struct {
@@ -257,14 +258,17 @@ func init() {
 	orm.Debug = true
 
 	//获取配置信息
-	//username := beego.AppConfig.String("mysql::username")
-	//password := beego.AppConfig.String("mysql::password")
-	//host := beego.AppConfig.String("mysql::host")
-	//port := beego.AppConfig.String("mysql::port")
-	//database := beego.AppConfig.String("mysql::database")
-	//orm.RegisterDataBase("default", "mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
-	orm.RegisterDataBase("default", "mysql", "root:f7JtchgAP4qbqD5j1HTwFvu1Ubw9h3L@tcp(127.0.0.1:3399)/erp?charset=utf8&loc=Asia%2FShanghai")
+	username := beego.AppConfig.String("mysql::username")
+	password := beego.AppConfig.String("mysql::password")
+	host := beego.AppConfig.String("mysql::host")
+	port := beego.AppConfig.String("mysql::port")
+	database := beego.AppConfig.String("mysql::database")
+	orm.RegisterDataBase("default", "mysql", username+
+		":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
 
-	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer), new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission), new(DefaultPermission), new(ProductTemplate), new(OrderNum))
+	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer),
+		new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission),
+		new(DefaultPermission), new(ProductTemplate), new(OrderNum))
+
 	orm.RunSyncdb("default", false, true)
 }

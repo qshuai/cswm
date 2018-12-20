@@ -1,7 +1,6 @@
 package msg
 
 import (
-
 	"erp/modules/redis"
 
 	"github.com/astaxie/beego/orm"

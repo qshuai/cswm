@@ -1,5 +1,6 @@
 *.log
 .DS_Store
+.idea
 erp
 erp_database.sql
 data.json

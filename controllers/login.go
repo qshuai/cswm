@@ -36,10 +36,12 @@ func (c *LoginController) Post() {
 
 	o := orm.NewOrm()
 	u := models.User{}
-	err := o.QueryTable("user").Filter("username__exact", username).Filter("password", password).Filter("is_first", false).Filter("is_active", true).One(&u)
+	err := o.QueryTable("user").Filter("username__exact", username).
+		Filter("password", password).Filter("is_first", false).Filter("is_active", true).One(&u)
 	if err != nil {
 		uu := models.User{}
-		err := o.QueryTable("user").Filter("tel__exact", username).Filter("password", password).Filter("is_first", true).Filter("is_active", true).One(&uu)
+		err := o.QueryTable("user").Filter("tel__exact", username).
+			Filter("password", password).Filter("is_first", true).Filter("is_active", true).One(&uu)
 		if err != nil {
 			flash := beego.NewFlash()
 			flash.Error("注意：用户名或密码错误！")
