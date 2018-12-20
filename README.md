@@ -5,4 +5,4 @@ cswm represents `Customer Sale Warehousing Management` , and supports robust, st
 
 Demo page is here: [http://erp.thinkeridea.com/](http://erp.thinkeridea.com/) (user: **admin**    password: **admin123**) 
 
-This repository intends to help setuping a erp service for the real use. Fee free, go ahead.
+This repository intends to help setuping a erp service for the real use. Feel free, go ahead.
