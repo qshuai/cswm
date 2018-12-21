@@ -1,1 +1,2 @@
 *.go linguist-language=Go
+*.js linguist-language=Go
