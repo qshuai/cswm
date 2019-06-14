@@ -1,7 +1,7 @@
 cswm
 ===
 
-cswm represents `Customer Sale Warehousing Management` , and supports robust, stable, simple services. It has never crashed in the past year. This project depends on mysql and redis instance. 
+cswm represents `Customer Sale Warehousing Management` , and supports robust, stable, simple services. It has never crashed in the past years thanking for the awesome repository [beego](https://github.com/astaxie/beego). This project depends on mysql and redis instance. 
 
 Demo page is here: [http://erp.thinkeridea.com/](http://erp.thinkeridea.com/) (user: **admin**    password: **admin123**) 
 
