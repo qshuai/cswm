@@ -1,10 +1,9 @@
 package position
 
 import (
-	"erp/models"
-	"erp/modules/redis"
-
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/modules/redis"
 )
 
 func AsyncAllPosition() {

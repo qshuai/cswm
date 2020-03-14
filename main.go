@@ -4,18 +4,17 @@ import (
 	"regexp"
 	"strconv"
 
-	"erp/controllers"
-	_ "erp/models"
-	_ "erp/modules/redis"
-	"erp/plugins/message"
-	"erp/plugins/permission"
-	"erp/plugins/position"
-	_ "erp/routers"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/controllers"
+	_ "github.com/qshuai/cswm/models"
+	_ "github.com/qshuai/cswm/modules/redis"
+	"github.com/qshuai/cswm/plugins/message"
+	"github.com/qshuai/cswm/plugins/permission"
+	"github.com/qshuai/cswm/plugins/position"
+	_ "github.com/qshuai/cswm/routers"
 )
 
 func init() {

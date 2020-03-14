@@ -6,13 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"erp/models"
-	"erp/plugins/message"
-	"erp/plugins/permission"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/message"
+	"github.com/qshuai/cswm/plugins/permission"
 )
 
 type MoveController struct {

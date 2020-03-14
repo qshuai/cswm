@@ -4,13 +4,12 @@ import (
 	"html/template"
 	"strconv"
 
-	"erp/models"
-	permission2 "erp/plugins/permission"
-	"erp/plugins/position"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/permission"
+	"github.com/qshuai/cswm/plugins/position"
 )
 
 type Permission struct {
@@ -147,48 +146,48 @@ func (c *Permission) PermissionMemberEditPost() {
 		c.Abort("401")
 	}
 
-	permission := models.Permission{}
-	permission.Id, _ = c.GetInt("permission_id")
-	permission.AddMember = ConvertPermissionBool(c.GetString("AddMember"))
-	permission.EditMember = ConvertPermissionBool(c.GetString("EditMember"))
-	permission.ActiveMember = ConvertPermissionBool(c.GetString("ActiveMember"))
-	permission.AddConsumer = ConvertPermissionBool(c.GetString("AddConsumer"))
-	permission.EditConsumer = ConvertPermissionBool(c.GetString("EditConsumer"))
-	permission.ViewConsumer = ConvertPermissionBool(c.GetString("ViewConsumer"))
-	permission.AddBrand = ConvertPermissionBool(c.GetString("AddBrand"))
-	permission.AddDealer = ConvertPermissionBool(c.GetString("AddDealer"))
-	permission.ViewDealer = ConvertPermissionBool(c.GetString("ViewDealer"))
-	permission.AddSupplier = ConvertPermissionBool(c.GetString("AddSupplier"))
-	permission.ViewSupplier = ConvertPermissionBool(c.GetString("ViewSupplier"))
-	permission.AddProduct = ConvertPermissionBool(c.GetString("AddProduct"))
-	permission.InputInPrice = ConvertPermissionBool(c.GetString("InputInPrice"))
-	permission.ViewProductStore = ConvertPermissionBool(c.GetString("ViewProductStore"))
-	permission.ViewStock = ConvertPermissionBool(c.GetString("ViewStock"))
-	permission.ViewInPrice = ConvertPermissionBool(c.GetString("ViewInPrice"))
-	permission.EditProduct = ConvertPermissionBool(c.GetString("EditProduct"))
-	permission.DeleteProduct = ConvertPermissionBool(c.GetString("DeleteProduct"))
-	permission.OutputProduct = ConvertPermissionBool(c.GetString("OutputProduct"))
-	permission.ViewSale = ConvertPermissionBool(c.GetString("ViewSale"))
-	permission.ViewSaleConsumer = ConvertPermissionBool(c.GetString("ViewSaleConsumer"))
-	permission.ViewSaleInPrice = ConvertPermissionBool(c.GetString("ViewSaleInPrice"))
-	permission.EditSale = ConvertPermissionBool(c.GetString("EditSale"))
-	permission.OperateCategory = ConvertPermissionBool(c.GetString("OperateCategory"))
-	permission.RequestMove = ConvertPermissionBool(c.GetString("RequestMove"))
-	permission.ResponseMove = ConvertPermissionBool(c.GetString("ResponseMove"))
-	permission.ViewMove = ConvertPermissionBool(c.GetString("ViewMove"))
-	permission.AddStore = ConvertPermissionBool(c.GetString("AddStore"))
-	permission.ViewStore = ConvertPermissionBool(c.GetString("ViewStore"))
-	permission.OperateOtherStore = ConvertPermissionBool(c.GetString("OperateOtherStore"))
+	per := models.Permission{}
+	per.Id, _ = c.GetInt("permission_id")
+	per.AddMember = ConvertPermissionBool(c.GetString("AddMember"))
+	per.EditMember = ConvertPermissionBool(c.GetString("EditMember"))
+	per.ActiveMember = ConvertPermissionBool(c.GetString("ActiveMember"))
+	per.AddConsumer = ConvertPermissionBool(c.GetString("AddConsumer"))
+	per.EditConsumer = ConvertPermissionBool(c.GetString("EditConsumer"))
+	per.ViewConsumer = ConvertPermissionBool(c.GetString("ViewConsumer"))
+	per.AddBrand = ConvertPermissionBool(c.GetString("AddBrand"))
+	per.AddDealer = ConvertPermissionBool(c.GetString("AddDealer"))
+	per.ViewDealer = ConvertPermissionBool(c.GetString("ViewDealer"))
+	per.AddSupplier = ConvertPermissionBool(c.GetString("AddSupplier"))
+	per.ViewSupplier = ConvertPermissionBool(c.GetString("ViewSupplier"))
+	per.AddProduct = ConvertPermissionBool(c.GetString("AddProduct"))
+	per.InputInPrice = ConvertPermissionBool(c.GetString("InputInPrice"))
+	per.ViewProductStore = ConvertPermissionBool(c.GetString("ViewProductStore"))
+	per.ViewStock = ConvertPermissionBool(c.GetString("ViewStock"))
+	per.ViewInPrice = ConvertPermissionBool(c.GetString("ViewInPrice"))
+	per.EditProduct = ConvertPermissionBool(c.GetString("EditProduct"))
+	per.DeleteProduct = ConvertPermissionBool(c.GetString("DeleteProduct"))
+	per.OutputProduct = ConvertPermissionBool(c.GetString("OutputProduct"))
+	per.ViewSale = ConvertPermissionBool(c.GetString("ViewSale"))
+	per.ViewSaleConsumer = ConvertPermissionBool(c.GetString("ViewSaleConsumer"))
+	per.ViewSaleInPrice = ConvertPermissionBool(c.GetString("ViewSaleInPrice"))
+	per.EditSale = ConvertPermissionBool(c.GetString("EditSale"))
+	per.OperateCategory = ConvertPermissionBool(c.GetString("OperateCategory"))
+	per.RequestMove = ConvertPermissionBool(c.GetString("RequestMove"))
+	per.ResponseMove = ConvertPermissionBool(c.GetString("ResponseMove"))
+	per.ViewMove = ConvertPermissionBool(c.GetString("ViewMove"))
+	per.AddStore = ConvertPermissionBool(c.GetString("AddStore"))
+	per.ViewStore = ConvertPermissionBool(c.GetString("ViewStore"))
+	per.OperateOtherStore = ConvertPermissionBool(c.GetString("OperateOtherStore"))
 
 	o := orm.NewOrm()
 	user := models.User{}
 	user.Id, _ = c.GetInt("permission_user_id")
-	permission.User = &user
+	per.User = &user
 	permission_id := models.Permission{}
 	o.QueryTable("permission").Filter("User__id", user.Id).One(&permission_id, "id")
 
-	permission.Id = permission_id.Id
-	_, err := o.Update(&permission)
+	per.Id = permission_id.Id
+	_, err := o.Update(&per)
 	if err != nil {
 		logs.Error("修改人员权限失败")
 		c.Data["url"] = "/permission_member_edit/" + strconv.Itoa(user.Id)
@@ -199,7 +198,7 @@ func (c *Permission) PermissionMemberEditPost() {
 
 	//redis
 	o.QueryTable("user").Filter("id", user.Id).One(&user, "id", "username")
-	permission2.AsyncMysql2RedisOne(user.Username)
+	permission.AsyncMysql2RedisOne(user.Username)
 
 	c.Data["url"] = "/permission_member_edit/" + strconv.Itoa(user.Id)
 	c.Data["msg"] = "权限修改成功~"

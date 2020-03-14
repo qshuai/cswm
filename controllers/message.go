@@ -3,12 +3,11 @@ package controllers
 import (
 	"html/template"
 
-	"erp/models"
-	"erp/plugins/message"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/message"
 )
 
 type MessageController struct {
@@ -17,14 +16,14 @@ type MessageController struct {
 
 //message列表
 func (c *MessageController) Message_list() {
-	current_uid := c.GetSession("uid")
+	currentUid := c.GetSession("uid")
 	message := []models.Message{}
 
 	cond := orm.NewCondition()
-	cond_build := cond.And("from", current_uid).Or("to", current_uid)
+	condBuild := cond.And("from", currentUid).Or("to", currentUid)
 
 	o := orm.NewOrm()
-	o.QueryTable("message").SetCond(cond_build).RelatedSel().OrderBy("-created").All(&message)
+	o.QueryTable("message").SetCond(condBuild).RelatedSel().OrderBy("-created").All(&message)
 
 	c.Data["message"] = message
 	c.Data["xsrftoken"] = c.XSRFToken()

@@ -1,6 +1,6 @@
 package redis_orm
 
-import "erp/models"
+import "github.com/qshuai/cswm/models"
 
 type RedisInterface interface {
 	//权限操作

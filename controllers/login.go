@@ -6,10 +6,9 @@ import (
 	"html/template"
 	"time"
 
-	"erp/models"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
 )
 
 type LoginController struct {

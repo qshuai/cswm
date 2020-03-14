@@ -3,11 +3,10 @@ package redis_orm
 import (
 	"strconv"
 
-	"erp/models"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/garyburd/redigo/redis"
+	"github.com/qshuai/cswm/models"
 )
 
 //同步mysql数据表permission中的所有数据到redis

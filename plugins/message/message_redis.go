@@ -1,9 +1,8 @@
 package msg
 
 import (
-	"erp/modules/redis"
-
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/modules/redis"
 )
 
 func IncrOneMessage(username string) error {

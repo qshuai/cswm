@@ -7,12 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"erp/models"
-	"erp/plugins/permission"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/permission"
 )
 
 type StoreoutController struct {

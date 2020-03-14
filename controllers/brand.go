@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"erp/models"
-	"erp/plugins/permission"
+	"html/template"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"html/template"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/permission"
 )
 
 type BrandController struct {

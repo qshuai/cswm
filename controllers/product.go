@@ -8,12 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"erp/models"
-	"erp/plugins/permission"
-	"erp/plugins/position"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/permission"
+	"github.com/qshuai/cswm/plugins/position"
 )
 
 type ProductController struct {

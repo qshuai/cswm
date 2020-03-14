@@ -4,13 +4,12 @@ import (
 	"html/template"
 	"strconv"
 
-	"erp/models"
-	"erp/plugins/permission"
-
+	"github.com/360EntSecGroup-Skylar/excelize"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
-	"github.com/xuri/excelize"
+	"github.com/qshuai/cswm/models"
+	"github.com/qshuai/cswm/plugins/permission"
 )
 
 type CategoryController struct {

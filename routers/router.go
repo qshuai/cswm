@@ -1,9 +1,8 @@
 package routers
 
 import (
-	"erp/controllers"
-
 	"github.com/astaxie/beego"
+	"github.com/qshuai/cswm/controllers"
 )
 
 func init() {
