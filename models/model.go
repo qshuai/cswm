@@ -19,7 +19,7 @@ type User struct {
 	Ip         string      `orm:"size(15);null"`               //备注：最后一次登录IP
 	IsFirst    bool        `orm:"defaul(true)"`                //是否为第一次登陆，第一次登陆可以使用手机号码登陆，在次登陆则不能
 	IsActive   bool        `orm:"default(true)"`               //用于用户删除或禁用等操作，不用删除用户信息
-	Stage      string      `orm:"size(5);default(on)"`        //状态：在职，离职
+	Stage      string      `orm:"size(5);default(on)"`         //状态：on在职，off离职
 	PoolName   string      `orm:"size(10);null"`               //所管理库房的名称
 	Created    time.Time   `orm:"auto_now_add;type(datetime)"` //备注：用户创建时间
 	Updated    time.Time   `orm:"auto_now;type(datetime)"`     //备注：用户更新时间
