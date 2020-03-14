@@ -49,7 +49,7 @@ func (c *MemberController) Member_add_post() {
 	u.Position = c.GetString("position")
 	u.IsFirst = true
 	u.IsActive = true
-	u.Stage = "在职"
+	u.Stage = "on"
 
 	o := orm.NewOrm()
 	_, err := o.Insert(&u)
@@ -322,7 +322,7 @@ func (c *MemberController) OffPosition() {
 		o := orm.NewOrm()
 
 		if action == "off" {
-			user.Stage = "离职"
+			user.Stage = "off"
 			o.Update(&user, "stage")
 
 			c.Data["json"] = ResponseInfo{
@@ -332,7 +332,7 @@ func (c *MemberController) OffPosition() {
 			}
 			c.ServeJSON()
 		} else if action == "on" {
-			user.Stage = "在职"
+			user.Stage = "on"
 			o.Update(&user, "stage")
 
 			c.Data["json"] = ResponseInfo{

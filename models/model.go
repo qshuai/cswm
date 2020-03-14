@@ -10,16 +10,16 @@ import (
 
 type User struct {
 	Id         int
-	Username   string      `orm:"size(20);default();"` //备注：用户名
-	Password   string      `orm:"size(50)"`            //备注：密码
-	Name       string      `orm:"size(20);unique"`     //备注：姓名
-	Tel        string      `orm:"size(45)"`            //备注：电话
-	Position   string      `orm:"size(10)"`            //职位名称
-	LastLogin  time.Time   `orm:"type(datetime);null"` //备注：最后一次登录时间
-	Ip         string      `orm:"size(15);null"`       //备注：最后一次登录IP
-	IsFirst    bool        //是否为第一次登陆，第一次登陆可以使用手机号码登陆，在次登陆则不能
+	Username   string      `orm:"size(20);default();"`         //备注：用户名
+	Password   string      `orm:"size(50)"`                    //备注：密码
+	Name       string      `orm:"size(20);unique"`             //备注：姓名
+	Tel        string      `orm:"size(45)"`                    //备注：电话
+	Position   string      `orm:"size(10)"`                    //职位名称
+	LastLogin  time.Time   `orm:"type(datetime);null"`         //备注：最后一次登录时间
+	Ip         string      `orm:"size(15);null"`               //备注：最后一次登录IP
+	IsFirst    bool        `orm:"defaul(true)"`                //是否为第一次登陆，第一次登陆可以使用手机号码登陆，在次登陆则不能
 	IsActive   bool        `orm:"default(true)"`               //用于用户删除或禁用等操作，不用删除用户信息
-	Stage      string      `orm:"size(2);default(在职)"`         //状态：在职，离职
+	Stage      string      `orm:"size(5);default(on)"`        //状态：在职，离职
 	PoolName   string      `orm:"size(10);null"`               //所管理库房的名称
 	Created    time.Time   `orm:"auto_now_add;type(datetime)"` //备注：用户创建时间
 	Updated    time.Time   `orm:"auto_now;type(datetime)"`     //备注：用户更新时间
@@ -263,12 +263,18 @@ func init() {
 	host := beego.AppConfig.String("mysql::host")
 	port := beego.AppConfig.String("mysql::port")
 	database := beego.AppConfig.String("mysql::database")
-	orm.RegisterDataBase("default", "mysql", username+
+	err := orm.RegisterDataBase("default", "mysql", username+
 		":"+password+"@tcp("+host+":"+port+")/"+database+"?charset=utf8&loc=Asia%2FShanghai")
+	if err != nil {
+		panic("注册数据库失败" + err.Error())
+	}
 
 	orm.RegisterModel(new(User), new(Brand), new(Category), new(Store), new(Supplier), new(Dealer),
 		new(Product), new(Move), new(Consumer), new(Sale), new(Message), new(Permission),
 		new(DefaultPermission), new(ProductTemplate), new(OrderNum))
 
-	orm.RunSyncdb("default", false, true)
+	err = orm.RunSyncdb("default", false, true)
+	if err != nil {
+		panic("同步数据库失败" + err.Error())
+	}
 }
