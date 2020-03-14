@@ -6,3 +6,9 @@ erp_database.sql
 data.json
 dump.rdb
 appendonly.aof
+
+# dependencies
+vendor
+
+# binary file 
+cswm
