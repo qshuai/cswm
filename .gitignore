@@ -7,6 +7,9 @@ data.json
 dump.rdb
 appendonly.aof
 
+# private configuration
+app.conf
+
 # dependencies
 vendor
 
