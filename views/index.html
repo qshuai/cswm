@@ -6,16 +6,16 @@
 		<span class="c-666">我的桌面</span>
 		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 	<div class="Hui-article">
-		<article class="cl pt-20" style="padding-left: 300px;">
-			<div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee;">
+		<article class="cl pt-20">
+			<div class="col-md-4 col-sm-10 mr-20" style="border: 1px solid #eee;">
 				<span>销量统计</span>
 				<canvas id="sale_curve" width="400" height="400"></canvas>
 			</div>
-			<div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee;">
+			<div class="col-md-4 col-sm-10 mr-20" style="border: 1px solid #eee;">
 				<span>商品分类占比</span>
 				<canvas id="product_category" width="400" height="400"></canvas>
 			</div>
-			<div class="col-md-3 col-sm-10 mr-20" style="border: 1px solid #eee">
+			<div class="col-md-4 col-sm-10 mr-20" style="border: 1px solid #eee">
 				<span>近一个月的销售情况</span>
 				<canvas id="salesman" width="400" height="400"></canvas>
 			</div>
@@ -26,10 +26,11 @@
 	</div>
 </section>
 
+<!--以下是模拟数据，仅作为示例使用，请统计和加载你的真实数据-->
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
 	var sale_curve = document.getElementById("sale_curve").getContext('2d');
-	var myChart = new Chart(sale_curve, {
+	new Chart(sale_curve, {
 		type: 'line',
 		data: {
 			labels: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月"],
