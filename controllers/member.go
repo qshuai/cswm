@@ -20,7 +20,7 @@ type MemberController struct {
 	beego.Controller
 }
 
-//添加用户页面
+// 添加用户页面
 func (c *MemberController) Member_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddMember") {
 		c.Abort("401")
@@ -32,7 +32,7 @@ func (c *MemberController) Member_add() {
 	c.TplName = "member/member_add.html"
 }
 
-//添加用户提交逻辑
+// 添加用户提交逻辑
 func (c *MemberController) Member_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddMember") {
 		c.Abort("401")
@@ -102,14 +102,14 @@ func (c *MemberController) Member_add_post() {
 	c.Redirect("/member_list", 302)
 }
 
-//完善用户信息页面
+// 完善用户信息页面
 func (c *MemberController) UserInfo() {
 	c.Layout = "common.tpl"
 	c.Data["xsrfdata"] = template.HTML(c.XSRFFormHTML())
 	c.TplName = "member/info.html"
 }
 
-//完善用户信息提交逻辑
+// 完善用户信息提交逻辑
 func (c *MemberController) UserInfo_post() {
 	u := models.User{}
 	u.Id, _ = c.GetSession("uid").(int)
@@ -147,7 +147,7 @@ func (c *MemberController) UserInfo_post() {
 	c.Redirect("/", 302)
 }
 
-//获取用户列表
+// 获取用户列表
 func (c *MemberController) Member_list() {
 	u := []models.User{}
 	o := orm.NewOrm()
@@ -158,7 +158,7 @@ func (c *MemberController) Member_list() {
 	c.TplName = "member/member_list.html"
 }
 
-//个人信息修改
+// 个人信息修改
 func (c *MemberController) Member_edit() {
 	u := models.User{}
 	u.Id = c.GetSession("uid").(int)
@@ -172,7 +172,7 @@ func (c *MemberController) Member_edit() {
 	c.TplName = "member/member_edit.html"
 }
 
-//个人信息修改post
+// 个人信息修改post
 func (c *MemberController) Member_edit_post() {
 	u := models.User{}
 	u.Id = c.GetSession("uid").(int)
@@ -210,7 +210,7 @@ func (c *MemberController) Member_edit_post() {
 	}
 }
 
-//管理员修改人员信息页面
+// 管理员修改人员信息页面
 func (c *MemberController) Admin_member_edit() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
 		c.Abort("401")
@@ -241,7 +241,7 @@ func (c *MemberController) Admin_member_edit() {
 	c.TplName = "member/admin_edit.html"
 }
 
-//管理员检索所要修改的用户
+// 管理员检索所要修改的用户
 func (c *MemberController) Admin_member_edit_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
 		c.Abort("401")
@@ -270,7 +270,7 @@ func (c *MemberController) Admin_member_edit_post() {
 	}
 }
 
-//管理员禁用或激活用户账号
+// 管理员禁用或激活用户账号
 func (c *MemberController) Disable_active_member() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ActiveMember") {
 		c.Abort("401")
@@ -345,7 +345,7 @@ func (c *MemberController) OffPosition() {
 	}
 }
 
-//管理员修改账户信息
+// 管理员修改账户信息
 func (c *MemberController) Admin_edit_all() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "EditMember") {
 		c.Abort("401")
@@ -372,7 +372,7 @@ func (c *MemberController) Admin_edit_all() {
 	}
 }
 
-//获取禁用账户列表
+// 获取禁用账户列表
 func (c *MemberController) Disable_member_list() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ActiveMember") {
 		c.Abort("401")
@@ -387,12 +387,12 @@ func (c *MemberController) Disable_member_list() {
 	c.TplName = "member/disable_member_list.html"
 }
 
-//只允许添加比自己等级低的人员
+// 只允许添加比自己等级低的人员
 func modify(pp []string, position string) []string {
 	if position == pp[0] {
 		return pp
 	}
-	for index, _ := range pp {
+	for index := range pp {
 		if pp[index] == position {
 			return pp[index+1:]
 		}
@@ -400,10 +400,10 @@ func modify(pp []string, position string) []string {
 	return []string{}
 }
 
-//判断自己的等级是否高于另外一个人
+// 判断自己的等级是否高于另外一个人
 func judge(pp []string, my string, your string) bool {
 	var mindex, yindex int
-	for index, _ := range pp {
+	for index := range pp {
 		if my == pp[index] {
 			mindex = index
 		}

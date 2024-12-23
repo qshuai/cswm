@@ -14,7 +14,7 @@ type BrandController struct {
 	beego.Controller
 }
 
-//商标列表页面
+// 商标列表页面
 func (c *BrandController) Get() {
 	brand := []models.Brand{}
 	o := orm.NewOrm()
@@ -25,7 +25,7 @@ func (c *BrandController) Get() {
 	c.TplName = "brand/brand_list.html"
 }
 
-//添加商标页面
+// 添加商标页面
 func (c *BrandController) Brand_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddBrand") {
 		c.Abort("401")
@@ -35,7 +35,7 @@ func (c *BrandController) Brand_add() {
 	c.TplName = "brand/brand_add.html"
 }
 
-//添加商标 post提交
+// 添加商标 post提交
 func (c *BrandController) Brand_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddBrand") {
 		c.Abort("401")

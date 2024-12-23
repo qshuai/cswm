@@ -63,7 +63,7 @@ type Supplier struct {
 	Product []*Product `orm:"reverse(many)"`
 }
 
-//经销商
+// 经销商
 type Dealer struct {
 	Id      int
 	Name    string     `orm:"size(100);unique"`
@@ -237,7 +237,7 @@ type DefaultPermission struct {
 	OperateOtherStore bool   `orm:"default(false)"` //操作非管辖库房
 }
 
-//出库单编号
+// 出库单编号
 type OrderNum struct {
 	Id         int
 	Asap       string

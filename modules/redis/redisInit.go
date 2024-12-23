@@ -4,7 +4,7 @@ import "github.com/astaxie/beego"
 
 var RedisPool RedisInterface
 
-//获取redis配置信息
+// 获取redis配置信息
 func init() {
 	port, _ := beego.AppConfig.Int("redis::port")
 	DB, _ := beego.AppConfig.Int("redis::db")

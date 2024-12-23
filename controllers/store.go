@@ -6,6 +6,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+
 	"github.com/qshuai/cswm/models"
 	"github.com/qshuai/cswm/plugins/permission"
 )
@@ -14,7 +15,7 @@ type StoreController struct {
 	beego.Controller
 }
 
-//获取库房列表
+// 获取库房列表
 func (c *StoreController) Get() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewStore") {
 		c.Abort("401")
@@ -41,7 +42,7 @@ func (c *StoreController) Get() {
 	c.TplName = "store/store_list.html"
 }
 
-//添加库房页面
+// 添加库房页面
 func (c *StoreController) Store_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddStore") {
 		c.Abort("401")
@@ -52,7 +53,7 @@ func (c *StoreController) Store_add() {
 	c.TplName = "store/store_add.html"
 }
 
-//添加库房页面post
+// 添加库房页面post
 func (c *StoreController) Store_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddStore") {
 		c.Abort("401")

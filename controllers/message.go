@@ -14,7 +14,7 @@ type MessageController struct {
 	beego.Controller
 }
 
-//message列表
+// message列表
 func (c *MessageController) Message_list() {
 	currentUid := c.GetSession("uid")
 	message := []models.Message{}
@@ -31,7 +31,7 @@ func (c *MessageController) Message_list() {
 	c.TplName = "message/message_list.html"
 }
 
-//get请求单个message详情
+// get请求单个message详情
 func (c *MessageController) Message_info() {
 	mid, _ := c.GetInt(":mid")
 	o := orm.NewOrm()
@@ -60,7 +60,7 @@ func (c *MessageController) Message_info() {
 	c.TplName = "message/message_info.html"
 }
 
-//新建message页面
+// 新建message页面
 func (c *MessageController) Message_add() {
 	user := []models.User{}
 	current_user_id := c.GetSession("uid").(int)
@@ -80,7 +80,7 @@ func (c *MessageController) Message_add() {
 	c.TplName = "message/message_add.html"
 }
 
-//新建message提交post
+// 新建message提交post
 func (c *MessageController) Message_add_post() {
 	message_from := c.GetSession("uid").(int)
 	user_from := models.User{}

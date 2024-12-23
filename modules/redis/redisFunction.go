@@ -9,7 +9,7 @@ import (
 	"github.com/qshuai/cswm/models"
 )
 
-//同步mysql数据表permission中的所有数据到redis
+// 同步mysql数据表permission中的所有数据到redis
 func (r *RedisStorage) StorePermission(permission_items []models.Permission) error {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
@@ -57,7 +57,7 @@ func (r *RedisStorage) StorePermission(permission_items []models.Permission) err
 	return nil
 }
 
-//同步一个用户的permission数据到redis中
+// 同步一个用户的permission数据到redis中
 func (r *RedisStorage) StoreOnePermission(username string, permission models.Permission) error {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
@@ -104,7 +104,7 @@ func (r *RedisStorage) StoreOnePermission(username string, permission models.Per
 	return nil
 }
 
-//获取某个人的permission的一行数据
+// 获取某个人的permission的一行数据
 func (r *RedisStorage) GetOneRowPermission(username string) map[string]bool {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
@@ -119,7 +119,7 @@ func (r *RedisStorage) GetOneRowPermission(username string) map[string]bool {
 	return maps
 }
 
-//获取某个人的permission的某个权限数据
+// 获取某个人的permission的某个权限数据
 func (r *RedisStorage) GetOneItemPermission(username string, key string) bool {
 	//获取permission redis存储前缀
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")
@@ -130,7 +130,7 @@ func (r *RedisStorage) GetOneItemPermission(username string, key string) bool {
 	return b
 }
 
-//存储所有user数据表中的position到redis
+// 存储所有user数据表中的position到redis
 func (r *RedisStorage) StorePosition(position_items []models.User) error {
 	//获取position redis存储前缀
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
@@ -147,7 +147,7 @@ func (r *RedisStorage) StorePosition(position_items []models.User) error {
 	return nil
 }
 
-//存储某个user的position到redis
+// 存储某个user的position到redis
 func (r *RedisStorage) StoreOnePosition(position_item models.User) error {
 	//获取position redis存储前缀
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
@@ -163,7 +163,7 @@ func (r *RedisStorage) StoreOnePosition(position_item models.User) error {
 	return nil
 }
 
-//从redis中获取某个人员的position数据
+// 从redis中获取某个人员的position数据
 func (r *RedisStorage) GetOnePosition(username string) string {
 	//获取position redis存储前缀
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
@@ -174,7 +174,7 @@ func (r *RedisStorage) GetOnePosition(username string) string {
 	return res
 }
 
-//增加某人的消息数量
+// 增加某人的消息数量
 func (r *RedisStorage) IncrOneMessage(username string) error {
 	//获取position redis存储前缀
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
@@ -185,7 +185,7 @@ func (r *RedisStorage) IncrOneMessage(username string) error {
 	return err
 }
 
-//减少某人的消息数量
+// 减少某人的消息数量
 func (r *RedisStorage) DecrOneMessage(username string) error {
 	//获取position redis存储前缀
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
@@ -196,7 +196,7 @@ func (r *RedisStorage) DecrOneMessage(username string) error {
 	return err
 }
 
-//获取某人的消息数量
+// 获取某人的消息数量
 func (r *RedisStorage) GetOneMessageNum(username string) int {
 	//获取position redis存储前缀
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
@@ -207,7 +207,7 @@ func (r *RedisStorage) GetOneMessageNum(username string) int {
 	return res
 }
 
-//存储所有的未读message到redis
+// 存储所有的未读message到redis
 type M struct {
 	Username string
 	Num      string
@@ -226,7 +226,7 @@ func (r *RedisStorage) StoreAllMessage2Redis(message []M) error {
 	return nil
 }
 
-//修改key
+// 修改key
 func (r *RedisStorage) RenameKey(old, new string) error {
 	userdata_prefix := beego.AppConfig.String("redis::userdata_prefix")
 	permission_prefix := beego.AppConfig.String("redis::permission_prefix")

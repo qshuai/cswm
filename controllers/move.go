@@ -37,7 +37,7 @@ type movelist struct {
 	OperatedTime time.Time
 }
 
-//移库请求页面
+// 移库请求页面
 func (c *MoveController) Move_request() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "RequestMove") {
 		c.Abort("401")
@@ -67,7 +67,7 @@ func (c *MoveController) Move_request() {
 	c.TplName = "move/move_request.html"
 }
 
-//移库post提交
+// 移库post提交
 func (c *MoveController) Move_request_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "RequestMove") {
 		c.Abort("401")
@@ -156,7 +156,7 @@ func (c *MoveController) Move_request_post() {
 	}
 }
 
-//移库列表
+// 移库列表
 func (c *MoveController) Move_list() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewMove") {
 		c.Abort("401")
@@ -190,7 +190,7 @@ func (c *MoveController) Move_list() {
 	c.TplName = "move/move_list.html"
 }
 
-//移库接受
+// 移库接受
 func (c *MoveController) Move_accept() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
 		c.Abort("401")
@@ -213,7 +213,7 @@ func (c *MoveController) Move_accept() {
 	}
 }
 
-//拒绝移库
+// 拒绝移库
 func (c *MoveController) Move_deny() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
 		c.Abort("401")
@@ -236,7 +236,7 @@ func (c *MoveController) Move_deny() {
 	}
 }
 
-//移库完成
+// 移库完成
 func (c *MoveController) Move_finish() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ResponseMove") {
 		c.Abort("401")
@@ -271,7 +271,7 @@ func (c *MoveController) Move_finish() {
 	}
 }
 
-//移库详情页面
+// 移库详情页面
 func (c *MoveController) Move_info() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewMove") {
 		c.Abort("401")

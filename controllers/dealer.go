@@ -27,7 +27,7 @@ func (c *DealerController) Get() {
 	c.TplName = "dealer/dealer_list.html"
 }
 
-//添加经销商页面
+// 添加经销商页面
 func (c *DealerController) Dealer_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddDealer") {
 		c.Abort("401")
@@ -37,7 +37,7 @@ func (c *DealerController) Dealer_add() {
 	c.TplName = "dealer/dealer_add.html"
 }
 
-//添加经销商 post提交
+// 添加经销商 post提交
 func (c *DealerController) Dealer_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddDealer") {
 		c.Abort("401")

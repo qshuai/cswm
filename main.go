@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+
 	"github.com/qshuai/cswm/controllers"
 	_ "github.com/qshuai/cswm/models"
 	_ "github.com/qshuai/cswm/modules/redis"
@@ -23,7 +24,7 @@ func init() {
 	logs.Async(1e3)
 }
 
-//验证用户是否登陆
+// 验证用户是否登陆
 var FilterLogin = func(c *context.Context) {
 	_, ok := c.Input.Session("uid").(int)
 	if !ok && c.Request.RequestURI != "/login" {
@@ -33,14 +34,14 @@ var FilterLogin = func(c *context.Context) {
 	}
 }
 
-//验证用户是否完善用户名和密码信息
+// 验证用户是否完善用户名和密码信息
 var FilterUserInfo = func(c *context.Context) {
 	o := orm.NewOrm()
 	uid, _ := c.Input.Session("uid").(int)
 
 	//is_first变量是为了屏蔽用户登陆后还进行数据库查询操作
-	is_first, _ := c.GetSecureCookie(strconv.Itoa(uid), "is_first")
-	if is_first != "false" && uid != 0 {
+	isFirst, _ := c.GetSecureCookie(strconv.Itoa(uid), "is_first")
+	if isFirst != "false" && uid != 0 {
 		exist := o.QueryTable("user").Filter("id", uid).Filter("username", "").Exist()
 		if exist && c.Request.RequestURI != "/userinfo" {
 			c.Redirect(302, "/userinfo")
@@ -51,12 +52,12 @@ var FilterUserInfo = func(c *context.Context) {
 		}
 	}
 	//防止用户反复修改（此页面每个用户只能设置一次）
-	if is_first == "false" && c.Request.RequestURI == "/userinfo" {
+	if isFirst == "false" && c.Request.RequestURI == "/userinfo" {
 		c.Redirect(302, "/")
 	}
 }
 
-//为每个页面都赋予authority变量（用户权限map）
+// 为每个页面都赋予authority变量（用户权限map）
 var PermissionAssign = func(c *context.Context) {
 	username, _ := c.Input.Session("username").(string)
 	c.Input.SetData("authority", permission.GetOneRowPermission(username))
@@ -73,7 +74,7 @@ var MessageAssign = func(c *context.Context) {
 	c.Input.SetData("message_num", msg.GetOneMessageNum(username))
 }
 
-//模板函数
+// 模板函数
 func ToString(s int) string {
 	o := strconv.Itoa(s)
 	return o
@@ -84,7 +85,7 @@ func dd(m map[int]string, key int) map[int]string {
 	return m
 }
 
-//boot convert to string
+// boot convert to string
 func boolToString(b bool) string {
 	if b {
 		return "是"
@@ -92,13 +93,13 @@ func boolToString(b bool) string {
 	return "否"
 }
 
-//去除字符串中的html标签
+// 去除字符串中的html标签
 func stripTags(str string) string {
 	r, _ := regexp.Compile("(?U)<.+>")
 	return r.ReplaceAllString(str, "")
 }
 
-//string convert to int
+// string convert to int
 func stringToInt(str string) int {
 	i, _ := strconv.Atoi(str)
 	return i

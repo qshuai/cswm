@@ -15,7 +15,7 @@ type LoginController struct {
 	beego.Controller
 }
 
-//登陆页面
+// 登陆页面
 func (c *LoginController) Get() {
 	if _, ok := c.GetSession("uid").(int); ok {
 		c.Abort("401")
@@ -26,7 +26,7 @@ func (c *LoginController) Get() {
 	c.TplName = "login.html"
 }
 
-//登陆提交验证
+// 登陆提交验证
 func (c *LoginController) Post() {
 	username := c.GetString("username")
 	p := []byte(c.GetString("password"))
@@ -69,7 +69,7 @@ func (c *LoginController) Post() {
 	}
 }
 
-//退出登录
+// 退出登录
 func (c *LoginController) Logout() {
 	c.DelSession("uid")
 	c.DelSession("username")

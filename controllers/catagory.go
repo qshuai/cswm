@@ -16,7 +16,7 @@ type CategoryController struct {
 	beego.Controller
 }
 
-//分类列表数据前台展示
+// 分类列表数据前台展示
 func (c *CategoryController) Get() {
 	o := orm.NewOrm()
 	category := []models.Category{}
@@ -59,7 +59,7 @@ func (c *CategoryController) Get() {
 	c.TplName = "category/category_list.html"
 }
 
-//提交分类表excel界面展示
+// 提交分类表excel界面展示
 func (c *CategoryController) Category_upload() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")
@@ -69,7 +69,7 @@ func (c *CategoryController) Category_upload() {
 	c.TplName = "category/category_upload.html"
 }
 
-//分类表excel文件上传，以及更新数据库分类表
+// 分类表excel文件上传，以及更新数据库分类表
 func (c *CategoryController) Category_upload_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")
@@ -144,7 +144,7 @@ func (c *CategoryController) Category_upload_post() {
 	}
 }
 
-//添加分类
+// 添加分类
 func (c *CategoryController) Category_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")
@@ -172,7 +172,7 @@ func (c *CategoryController) Category_add() {
 	c.TplName = "category/category_add.html"
 }
 
-//添加分类提交
+// 添加分类提交
 func (c *CategoryController) Category_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")
@@ -223,7 +223,7 @@ func (c *CategoryController) Category_add_post() {
 	}
 }
 
-//分类编辑
+// 分类编辑
 func (c *CategoryController) Category_edit() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")
@@ -244,7 +244,7 @@ func (c *CategoryController) Category_edit() {
 	c.TplName = "category/category_edit.html"
 }
 
-//ajax请求1条分类信息
+// ajax请求1条分类信息
 func (c *CategoryController) Category_search() {
 	if !c.IsAjax() {
 		return
@@ -290,7 +290,7 @@ func (c *CategoryController) Category_search() {
 	c.ServeJSON()
 }
 
-//分类编辑post
+// 分类编辑post
 func (c *CategoryController) Category_edit_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OperateCategory") {
 		c.Abort("401")

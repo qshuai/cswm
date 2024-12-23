@@ -16,7 +16,7 @@ type Permission struct {
 	beego.Controller
 }
 
-//默认权限展示页面
+// 默认权限展示页面
 func (c *Permission) DefaultPermission() {
 	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
 		c.Abort("401")
@@ -31,7 +31,7 @@ func (c *Permission) DefaultPermission() {
 	c.TplName = "permission/default_permission.html"
 }
 
-//默认权限编辑页面
+// 默认权限编辑页面
 func (c *Permission) DefaultPermissionEdit() {
 	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
 		c.Abort("401")
@@ -49,7 +49,7 @@ func (c *Permission) DefaultPermissionEdit() {
 	c.TplName = "permission/default_permission_edit.html"
 }
 
-//默认权限编辑post提交
+// 默认权限编辑post提交
 func (c *Permission) DefaultPermissionEditPost() {
 	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
 		c.Abort("401")
@@ -103,7 +103,7 @@ func (c *Permission) DefaultPermissionEditPost() {
 	c.TplName = "jump/success.html"
 }
 
-//人员列表
+// 人员列表
 func (c *Permission) PermissionMemberList() {
 	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
 		c.Abort("401")
@@ -117,7 +117,7 @@ func (c *Permission) PermissionMemberList() {
 	c.TplName = "permission/permission_member_list.html"
 }
 
-//人员权限编辑页面
+// 人员权限编辑页面
 func (c *Permission) PermissionMemberEdit() {
 	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
 		c.Abort("401")
@@ -140,7 +140,7 @@ func (c *Permission) PermissionMemberEdit() {
 	c.TplName = "permission/permission_member_edit.html"
 }
 
-//人员权限编辑post提交
+// 人员权限编辑post提交
 func (c *Permission) PermissionMemberEditPost() {
 	if position.GetOnePosition(c.GetSession("username").(string)) != "超级管理员" {
 		c.Abort("401")

@@ -40,7 +40,7 @@ type product struct {
 	GetInvoice   time.Time
 }
 
-//定义querybuiler查询结果的接受结构体
+// 定义querybuiler查询结果的接受结构体
 type product_template struct {
 	Id         int
 	ThreeStage string
@@ -54,11 +54,11 @@ type product_template struct {
 	DealerName string
 }
 
-//每次获取的product数据条数
+// 每次获取的product数据条数
 const ProductLimit = 100
 const TemplateLimit = 100
 
-//获取商品列表
+// 获取商品列表
 func (c *ProductController) Get() {
 	username := c.GetSession("username").(string)
 	user := models.User{}
@@ -141,7 +141,7 @@ func (c *ProductController) Get() {
 	c.TplName = "product/product_list.html"
 }
 
-//ajax加载更多商品
+// ajax加载更多商品
 func (c *ProductController) ProductLoadMore() {
 	if !c.IsAjax() {
 		return
@@ -226,7 +226,7 @@ func (c *ProductController) ProductLoadMore() {
 	c.ServeJSON()
 }
 
-//删除单条商品信息
+// 删除单条商品信息
 func (c *ProductController) Product_item_delete() {
 	if c.IsAjax() {
 		//判断当前用户是否会有删除商品的权限
@@ -277,7 +277,7 @@ func (c *ProductController) Product_item_delete() {
 	return
 }
 
-//编辑单条商品信息
+// 编辑单条商品信息
 func (c *ProductController) Product_item_edit() {
 	//判断当前用户时候有权限
 	un := c.GetSession("username").(string)
@@ -353,7 +353,7 @@ func (c *ProductController) Product_item_edit() {
 
 }
 
-//商品添加页面
+// 商品添加页面
 func (c *ProductController) Add_get() {
 	//判断当前用户时候有权限
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddProduct") {
@@ -372,7 +372,7 @@ func (c *ProductController) Add_get() {
 	c.TplName = "product/product_add.html"
 }
 
-//商品添加post
+// 商品添加post
 func (c *ProductController) Add_post() {
 	//判断当前用户时候有权限
 	un := c.GetSession("username").(string)
@@ -440,7 +440,7 @@ func (c *ProductController) Add_post() {
 	c.TplName = "jump/error.html"
 }
 
-//ajax通过货号一键填充表单
+// ajax通过货号一键填充表单
 func (c *ProductController) SearchByCatnum() {
 	if !c.IsAjax() {
 		return
@@ -556,7 +556,7 @@ func (c *ProductController) Product_track() {
 	c.TplName = "product/sale_info.html"
 }
 
-//管理员添加商品模板
+// 管理员添加商品模板
 func (c *ProductController) ProductTemplateList() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
 	if pos != "超级管理员" && pos != "总库管理员" {
@@ -594,7 +594,7 @@ func (c *ProductController) ProductTemplateList() {
 	c.TplName = "product/product_template_list.html"
 }
 
-//加载更多模板数据（ajax）
+// 加载更多模板数据（ajax）
 func (c *ProductController) TemplateLoadMore() {
 	if !c.IsAjax() {
 		return
@@ -630,7 +630,7 @@ func (c *ProductController) TemplateLoadMore() {
 	c.ServeJSON()
 }
 
-//商品模板添加页面
+// 商品模板添加页面
 func (c *ProductController) ProductTemplateAdd() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
 	if pos != "超级管理员" && pos != "总库管理员" {
@@ -645,7 +645,7 @@ func (c *ProductController) ProductTemplateAdd() {
 	c.TplName = "product/product_template_add.html"
 }
 
-//商品模板添加提交
+// 商品模板添加提交
 func (c *ProductController) ProductTemplateAddPost() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
 	if pos != "超级管理员" && pos != "总库管理员" {
@@ -703,7 +703,7 @@ func (c *ProductController) ProductTemplateAddPost() {
 	c.TplName = "jump/error.html"
 }
 
-//商品模板编辑提交
+// 商品模板编辑提交
 func (c *ProductController) ProductTemplateEditPost() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
 	if pos != "超级管理员" && pos != "总库管理员" {
@@ -768,7 +768,7 @@ func (c *ProductController) ProductTemplateEditPost() {
 	c.TplName = "jump/error.html"
 }
 
-//删除指定product_template
+// 删除指定product_template
 func (c *ProductController) ProductTemplateDeletePost() {
 	pos := position.GetOnePosition(c.GetSession("username").(string))
 	if pos != "超级管理员" && pos != "总库管理员" {
@@ -795,8 +795,8 @@ func (c *ProductController) ProductTemplateDeletePost() {
 	}
 }
 
-//公共函数
-//获取品牌列表
+// 公共函数
+// 获取品牌列表
 func GetBrandList() string {
 	o := orm.NewOrm()
 	brand := []models.Brand{}
@@ -808,7 +808,7 @@ func GetBrandList() string {
 	return brand_string
 }
 
-//获取供应商列表
+// 获取供应商列表
 func GetSupplierList() string {
 	o := orm.NewOrm()
 	supplier := []models.Supplier{}
@@ -820,7 +820,7 @@ func GetSupplierList() string {
 	return supplier_string
 }
 
-//获取库房列表
+// 获取库房列表
 func GetStoreList(pool_name string) string {
 
 	var store_string string
@@ -840,7 +840,7 @@ func GetStoreList(pool_name string) string {
 	return store_string
 }
 
-//获取管辖库房列表
+// 获取管辖库房列表
 func GetStoreSlice(pool_name string) []string {
 
 	var store_slice []string
@@ -864,7 +864,7 @@ func GetStoreSlice(pool_name string) []string {
 	return store_slice
 }
 
-//判断是否属于所管辖库房
+// 判断是否属于所管辖库房
 func JudgeStore(store_slice []string, store string) bool {
 	for _, item := range store_slice {
 		if item == store {
@@ -874,7 +874,7 @@ func JudgeStore(store_slice []string, store string) bool {
 	return false
 }
 
-//判断是否属于所管辖库房
+// 判断是否属于所管辖库房
 func JudgeIsStore(pool_name, input string) bool {
 	if pool_name == "" {
 		return false
@@ -902,7 +902,7 @@ func JudgeIsStore(pool_name, input string) bool {
 	return false
 }
 
-//获取三级分类列表
+// 获取三级分类列表
 func GetThreeStageList() string {
 	o := orm.NewOrm()
 	three_stage := []models.Category{}
@@ -914,7 +914,7 @@ func GetThreeStageList() string {
 	return three_stage_string
 }
 
-//根据brand name 获取 brand
+// 根据brand name 获取 brand
 func GetBrand(name string) *models.Brand {
 	brand := models.Brand{}
 	o := orm.NewOrm()
@@ -922,7 +922,7 @@ func GetBrand(name string) *models.Brand {
 	return &brand
 }
 
-//根据dealer name 获取 dealer
+// 根据dealer name 获取 dealer
 func GetDealer(name string) *models.Dealer {
 	dealer := models.Dealer{}
 	o := orm.NewOrm()
@@ -930,7 +930,7 @@ func GetDealer(name string) *models.Dealer {
 	return &dealer
 }
 
-//根据三级分类名称获取对应
+// 根据三级分类名称获取对应
 func GetCategory(three_stage string) *models.Category {
 	category := models.Category{}
 	o := orm.NewOrm()
@@ -938,7 +938,7 @@ func GetCategory(three_stage string) *models.Category {
 	return &category
 }
 
-//根据供应商名称获取供应商
+// 根据供应商名称获取供应商
 func GetSupplier(name string) *models.Supplier {
 	supplier := models.Supplier{}
 	o := orm.NewOrm()
@@ -946,7 +946,7 @@ func GetSupplier(name string) *models.Supplier {
 	return &supplier
 }
 
-//根据库房字符串获取库房信息
+// 根据库房字符串获取库房信息
 func GetStore(name string) *models.Store {
 	store := models.Store{}
 	o := orm.NewOrm()
@@ -955,7 +955,7 @@ func GetStore(name string) *models.Store {
 	return &store
 }
 
-//获取商品模板中的货号列表
+// 获取商品模板中的货号列表
 func GetArtNumList() string {
 	o := orm.NewOrm()
 	art_num := []models.ProductTemplate{}

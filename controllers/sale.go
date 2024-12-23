@@ -47,7 +47,7 @@ type salelist struct {
 	Created      string
 }
 
-//获取销售列表数据
+// 获取销售列表数据
 func (c *SaleController) Sale_list() {
 	username := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSale") {
@@ -126,7 +126,7 @@ func (c *SaleController) Sale_list() {
 	c.TplName = "sale/sale_list.html"
 }
 
-//获取更多销售记录
+// 获取更多销售记录
 func (c *SaleController) SaleLoadMore() {
 	username := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSale") {
@@ -207,7 +207,7 @@ func (c *SaleController) SaleLoadMore() {
 	c.ServeJSON()
 }
 
-//单条销售记录修改post
+// 单条销售记录修改post
 func (c *SaleController) Sale_edit() {
 	un := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(un, "EditSale") {
@@ -242,7 +242,7 @@ func (c *SaleController) Sale_edit() {
 	}
 }
 
-//打印
+// 打印
 func (c *SaleController) Print() {
 	print_list := c.GetString(":list")
 	print_id, _ := c.GetInt(":id")
@@ -346,7 +346,7 @@ func (c *SaleController) Print() {
 	c.TplName = "sale/print.html"
 }
 
-//出库单列表
+// 出库单列表
 func (c *SaleController) OrderList() {
 	order := []models.OrderNum{}
 	o := orm.NewOrm()
@@ -357,7 +357,7 @@ func (c *SaleController) OrderList() {
 	c.TplName = "sale/order_list.html"
 }
 
-//作废出库单
+// 作废出库单
 func (c *SaleController) OrderClose() {
 	oid, _ := c.GetInt(":oid")
 	o := orm.NewOrm()
@@ -380,7 +380,7 @@ func (c *SaleController) OrderClose() {
 	}
 }
 
-//从product_list页面点击按钮跳转到相应货号的销售列表
+// 从product_list页面点击按钮跳转到相应货号的销售列表
 func (c *SaleController) ProductSalInfo() {
 	username := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewSale") {
@@ -459,7 +459,7 @@ func (c *SaleController) ProductSalInfo() {
 	c.TplName = "sale/sale_list.html"
 }
 
-//编辑出库单（伪造）
+// 编辑出库单（伪造）
 func (c *SaleController) OrderEdit() {
 	print_list := c.Ctx.GetCookie("print_sale_list")
 	if print_list == "" {
@@ -510,7 +510,7 @@ func (c *SaleController) OrderEdit() {
 	c.TplName = "sale/order_edit.html"
 }
 
-//编辑出库单（伪造）
+// 编辑出库单（伪造）
 func (c *SaleController) OrderEditPost() {
 	ids := c.GetStrings("sid")
 	outs := c.GetStrings("out_price")
@@ -588,7 +588,7 @@ func (c *SaleController) OrderEditPost() {
 	c.Redirect("/order_list", 302)
 }
 
-//显示出库单列表
+// 显示出库单列表
 func (c *SaleController) OrderAdd() {
 	o := orm.NewOrm()
 	order_list := []models.OrderNum{}

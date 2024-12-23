@@ -14,7 +14,7 @@ type ConsumerController struct {
 	beego.Controller
 }
 
-//获取客户列表
+// 获取客户列表
 func (c *ConsumerController) Get() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "ViewConsumer") {
 		c.Abort("401")

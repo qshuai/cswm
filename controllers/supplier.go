@@ -28,7 +28,7 @@ func (c *SupplierController) Get() {
 	c.TplName = "supplier/supplier_list.html"
 }
 
-//添加供应商页面
+// 添加供应商页面
 func (c *SupplierController) Supplier_add() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddSupplier") {
 		c.Abort("401")
@@ -39,7 +39,7 @@ func (c *SupplierController) Supplier_add() {
 	c.TplName = "supplier/supplier_add.html"
 }
 
-//添加供应商 post提交
+// 添加供应商 post提交
 func (c *SupplierController) Supplier_add_post() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "AddSupplier") {
 		c.Abort("401")
@@ -75,7 +75,7 @@ func (c *SupplierController) Supplier_add_post() {
 	}
 }
 
-//编辑供应商信息 ajax
+// 编辑供应商信息 ajax
 func (c *SupplierController) Supplier_edit_post() {
 	sup := models.Supplier{}
 	sup.Id, _ = c.GetInt("supplier_id")

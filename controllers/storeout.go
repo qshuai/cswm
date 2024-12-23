@@ -18,7 +18,7 @@ type StoreoutController struct {
 	beego.Controller
 }
 
-//渲染出库页面
+// 渲染出库页面
 func (c *StoreoutController) Store_out_action() {
 	if !permission.GetOneItemPermission(c.GetSession("username").(string), "OutputProduct") {
 		c.Abort("401")
@@ -54,7 +54,7 @@ func (c *StoreoutController) Store_out_action() {
 	c.TplName = "storeout/store_output_action.html"
 }
 
-//出库post
+// 出库post
 func (c *StoreoutController) Store_out_action_post() {
 	username := c.GetSession("username").(string)
 	if !permission.GetOneItemPermission(username, "OutputProduct") {
